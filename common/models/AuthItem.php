@@ -1,6 +1,6 @@
 <?php
 
-namespace backend\models;
+namespace common\models;
 
 use Yii;
 
@@ -74,5 +74,7 @@ class AuthItem extends \yii\db\ActiveRecord
         return $this->hasOne(AuthRule::className(), ['name' => 'rule_name']);
     }
 
-    
+    public function getMenu(){
+        return $this->hasOne(Menu::className(),['id' => 'menu_id']);
+    }
 }

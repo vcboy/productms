@@ -3,7 +3,8 @@ namespace backend\controllers;
 use backend\models\Notice;
 use Yii;
 use yii\filters\AccessControl;
-use backend\models\LoginForm;
+//use backend\models\LoginForm;
+use common\models\LoginForm;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
 

@@ -3,6 +3,7 @@ namespace frontend\controllers;
 
 use Yii;
 use common\models\LoginForm;
+use common\models\AuthItemChild;
 use frontend\models\PasswordResetRequestForm;
 use frontend\models\ResetPasswordForm;
 use frontend\models\SignupForm;
@@ -12,6 +13,7 @@ use yii\web\BadRequestHttpException;
 use yii\web\Controller;
 use yii\filters\VerbFilter;
 use yii\filters\AccessControl;
+use yii\helpers\ArrayHelper;
 
 /**
  * Site controller
@@ -67,18 +69,25 @@ class SiteController extends Controller
 
     public function actionIndex()
     {
+        //$role_name = Yii::$app->user->identity->role_name;
+        //$menuidArr = ArrayHelper::map(AuthItemChild::find()->with(['item'])->where(['parent'=>$role_name])->all(),'item.menu.url','item.menu.name');
+        //var_dump(Yii::$app->user->identity);
         return $this->render('index');
     }
 
     public function actionLogin()
     {
         if (!\Yii::$app->user->isGuest) {
+            $role_name = Yii::$app->user->identity->role_name;
+            $menuidArr = ArrayHelper::map(AuthItemChild::find()->with(['item'])->where(['parent'=>$role_name])->all(),'item.menu.url','item.menu.name');
+            
+            //var_dump(Yii::$app->user->identity);
             return $this->goHome();
         }
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            return $this->goBack();
+            //return $this->goBack();
         } else {
             return $this->render('login', [
                 'model' => $model,

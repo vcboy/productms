@@ -1,7 +1,7 @@
 <?php
     use yii\helpers\Url;
 ?>
-<div class="navbar navbar-default" id="navbar" style="background-color: #393939">
+<div class="navbar navbar-default" id="navbar">
     <script type="text/javascript">
         try{ace.settings.check('navbar' , 'fixed')}catch(e){}
         $(function(){
@@ -21,9 +21,9 @@
 
     <div class="navbar-container" id="navbar-container">
         <div class="navbar-header pull-left">
-            <a href="<?=Url::to(['default/index']);?>" class="navbar-brand" style="padding: 0px;">
-                <small style="font-size: 75%">
-                    <img class="nav-user-photo" src="<?=Yii::$app -> request -> baseUrl;?>/resource/avatars/logo.png" style="width:120px;padding-top: 5px" alt="ABCD" />
+            <a href="<?=Url::to(['default/index']);?>" class="navbar-brand">
+                <small>
+                    <i class="icon-leaf"></i>
                     <?=Yii::$app->params['appname']?>
                 </small>
             </a>
@@ -32,7 +32,7 @@
         <div class="navbar-header pull-right" role="navigation">
             <ul class="nav ace-nav">
                 <li class="light-blue dropdown" id="wellcome_user">
-                    <a data-toggle="dropdown" href="#" class="dropdown-toggle" style="background-color: #393939">
+                    <a data-toggle="dropdown" href="#" class="dropdown-toggle" >
                             <span class="user-info">
                                 <small>欢迎</small>
                                 <?=$admin -> name;?>

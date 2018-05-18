@@ -13,8 +13,9 @@ return [
     'controllerNamespace' => 'frontend\controllers',
     'components' => [
         'user' => [
-            'identityClass' => 'common\models\User',
+            'identityClass' => 'common\models\Admin',
             'enableAutoLogin' => true,
+            'loginUrl' => ['site/login'],
         ],
         'log' => [
             'traceLevel' => YII_DEBUG ? 3 : 0,
@@ -27,6 +28,9 @@ return [
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
+        ],
+        'session' => [
+
         ],
     ],
     'language' => 'zh-CN',
