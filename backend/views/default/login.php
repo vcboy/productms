@@ -18,10 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
     <div class="main-content">
         <div class="row">
             <div class="col-sm-10 col-sm-offset-1">
-                <div class="my-center">
-                    <!--img src="<?=Yii::$app -> request -> baseUrl?>/resource/images/logo.png"-->
-                    <!--img src="<?=Yii::$app -> request -> baseUrl?>/resource/images/title.png"-->
-                </div>
                 <div class="login-container my-login-container">
                     <div class="space-6"></div>
                     <div class="position-relative">

@@ -15,8 +15,8 @@ use yii\widgets\ActiveForm;
                 'action' => ['index'],
                 'method' => 'get',
                 'fieldConfig' => [
-                    'template' => "<div class='form-group' style='float: left;width:400px;'>{label} {input}</div>",
-                    'labelOptions' => ['style' => 'width:60px;'],
+                    'template' => "<div class='form-group'>{label} {input}</div>",
+                    'labelOptions' => [],
                 ],
             ]);
             ?>
