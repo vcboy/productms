@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-05-18 14:50:07
--- 服务器版本： 10.1.9-MariaDB
--- PHP Version: 7.0.1
+-- Generation Time: 2018-05-19 15:58:10
+-- 服务器版本： 10.1.8-MariaDB
+-- PHP Version: 5.6.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -97,19 +97,47 @@ INSERT INTO `wx_auth_item` (`name`, `type`, `description`, `rule_name`, `data`, 
 ('admin_delete', 2, '用户删除', NULL, NULL, NULL, NULL, 33),
 ('admin_quickentry', 2, '快捷入口设置', NULL, NULL, NULL, NULL, 35),
 ('admin_update', 2, '用户修改', NULL, NULL, NULL, NULL, 33),
+('brand', 2, '品牌', NULL, NULL, NULL, NULL, 41),
+('consume_add', 2, '添加', NULL, NULL, NULL, NULL, 64),
+('consume_groupproduct', 2, '查询', NULL, NULL, NULL, NULL, 61),
+('consume_index', 2, '列表', NULL, NULL, NULL, NULL, 63),
+('consume_sh', 2, '审核', NULL, NULL, NULL, NULL, 65),
+('food', 2, '食材名称', NULL, NULL, NULL, NULL, 38),
+('foodclass', 2, '食材分类', NULL, NULL, NULL, NULL, 37),
+('foodunit', 2, '食材单位', NULL, NULL, NULL, NULL, 40),
 ('menu_create', 2, '菜单添加', NULL, NULL, NULL, NULL, 32),
 ('menu_delete', 2, '菜单删除', NULL, NULL, NULL, NULL, 32),
 ('menu_taxis', 2, '菜单排序', NULL, NULL, NULL, NULL, 32),
 ('menu_update', 2, '菜单修改', NULL, NULL, NULL, NULL, 32),
+('param', 2, '规格参数', NULL, NULL, NULL, NULL, 39),
 ('password_update', 2, '修改密码', NULL, NULL, NULL, NULL, 75),
 ('permission_create', 2, '权限添加', NULL, NULL, NULL, NULL, 30),
 ('permission_delete', 2, '权限删除', NULL, NULL, NULL, NULL, 30),
 ('permission_update', 2, '权限修改', NULL, NULL, NULL, NULL, 30),
+('product', 2, '成品名称', NULL, NULL, NULL, NULL, 44),
+('product-template_add', 2, '成品配比', NULL, NULL, NULL, NULL, 51),
+('product-template_index', 2, '成品显示', NULL, NULL, NULL, NULL, 52),
+('productclass', 2, '成品分类', NULL, NULL, NULL, NULL, 43),
+('productunit', 2, '成品单位', NULL, NULL, NULL, NULL, 45),
+('product_add', 2, '配货需求', NULL, NULL, NULL, NULL, 54),
+('product_del', 2, '删除发配货信息', NULL, NULL, NULL, NULL, 55),
+('product_edit', 2, '修改发配货信息', NULL, NULL, NULL, NULL, 55),
+('product_groupproduct', 2, '查询', NULL, NULL, NULL, NULL, 60),
+('product_inspector', 2, '验货入库', NULL, NULL, NULL, NULL, 56),
+('product_search', 2, '成品库查询', NULL, NULL, NULL, NULL, 59),
+('product_send', 2, '发货配货', NULL, NULL, NULL, NULL, 55),
+('purchase_add', 2, '添加采购', NULL, NULL, NULL, NULL, 47),
+('purchase_del', 2, '删除采购信息', NULL, NULL, NULL, NULL, 48),
+('purchase_depot', 2, '验货入库', NULL, NULL, NULL, NULL, 49),
+('purchase_edit', 2, '修改采购信息', NULL, NULL, NULL, NULL, 48),
+('purchase_index', 2, '采购管理', NULL, NULL, NULL, NULL, 48),
+('purchase_search', 2, '食材库查询', NULL, NULL, NULL, NULL, 58),
 ('role_create', 2, '角色添加', NULL, NULL, NULL, NULL, 31),
 ('role_delete', 2, '角色删除', NULL, NULL, NULL, NULL, 31),
 ('role_permission', 2, '角色权限设置', NULL, NULL, NULL, NULL, 31),
 ('role_update', 2, '角色修改', NULL, NULL, NULL, NULL, 31),
 ('shortcut_update', 2, '设置快捷方式', NULL, NULL, NULL, NULL, 74),
+('supplier', 2, '供应商', NULL, NULL, NULL, NULL, 42),
 ('zongadming', 1, '总管理员', NULL, NULL, NULL, NULL, NULL);
 
 -- --------------------------------------------------------
@@ -132,17 +160,45 @@ INSERT INTO `wx_auth_item_child` (`parent`, `child`) VALUES
 ('zongadming', 'admin_delete'),
 ('zongadming', 'admin_quickentry'),
 ('zongadming', 'admin_update'),
+('zongadming', 'brand'),
+('zongadming', 'consume_add'),
+('zongadming', 'consume_groupproduct'),
+('zongadming', 'consume_index'),
+('zongadming', 'consume_sh'),
+('zongadming', 'food'),
+('zongadming', 'foodclass'),
+('zongadming', 'foodunit'),
 ('zongadming', 'menu_create'),
 ('zongadming', 'menu_delete'),
 ('zongadming', 'menu_taxis'),
 ('zongadming', 'menu_update'),
+('zongadming', 'param'),
 ('zongadming', 'permission_create'),
 ('zongadming', 'permission_delete'),
 ('zongadming', 'permission_update'),
+('zongadming', 'product'),
+('zongadming', 'product-template_add'),
+('zongadming', 'product-template_index'),
+('zongadming', 'productclass'),
+('zongadming', 'productunit'),
+('zongadming', 'product_add'),
+('zongadming', 'product_del'),
+('zongadming', 'product_edit'),
+('zongadming', 'product_groupproduct'),
+('zongadming', 'product_inspector'),
+('zongadming', 'product_search'),
+('zongadming', 'product_send'),
+('zongadming', 'purchase_add'),
+('zongadming', 'purchase_del'),
+('zongadming', 'purchase_depot'),
+('zongadming', 'purchase_edit'),
+('zongadming', 'purchase_index'),
+('zongadming', 'purchase_search'),
 ('zongadming', 'role_create'),
 ('zongadming', 'role_delete'),
 ('zongadming', 'role_permission'),
-('zongadming', 'role_update');
+('zongadming', 'role_update'),
+('zongadming', 'supplier');
 
 -- --------------------------------------------------------
 
@@ -158,20 +214,50 @@ CREATE TABLE IF NOT EXISTS `wx_menu` (
   `taxis` int(11) DEFAULT '0' COMMENT '排序字段 默认0,以数字倒序排列',
   `data` text,
   `url` varchar(100) DEFAULT NULL COMMENT '菜单链接地址'
-) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COMMENT='系统管理员菜单权限表\r\n';
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8 COMMENT='系统管理员菜单权限表\r\n';
 
 --
 -- 转存表中的数据 `wx_menu`
 --
 
 INSERT INTO `wx_menu` (`id`, `name`, `parent`, `route`, `taxis`, `data`, `url`) VALUES
-(29, '系统设置', 0, NULL, 20, NULL, ''),
+(29, '系统设置', 0, NULL, 1, NULL, ''),
 (30, '权限管理', 29, NULL, NULL, NULL, 'permission-form/index'),
 (31, '角色管理', 29, NULL, NULL, NULL, 'role-form/index'),
 (32, '菜单管理', 29, NULL, NULL, NULL, 'menu/index'),
 (33, '用户管理', 29, NULL, NULL, NULL, 'admin/index'),
 (34, '设置快捷方式', 29, NULL, 1, NULL, 'shortcut/index'),
-(35, '修改密码', 29, NULL, 2, NULL, 'admin/edit-password');
+(35, '修改密码', 29, NULL, 2, NULL, 'admin/edit-password'),
+(36, '基础信息', 0, NULL, 10, NULL, ''),
+(37, '食材分类', 36, NULL, NULL, NULL, 'refcode/index?type_code=foodclass'),
+(38, '食材名称', 36, NULL, NULL, NULL, 'refcode/index?type_code=food'),
+(39, '规格参数', 36, NULL, NULL, NULL, 'refcode/index?type_code=param'),
+(40, '食材单位', 36, NULL, NULL, NULL, 'refcode/index?type_code=foodunit'),
+(41, '品牌', 36, NULL, NULL, NULL, 'refcode/index?type_code=brand'),
+(42, '供应商', 36, NULL, NULL, NULL, 'refcode/index?type_code=supplier'),
+(43, '成品分类', 36, NULL, NULL, NULL, 'refcode/index?type_code=productclass'),
+(44, '成品名称', 36, NULL, NULL, NULL, 'refcode/index?type_code=product'),
+(45, '成品单位', 36, NULL, NULL, NULL, 'refcode/index?type_code=productunit'),
+(46, '采购入库', 0, NULL, 9, NULL, ''),
+(47, '添加采购', 46, NULL, NULL, NULL, 'purchase/add'),
+(48, '采购管理', 46, NULL, NULL, NULL, 'purchase/index'),
+(49, '验货入库', 46, NULL, NULL, NULL, 'purchase/depot'),
+(50, '食材配比', 0, NULL, 8, NULL, ''),
+(51, '成品配比', 50, NULL, NULL, NULL, 'product-template/add'),
+(52, '成品显示', 50, NULL, NULL, NULL, 'product-template/index'),
+(53, '成品管理', 0, NULL, 7, NULL, ''),
+(54, '配货需求', 53, NULL, NULL, NULL, 'product/add'),
+(55, '发货配货', 53, NULL, NULL, NULL, 'product/send'),
+(56, '验货入库', 53, NULL, NULL, NULL, 'product/inspector'),
+(57, '数据查询', 0, NULL, 6, NULL, ''),
+(58, '食材库查询', 57, NULL, NULL, NULL, 'purchase/search'),
+(59, '成品库查询', 57, NULL, NULL, NULL, 'product/search'),
+(60, '发货完成基准价', 57, NULL, NULL, NULL, 'product/groupproduct'),
+(61, '成品消耗基准价', 57, NULL, NULL, NULL, 'consume/groupproduct'),
+(62, '成品消耗', 0, NULL, 5, NULL, ''),
+(63, '消耗管理', 62, NULL, 3, NULL, 'consume/index'),
+(64, '消耗添加', 62, NULL, 4, NULL, 'consume/add'),
+(65, '报损审核', 62, NULL, NULL, NULL, 'consume/sh');
 
 --
 -- Indexes for dumped tables
@@ -233,7 +319,7 @@ ALTER TABLE `wx_admin`
 -- AUTO_INCREMENT for table `wx_menu`
 --
 ALTER TABLE `wx_menu`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=71;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=66;
 --
 -- 限制导出的表
 --
