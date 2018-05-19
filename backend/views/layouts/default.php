@@ -75,36 +75,38 @@ if(!isset($this -> context -> subject)){
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/excanvas.min.js"></script>
     <![endif]-->
 
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
+    <!--<script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.ui.touch-punch.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.slimscroll.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.easy-pie-chart.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.sparkline.min.js"></script>
-
-    <!-- ace scripts -->
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/ace-elements.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/ace.min.js"></script>
-
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.ui.touch-punch.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/chosen.jquery.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/fuelux/fuelux.spinner.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/date-time/bootstrap-datepicker.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/date-time/bootstrap-timepicker.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/date-time/moment.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/date-time/daterangepicker.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/bootstrap-colorpicker.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.knob.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.autosize.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.inputlimiter.1.3.1.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.maskedinput.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/bootstrap-tag.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.PrintArea.js"></script>
+    -->
 
-    <!--上传图片插件-->
+    <!-- ace scripts -->
+    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/ace-elements.min.js"></script>
+    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/ace.min.js"></script>
+
+  
+    
+    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/date-time/bootstrap-datepicker.min.js"></script>
+    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/date-time/bootstrap-timepicker.min.js"></script>
+    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/date-time/moment.min.js"></script>
+    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/date-time/daterangepicker.min.js"></script>
+    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/bootstrap-colorpicker.min.js"></script>
+    
+
+    <!--上传图片插件
     <script type="text/javascript" src="<?=Yii::$app -> request -> baseUrl;?>/uploadify/swfobject.js"></script>
 	<script type="text/javascript" src="<?=Yii::$app -> request -> baseUrl;?>/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
-	<link href="<?=Yii::$app -> request -> baseUrl;?>/uploadify/uploadify.css" rel="stylesheet" type="text/css" />
+	<link href="<?=Yii::$app -> request -> baseUrl;?>/uploadify/uploadify.css" rel="stylesheet" type="text/css" />-->
 
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/jquery-ui-1.10.3.custom.min.css" />
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/chosen.css" />
@@ -114,7 +116,7 @@ if(!isset($this -> context -> subject)){
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/colorpicker.css" />
     <!--项目公共js-->
 	<script src="<?=Yii::$app -> request -> baseUrl;?>/js/common.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/js/exam.js"></script>
+    <!--<script src="<?=Yii::$app -> request -> baseUrl;?>/js/exam.js"></script>-->
 	<!--弹出框-->
 	<script src="<?=Yii::$app -> request -> baseUrl;?>/js/sweetalert-master/lib/sweet-alert.min.js"></script>
 	<link rel="stylesheet" type="text/css" href="<?=Yii::$app -> request -> baseUrl;?>/js/sweetalert-master/lib/sweet-alert.css">
@@ -136,9 +138,9 @@ if(!isset($this -> context -> subject)){
     <!--Jquery cookie 插件 Start-->
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.cookie.js"></script>
     <!--Jquery cookie 插件 End-->
-    <!--Jquery 复制代码到剪贴板-->
+    <!--Jquery 复制代码到剪贴板
     <script src="<?=Yii::$app -> request -> baseUrl;?>/js/jquery.zclip.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/js/ZeroClipboard.js"></script>
+    <script src="<?=Yii::$app -> request -> baseUrl;?>/js/ZeroClipboard.js"></script>-->
 
     <!-- 框架自定义css-->
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/css/default.css" />
@@ -215,19 +217,24 @@ if (isset($this->blocks['head'])) {
 							</li>
                             <?php
                             //START-得到左侧菜单
-                            $menu = new Menu();
+                            //$menu = new Menu();
                             /****判断登录用户拥有的菜单 START******************************************************************************/
-                            $auth = Yii::$app->authManager;
+                            /*$auth = Yii::$app->authManager;
                             $userid = Yii::$app->user->identity->id;
-                            $leftMenu = $menu ->getUserLeftMenu($userid);
+                            $leftMenu = $menu ->getUserLeftMenu($userid);*/
                             /****判断登录用户拥有的菜单 END******************************************************************************/
                             //END-得到左侧菜单
                             /****菜单定位 Start ******************************************************************/
-                            $controller     = Yii::$app->controller->id;            //得到当前控制器名称
+                            /*$controller     = Yii::$app->controller->id;            //得到当前控制器名称
                             $action         = Yii::$app->controller->action->id;    //得到当前action名称
                             $current_url    = $controller.'/'.$action;
+                            $queryString    = Yii::$app->request->queryString;*/
+        
+                            /*$current_url    = $controller.'/'.$action;
+                            if($queryString)
+                                $current_url .= '?'.$queryString;*/
                             //定位数组
-                            $current_key = array(
+                            /*$current_key = array(
                                 'k1' => '',
                                 'k2' => '',
                                 'k3' => '',
@@ -279,7 +286,8 @@ if (isset($this->blocks['head'])) {
                                 if ($top_menu_name) {
                                     echo '<li class="active">' . $top_menu_name . '</li> ';
                                 }
-                            }
+                            }*/
+                            //echo $this -> context -> childSubject.'a';
                             if($this -> context -> childSubject){
                                 if ($this->context->subject) {
                                     echo '<li class="active">' . $this->context->childSubject . '</li>';
@@ -330,53 +338,6 @@ if (isset($this->blocks['head'])) {
 							-->
 						</div><!-- #nav-search -->
 					</div>
-                <div class="ace-settings-container" id="ace-settings-container" style="display: none">
-                    <div class="btn btn-app btn-xs btn-warning ace-settings-btn" id="ace-settings-btn">
-                        <i class="icon-cog bigger-150"></i>
-                    </div>
-
-                    <div class="ace-settings-box" id="ace-settings-box" style="display: none">
-                        <div>
-                            <div class="pull-left" id="change_skin">
-                                <select id="skin-colorpicker" class="hide">
-                                    <option data-skin="default" value="#438EB9">#438EB9</option>
-                                    <option data-skin="skin-1" value="#222A2D">#222A2D</option>
-                                    <option data-skin="skin-2" value="#C6487E">#C6487E</option>
-                                    <option data-skin="skin-3" value="#D0D0D0">#D0D0D0</option>
-                                </select>
-                            </div>
-                            <span>&nbsp; 选择皮肤</span>
-                        </div>
-
-                        <div>
-                            <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-navbar" />
-                            <label class="lbl" for="ace-settings-navbar"> 固定导航条</label>
-                        </div>
-
-                        <div>
-                            <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-sidebar" />
-                            <label class="lbl" for="ace-settings-sidebar"> 固定滑动条</label>
-                        </div>
-
-                        <div>
-                            <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-breadcrumbs" />
-                            <label class="lbl" for="ace-settings-breadcrumbs">固定面包屑</label>
-                        </div>
-
-                        <div>
-                            <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-rtl" />
-                            <label class="lbl" for="ace-settings-rtl">切换到左边</label>
-                        </div>
-
-                        <div>
-                            <input type="checkbox" class="ace ace-checkbox-2" id="ace-settings-add-container" />
-                            <label class="lbl" for="ace-settings-add-container">
-                                切换窄屏
-                                <b></b>
-                            </label>
-                        </div>
-                    </div>
-                </div><!-- /#ace-settings-container -->
 				<div class="page-content">
 				<!--内容页面-->
 				<?= $content ?>
@@ -385,39 +346,6 @@ if (isset($this->blocks['head'])) {
     </div>
 </div>
 
-<!-- Modal -->
-<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
-  <div class="modal-dialog" role="document">
-    <div class="modal-content">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-        <h4 class="modal-title" id="myModalLabel">分享</h4>
-      </div>
-      <div class="modal-body">
-        <form>
-          <div class="form-group">
-            <label for="recipient-name" class="control-label">链接</label>
-            <div>
-            <input type="text" class="form-control" id="push_url" style="width: 85%;float: left;"> 
-            <button type="button" class="btn btn-primary" style="height: 34px;padding-top: 3px;float: right;" onclick="javascript:tolink()">打开</button>
-            </div>
-          </div>
-          <div class="form-group">
-            <label for="message-text" class="control-label" style="    padding-top: 15px;">二维码</label>
-            <!-- <textarea class="form-control" id="message-text"></textarea> -->
-            <div style="text-align: center;">
-            <img src="http://www.local/joblive/manager/backend/web/course/qrcode/3" id="qrcodeimg">
-            </div>
-          </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-primary" data-dismiss="modal">关闭</button>
-        <!-- <button type="button" class="btn btn-primary">Send message</button> -->
-      </div>
-    </div>
-  </div>
-</div>
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
         jQuery(function($) {

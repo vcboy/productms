@@ -6,6 +6,8 @@
     display: inline;
 }
 
+
+
 .tabfield div input{
     width: 15%;
     display: inline-block;
@@ -135,4 +137,17 @@
 
 .wlogo{
     background: url(../img/logo.png)
+}
+
+@media only screen and (max-width: 500px){
+    .tabfield div{
+        display: inline-block;
+        width: 100%;
+    }
+    .tabfield div input{
+        width: 70%;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
 }

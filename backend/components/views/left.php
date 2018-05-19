@@ -237,7 +237,11 @@
         /****菜单定位 Start ******************************************************************/
         $controller     = Yii::$app->controller->id;            //得到当前控制器名称
         $action         = Yii::$app->controller->action->id;    //得到当前action名称
+        $queryString    = Yii::$app->request->queryString;
+        
         $current_url    = $controller.'/'.$action;
+        if($queryString)
+            $current_url .= '?'.$queryString;
         //定位数组
         $current_key = array(
             'k1' => '',
@@ -330,6 +334,7 @@
                     $li_class_2 = '';
                     if(!empty($v1['sons'])){
                         if(strlen($current_key['k2'])){
+                            echo $current_key['k1'] .'== '.$k;
                             if($current_key['k1'] == $k && $current_key['k2'] == $k1){
                                 $li_class_2 = 'class = "active open"';
                             }
@@ -353,7 +358,9 @@
                         $menu_left .= '</ul>';
                         $menu_left .= '</li>';
                     }else{
+
                         if(strlen($current_key['k2'])){
+                             
                             if($current_key['k1'] == $k && $current_key['k2'] == $k1){
                                 $li_class_2 = 'class = "active"';
                             }
