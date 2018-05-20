@@ -18,7 +18,7 @@ class RefcodeSearch extends Refcode
     public function rules()
     {
         return [
-            [['id', 'is_del'], 'integer'],
+            [['id', 'is_del','pid'], 'integer'],
             [['nm', 'value', 'type'], 'safe'],
         ];
     }
@@ -39,9 +39,11 @@ class RefcodeSearch extends Refcode
      *
      * @return ActiveDataProvider
      */
-    public function search($params)
+    public function search($params,$where = [])
     {
         $query = Refcode::find();
+
+        $query->where(['is_del'=>0]+$where);
 
         // add conditions that should always apply here
 
@@ -50,7 +52,6 @@ class RefcodeSearch extends Refcode
         ]);
 
         $this->load($params);
-
         if (!$this->validate()) {
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');

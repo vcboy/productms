@@ -12,10 +12,9 @@ $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="refcode-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
+        'type_code' => $type_code,
     ]) ?>
 
 </div>

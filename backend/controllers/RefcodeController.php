@@ -25,7 +25,7 @@ class RefcodeController extends CController
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
-                    'delete' => ['POST'],
+                    'delete' => ['POST','GET'],
                 ],
             ],
         ];
@@ -38,12 +38,15 @@ class RefcodeController extends CController
     public function actionIndex()
     {
         $searchModel = new RefcodeSearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $type_code = $this->request->get('type_code');
+        $where = ['type'=>$type_code];
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams,$where);
+        
         $type_codeArr = Yii::$app->params['type_code'];
         $type_name = array_key_exists($type_code,$type_codeArr)?$type_codeArr[$type_code]:'';
-
+        //$dataProvider->where(['type_code'=>$type_code]);
         $this -> childSubject = $type_name;
+        //dump(Yii::$app->session['menu']);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -74,9 +77,11 @@ class RefcodeController extends CController
         $type_code = $this->request->get('type_code');
         $type_codeArr = Yii::$app->params['type_code'];
         $type_name = array_key_exists($type_code,$type_codeArr)?$type_codeArr[$type_code]:'';
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        
+        if ($model->load(Yii::$app->request->post())) {
+            $model->type = $type_code;
+            $model->save();
+            return $this->redirect(['index', 'type_code' => $model->type]);
         } else {
             return $this->render('create', [
                 'model' => $model,
@@ -97,10 +102,11 @@ class RefcodeController extends CController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index', 'type_code' => $model->type]);
         } else {
             return $this->render('update', [
                 'model' => $model,
+                'type_code' => $model->type,
             ]);
         }
     }
@@ -113,9 +119,10 @@ class RefcodeController extends CController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
-        return $this->redirect(['index']);
+        $model = $this->findModel($id);
+        $model->is_del = 1;
+        $model->save();
+        return $this->redirect(['index','type_code'=>$model->type]);
     }
 
     /**

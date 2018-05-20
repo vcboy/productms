@@ -1,7 +1,7 @@
 <?php
 
 namespace backend\models;
-
+use yii\helpers\ArrayHelper;
 use Yii;
 
 /**
@@ -29,7 +29,7 @@ class Refcode extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['is_del'], 'integer'],
+            [['is_del','pid'], 'integer'],
             [['nm'], 'string', 'max' => 128],
             [['nm'], 'required', 'message'=>'{attribute}不能为空'],
             [['value'], 'string', 'max' => 64],
@@ -48,6 +48,26 @@ class Refcode extends \yii\db\ActiveRecord
             'value' => '对应的值',
             'type' => '类型',
             'is_del' => '是否删除 1是，0否',
+            'parentName' => '所属分类',
         ];
+    }
+
+
+    public static function getRefcodeBytype($type)
+    {
+        $refcode = ArrayHelper::map(self::find()->where(['type'=>$type,'is_del'=>0])->all(),'id','nm');
+        return $refcode;
+    }
+
+    /*
+     * 得到上级菜单名称
+     */
+    public function getParentName(){
+        $parentName = '';
+        if($this->pid){
+            $parent = self::findOne(['id'=>$this->pid]);
+            $parentName = $parent -> nm;
+        }
+        return $parentName;
     }
 }

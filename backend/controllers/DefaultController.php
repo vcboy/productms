@@ -83,7 +83,7 @@ class DefaultController extends Controller
     public function actionLogout()
     {
         Yii::$app->user->logout();
-
+        unset(Yii::$app->session['menu']);
         return $this->goHome();
     }
     

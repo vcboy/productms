@@ -13,14 +13,16 @@ class LeftWidget extends Widget{
 
     public function run(){
         $admin = Admin::findById(Yii::$app -> user -> id);
-        //START-得到左侧菜单
         $menu = new Menu();
-        /****判断登录用户拥有的菜单 START******************************************************************************/
         $auth = Yii::$app->authManager;
         $userid = Yii::$app->user->identity->id;
-        $leftMenu = $menu ->getUserLeftMenu($userid);
-        /****判断登录用户拥有的菜单 END******************************************************************************/
-        //END-得到左侧菜单
+        $menudata = Yii::$app->session['menu'];
+        if(!$menudata){
+            $leftMenu = $menu ->getUserLeftMenu($userid);
+            Yii::$app->session['menu'] = $leftMenu;
+        }else{
+            $leftMenu = $menudata;
+        }
         return $this -> render('left',['admin' => $admin,'leftMenu' => $leftMenu]);
     }
 

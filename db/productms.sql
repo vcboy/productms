@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-05-19 18:04:37
+-- Generation Time: 2018-05-20 17:55:03
 -- 服务器版本： 10.1.8-MariaDB
 -- PHP Version: 5.6.14
 
@@ -239,14 +239,14 @@ INSERT INTO `wx_menu` (`id`, `name`, `parent`, `route`, `taxis`, `data`, `url`) 
 (44, '成品名称', 36, NULL, NULL, NULL, 'refcode/index?type_code=product'),
 (45, '成品单位', 36, NULL, NULL, NULL, 'refcode/index?type_code=productunit'),
 (46, '采购入库', 0, NULL, 9, NULL, ''),
-(47, '添加采购', 46, NULL, NULL, NULL, 'purchase/add'),
+(47, '添加采购', 46, NULL, NULL, NULL, 'purchase/create'),
 (48, '采购管理', 46, NULL, NULL, NULL, 'purchase/index'),
 (49, '验货入库', 46, NULL, NULL, NULL, 'purchase/depot'),
 (50, '食材配比', 0, NULL, 8, NULL, ''),
-(51, '成品配比', 50, NULL, NULL, NULL, 'product-template/add'),
+(51, '成品配比', 50, NULL, NULL, NULL, 'product-template/create'),
 (52, '成品显示', 50, NULL, NULL, NULL, 'product-template/index'),
 (53, '成品管理', 0, NULL, 7, NULL, ''),
-(54, '配货需求', 53, NULL, NULL, NULL, 'product/add'),
+(54, '配货需求', 53, NULL, NULL, NULL, 'product/create'),
 (55, '发货配货', 53, NULL, NULL, NULL, 'product/send'),
 (56, '验货入库', 53, NULL, NULL, NULL, 'product/inspector'),
 (57, '数据查询', 0, NULL, 6, NULL, ''),
@@ -256,7 +256,7 @@ INSERT INTO `wx_menu` (`id`, `name`, `parent`, `route`, `taxis`, `data`, `url`) 
 (61, '成品消耗基准价', 57, NULL, NULL, NULL, 'consume/groupproduct'),
 (62, '成品消耗', 0, NULL, 5, NULL, ''),
 (63, '消耗管理', 62, NULL, 3, NULL, 'consume/index'),
-(64, '消耗添加', 62, NULL, 4, NULL, 'consume/add'),
+(64, '消耗添加', 62, NULL, 4, NULL, 'consume/create'),
 (65, '报损审核', 62, NULL, NULL, NULL, 'consume/sh');
 
 -- --------------------------------------------------------
@@ -388,8 +388,21 @@ CREATE TABLE IF NOT EXISTS `wx_refcode` (
   `nm` varchar(128) DEFAULT NULL,
   `value` varchar(64) DEFAULT NULL COMMENT '对应的值',
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
+  `pid` int(11) DEFAULT NULL COMMENT '父类id',
   `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='基础表';
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='基础表';
+
+--
+-- 转存表中的数据 `wx_refcode`
+--
+
+INSERT INTO `wx_refcode` (`id`, `nm`, `value`, `type`, `pid`, `is_del`) VALUES
+(1, '牛肉1w', NULL, NULL, NULL, 1),
+(2, '禽类21', NULL, 'foodclass', NULL, 0),
+(3, '鸡肉', '20', 'food', 2, 0),
+(4, '鸭肉', '10', 'food', 2, 1),
+(5, '蔬菜', NULL, 'foodclass', NULL, 0),
+(6, '食材1公司', NULL, 'supplier', NULL, 0);
 
 --
 -- Indexes for dumped tables
@@ -478,7 +491,8 @@ ALTER TABLE `wx_purchase`
 -- Indexes for table `wx_refcode`
 --
 ALTER TABLE `wx_refcode`
-  ADD PRIMARY KEY (`id`);
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `type` (`type`);
 
 --
 -- AUTO_INCREMENT for dumped tables
@@ -528,7 +542,7 @@ ALTER TABLE `wx_purchase`
 -- AUTO_INCREMENT for table `wx_refcode`
 --
 ALTER TABLE `wx_refcode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- 限制导出的表
 --
