@@ -8,7 +8,8 @@ use backend\models\PurchaseSearch;
 use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
-
+use backend\models\Refcode;
+use yii\helpers\ArrayHelper;
 /**
  * PurchaseController implements the CRUD actions for Purchase model.
  */
@@ -118,5 +119,11 @@ class PurchaseController extends CController
         } else {
             throw new NotFoundHttpException('The requested page does not exist.');
         }
+    }
+
+    public function actionGetfood(){
+        $foodclass_id = $this->request->post('foodclass_id');
+        $foodArr = ArrayHelper::map(Refcode::find()->where(['pid'=>$foodclass_id,'is_del'=>0])->all(),'id','nm');
+        echo json_encode($foodArr);
     }
 }

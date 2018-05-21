@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-05-20 17:55:03
--- 服务器版本： 10.1.8-MariaDB
--- PHP Version: 5.6.14
+-- Generation Time: 2018-05-21 19:31:23
+-- 服务器版本： 10.1.9-MariaDB
+-- PHP Version: 7.0.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -390,7 +390,7 @@ CREATE TABLE IF NOT EXISTS `wx_refcode` (
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `pid` int(11) DEFAULT NULL COMMENT '父类id',
   `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='基础表';
+) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='基础表';
 
 --
 -- 转存表中的数据 `wx_refcode`
@@ -402,7 +402,10 @@ INSERT INTO `wx_refcode` (`id`, `nm`, `value`, `type`, `pid`, `is_del`) VALUES
 (3, '鸡肉', '20', 'food', 2, 0),
 (4, '鸭肉', '10', 'food', 2, 1),
 (5, '蔬菜', NULL, 'foodclass', NULL, 0),
-(6, '食材1公司', NULL, 'supplier', NULL, 0);
+(6, '食材1公司', NULL, 'supplier', NULL, 0),
+(7, '年份', NULL, 'param', 3, 0),
+(8, '鸭肉', '30', 'food', 2, 0),
+(9, '长度', NULL, 'param', 8, 0);
 
 --
 -- Indexes for dumped tables
@@ -542,7 +545,7 @@ ALTER TABLE `wx_purchase`
 -- AUTO_INCREMENT for table `wx_refcode`
 --
 ALTER TABLE `wx_refcode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
 --
 -- 限制导出的表
 --
