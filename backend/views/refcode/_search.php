@@ -15,7 +15,7 @@ use yii\widgets\ActiveForm;
         'method' => 'get',
         'fieldConfig' => [
             'template' => "<div>{label} {input}</div>",
-            'labelOptions' => ['style' => 'width:60px;'],
+            'labelOptions' => ['style' => 'width:100px;'],
         ],
     ]); ?>
     <div class="tabfield">

@@ -10,6 +10,7 @@ use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\components\CController;
+use yii\filters\AccessControl;
 
 /**
  * RefcodeController implements the CRUD actions for Refcode model.
@@ -22,6 +23,16 @@ class RefcodeController extends CController
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions'   => [],
+                        'allow'     => true,
+                        'roles'     => ['@'],   //其中？代表游客，@代表已登录的用户。
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [

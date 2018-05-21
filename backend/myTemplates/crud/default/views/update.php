@@ -22,9 +22,7 @@ $this->params['breadcrumbs'][] = ['label' => $model-><?= $generator->getNameAttr
 $this->params['breadcrumbs'][] = <?= $generator->generateString('Update') ?>;
 ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-update">
-	<div class="createfield">
     <?= "<?= " ?>$this->render('_form', [
         'model' => $model,
     ]) ?>
-    </div>
 </div>

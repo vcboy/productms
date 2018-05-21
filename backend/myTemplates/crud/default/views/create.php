@@ -1,4 +1,4 @@
-	<div class="createfield"><?php
+<?php
 
 use yii\helpers\Inflector;
 use yii\helpers\StringHelper;
@@ -20,9 +20,7 @@ $this->params['breadcrumbs'][] = ['label' => <?= $generator->generateString(Infl
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="<?= Inflector::camel2id(StringHelper::basename($generator->modelClass)) ?>-create">
-	<div class="createfield">
     <?= "<?= " ?>$this->render('_form', [
         'model' => $model,
     ]) ?>
-    </div>
 </div>
