@@ -30,13 +30,14 @@ $foodunitlist = Refcode::getRefcodeBytype('foodunit');
 
     <?= $form->field($model, 'price')->textInput() ?>
 
-    <?= $form->field($model, 'unit')->dropDownList(array(''=>'--请选择--')+$foodunitlist) ?>
+    <?//= $form->field($model, 'unit')->dropDownList(array(''=>'--请选择--')+$foodunitlist) ?>
 
     <?= $form->field($model, 'brand')->dropDownList(array(''=>'--请选择--')+$brandlist) ?>
 
     <?= $form->field($model, 'supplier')->dropDownList(array(''=>'--请选择--')+$supplierlist) ?>
 
     <?= $form->field($model, 'pur_user')->textInput() ?>
+    <?=Html::input('hidden','pur_userid',Yii::$app->user->identity->id,['id' => 'pur_userid']);?>
 
     <?= $form->field($model, 'pur_date')->textInput() ?>
 

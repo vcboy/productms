@@ -27,8 +27,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'summary' => '',
         'columns' =>  [
         ['class' => 'yii\grid\SerialColumn','header' => '序号'],
-
-            'id',
             'foodclass_id',
             'food_id',
             'param_id',

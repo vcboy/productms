@@ -75,7 +75,12 @@ class PurchaseController extends CController
         $model = new Purchase();
         $model->pur_user = $this->user->name;
         $model->pur_date = date("Y-m-d H:i");
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $pur_userid = $this->request->post('pur_userid');
+            $model->pur_date = strtotime($model->pur_date);
+            $model->pur_user = $pur_userid;
+            $model->save();
+            //var_dump($model->getErrors());
             return $this->redirect(['index']);
         } else {
             return $this->render('create', [
