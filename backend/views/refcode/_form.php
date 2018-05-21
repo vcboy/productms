@@ -19,6 +19,8 @@ use backend\models\Refcode;
         case 'food':
             $downlist = Refcode::getRefcodeBytype('foodclass');
             echo $form->field($model, 'pid')->label('食材分类')->dropDownList(array(''=>'--请选择--')+$downlist);
+            $unitlist = Refcode::getRefcodeBytype('foodunit');
+            echo $form->field($model, 'pid2')->label('食材单位')->dropDownList(array(''=>'--请选择--')+$unitlist);
             break;
         case 'param':
             $downlist = Refcode::getRefcodeBytype('food');

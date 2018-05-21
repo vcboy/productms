@@ -44,7 +44,7 @@ class Purchase extends \yii\db\ActiveRecord
         return [
             [['foodclass_id', 'food_id', 'param_id', 'book_count', 'pur_user', 'pur_date', 'depot_user', 'depot_count', 'depot_date', 'sycount', 'status', 'is_del'], 'integer'],
             [['price'], 'number'],
-            [['foodclass_id', 'food_id','pur_user', 'pur_date'], 'required'],
+            [['foodclass_id', 'food_id','price','book_count','pur_user', 'pur_date'], 'required'],
             [['comment'], 'string'],
             [['unit'], 'string', 'max' => 32],
             [['brand', 'supplier'], 'string', 'max' => 128],
@@ -63,7 +63,7 @@ class Purchase extends \yii\db\ActiveRecord
             'param_id' => '规格参数',
             'book_count' => '采购数量',
             'price' => '单价',
-            'unit' => '单位',
+            'unit' => '食材单位',
             'brand' => '品牌',
             'supplier' => '供应商',
             'pur_user' => '采购人',

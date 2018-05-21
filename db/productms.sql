@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-05-21 19:31:23
--- 服务器版本： 10.1.9-MariaDB
--- PHP Version: 7.0.1
+-- Generation Time: 2018-05-21 22:36:31
+-- 服务器版本： 10.1.8-MariaDB
+-- PHP Version: 5.6.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -335,7 +335,14 @@ CREATE TABLE IF NOT EXISTS `wx_product_template` (
   `unitprice` float DEFAULT NULL COMMENT '基准价',
   `unit` varchar(32) DEFAULT NULL COMMENT '单位',
   `is_del` int(11) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品模板主表';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='成品模板主表';
+
+--
+-- 转存表中的数据 `wx_product_template`
+--
+
+INSERT INTO `wx_product_template` (`id`, `productclass_id`, `product_id`, `unitprice`, `unit`, `is_del`) VALUES
+(1, 10, 14, 100, '16', 0);
 
 -- --------------------------------------------------------
 
@@ -375,7 +382,14 @@ CREATE TABLE IF NOT EXISTS `wx_purchase` (
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '0：未入库，1已入库',
   `comment` text NOT NULL COMMENT '验收意见',
   `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='采购表（市场库存表）';
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='采购表（市场库存表）';
+
+--
+-- 转存表中的数据 `wx_purchase`
+--
+
+INSERT INTO `wx_purchase` (`id`, `foodclass_id`, `food_id`, `param_id`, `book_count`, `price`, `unit`, `brand`, `supplier`, `pur_user`, `pur_date`, `depot_user`, `depot_count`, `depot_date`, `sycount`, `status`, `comment`, `is_del`) VALUES
+(1, 2, 3, 7, 21, 100, '111', '11', '111', 2222, 222, 222, 22, 22, 22, 22, '22', 22);
 
 -- --------------------------------------------------------
 
@@ -389,23 +403,36 @@ CREATE TABLE IF NOT EXISTS `wx_refcode` (
   `value` varchar(64) DEFAULT NULL COMMENT '对应的值',
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `pid` int(11) DEFAULT NULL COMMENT '父类id',
+  `pid2` int(11) DEFAULT NULL COMMENT '食材单位',
   `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
-) ENGINE=InnoDB AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COMMENT='基础表';
+) ENGINE=InnoDB AUTO_INCREMENT=22 DEFAULT CHARSET=utf8 COMMENT='基础表';
 
 --
 -- 转存表中的数据 `wx_refcode`
 --
 
-INSERT INTO `wx_refcode` (`id`, `nm`, `value`, `type`, `pid`, `is_del`) VALUES
-(1, '牛肉1w', NULL, NULL, NULL, 1),
-(2, '禽类21', NULL, 'foodclass', NULL, 0),
-(3, '鸡肉', '20', 'food', 2, 0),
-(4, '鸭肉', '10', 'food', 2, 1),
-(5, '蔬菜', NULL, 'foodclass', NULL, 0),
-(6, '食材1公司', NULL, 'supplier', NULL, 0),
-(7, '年份', NULL, 'param', 3, 0),
-(8, '鸭肉', '30', 'food', 2, 0),
-(9, '长度', NULL, 'param', 8, 0);
+INSERT INTO `wx_refcode` (`id`, `nm`, `value`, `type`, `pid`, `pid2`, `is_del`) VALUES
+(1, '牛肉1w', NULL, NULL, NULL, NULL, 1),
+(2, '禽类21', NULL, 'foodclass', NULL, NULL, 0),
+(3, '鸡肉', '20', 'food', 2, NULL, 0),
+(4, '鸭肉', '10', 'food', 2, NULL, 1),
+(5, '蔬菜', NULL, 'foodclass', NULL, NULL, 0),
+(6, '食材1公司', NULL, 'supplier', NULL, NULL, 0),
+(7, '年份', NULL, 'param', 3, NULL, 0),
+(8, '鸭肉', '30', 'food', 2, 19, 0),
+(9, '长度', NULL, 'param', 8, NULL, 0),
+(10, '粤菜', NULL, 'productclass', NULL, NULL, 0),
+(11, '湘菜', NULL, 'productclass', NULL, NULL, 0),
+(12, '川菜', NULL, 'productclass', NULL, NULL, 0),
+(13, '江浙菜', NULL, 'productclass', NULL, NULL, 0),
+(14, '龙虎斗', NULL, 'product', 10, NULL, 0),
+(15, '兴宁烤鸡', NULL, 'product', 13, NULL, 0),
+(16, '斤', NULL, 'productunit', NULL, NULL, 0),
+(17, '公斤', NULL, 'productunit', NULL, NULL, 0),
+(18, '磅', NULL, 'productunit', NULL, NULL, 0),
+(19, '只', NULL, 'foodunit', NULL, NULL, 0),
+(20, '斤', NULL, 'foodunit', NULL, NULL, 0),
+(21, '磅', NULL, 'foodunit', NULL, NULL, 0);
 
 --
 -- Indexes for dumped tables
@@ -530,7 +557,7 @@ ALTER TABLE `wx_product_entry`
 -- AUTO_INCREMENT for table `wx_product_template`
 --
 ALTER TABLE `wx_product_template`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `wx_product_template_entry`
 --
@@ -540,12 +567,12 @@ ALTER TABLE `wx_product_template_entry`
 -- AUTO_INCREMENT for table `wx_purchase`
 --
 ALTER TABLE `wx_purchase`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT for table `wx_refcode`
 --
 ALTER TABLE `wx_refcode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=10;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=22;
 --
 -- 限制导出的表
 --

@@ -9,6 +9,9 @@ use backend\models\Refcode;
 /* @var $model backend\models\Purchase */
 /* @var $form yii\widgets\ActiveForm */
 $foodclasslist = Refcode::getRefcodeBytype('foodclass');
+$brandlist = Refcode::getRefcodeBytype('brand');
+$supplierlist = Refcode::getRefcodeBytype('supplier');
+$foodunitlist = Refcode::getRefcodeBytype('foodunit');
 ?>
 <div class="page-header">
     <h1><?=$this->title?></h1>
@@ -27,29 +30,29 @@ $foodclasslist = Refcode::getRefcodeBytype('foodclass');
 
     <?= $form->field($model, 'price')->textInput() ?>
 
-    <?= $form->field($model, 'unit')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'unit')->dropDownList(array(''=>'--请选择--')+$foodunitlist) ?>
 
-    <?= $form->field($model, 'brand')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'brand')->dropDownList(array(''=>'--请选择--')+$brandlist) ?>
 
-    <?= $form->field($model, 'supplier')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'supplier')->dropDownList(array(''=>'--请选择--')+$supplierlist) ?>
 
     <?= $form->field($model, 'pur_user')->textInput() ?>
 
     <?= $form->field($model, 'pur_date')->textInput() ?>
 
-    <?= $form->field($model, 'depot_user')->textInput() ?>
+    <?//= $form->field($model, 'depot_user')->textInput() ?>
 
-    <?= $form->field($model, 'depot_count')->textInput() ?>
+    <?//= $form->field($model, 'depot_count')->textInput() ?>
 
-    <?= $form->field($model, 'depot_date')->textInput() ?>
+    <?//= $form->field($model, 'depot_date')->textInput() ?>
 
-    <?= $form->field($model, 'sycount')->textInput() ?>
+    <?//= $form->field($model, 'sycount')->textInput() ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?//= $form->field($model, 'status')->textInput() ?>
 
-    <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
+    <?//= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'is_del')->textInput() ?>
+    <?//= $form->field($model, 'is_del')->textInput() ?>
 
 
     <div class="form-group">

@@ -16,6 +16,7 @@ class CController extends Controller
     public $childSubject;//子菜单
     public $is_welcome;//是否欢迎页面
     public $request;
+    public $user;
     
     public function renderJson($params = array())
     {
@@ -25,6 +26,7 @@ class CController extends Controller
     public function init(){
         //$this->childSubject = '欢迎页面';
         $this->request = Yii::$app->request;
+        $this->user = Yii::$app->user->identity;
         if(Yii::$app -> user -> isGuest){
             return $this -> goBack();
         }

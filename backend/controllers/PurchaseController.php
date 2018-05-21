@@ -10,6 +10,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use backend\models\Refcode;
 use yii\helpers\ArrayHelper;
+use yii\filters\AccessControl;
 /**
  * PurchaseController implements the CRUD actions for Purchase model.
  */
@@ -18,6 +19,16 @@ class PurchaseController extends CController
     public function behaviors()
     {
         return [
+            'access' => [
+                'class' => AccessControl::className(),
+                'rules' => [
+                    [
+                        'actions'   => [],
+                        'allow'     => true,
+                        'roles'     => ['@'],   //其中？代表游客，@代表已登录的用户。
+                    ],
+                ],
+            ],
             'verbs' => [
                 'class' => VerbFilter::className(),
                 'actions' => [
@@ -62,7 +73,8 @@ class PurchaseController extends CController
     public function actionCreate()
     {
         $model = new Purchase();
-
+        $model->pur_user = $this->user->name;
+        $model->pur_date = date("Y-m-d H:i");
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['index']);
         } else {

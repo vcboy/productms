@@ -39,8 +39,10 @@ $domenu = [
     ],
 ];
 $columns = [['class' => 'yii\grid\SerialColumn','header' => '序号'],'nm'];
-if($type_code == 'food')
+if($type_code == 'food'){
     array_push($columns,'value');
+    array_push($columns,'unitName');
+}
 
 if($type_code == 'food' || $type_code == 'param' || $type_code == 'product')
     array_push($columns,'parentName');

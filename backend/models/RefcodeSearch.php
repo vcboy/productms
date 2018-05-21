@@ -18,7 +18,7 @@ class RefcodeSearch extends Refcode
     public function rules()
     {
         return [
-            [['id', 'is_del','pid'], 'integer'],
+            [['id', 'is_del','pid','pid2'], 'integer'],
             [['nm', 'value', 'type'], 'safe'],
         ];
     }
