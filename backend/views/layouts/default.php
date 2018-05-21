@@ -487,11 +487,11 @@ if (isset($this->blocks['head'])) {
             return 'left';
         }
 
-
+        /*
         $('.dialogs,.comments').slimScroll({
             height: '300px'
         });
-
+        */
 
         //Android's default browser somehow is confused when tapping on label which will lead to dragging the task
         //so disable dragging when clicking on label
@@ -503,7 +503,7 @@ if (isset($this->blocks['head'])) {
                 var label = li.find('label.inline').get(0);
                 if(label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation() ;
             });
-
+        /*
         $('#tasks').sortable({
                 opacity:0.8,
                 revert:true,
@@ -521,7 +521,7 @@ if (isset($this->blocks['head'])) {
             if(this.checked) $(this).closest('li').addClass('selected');
             else $(this).closest('li').removeClass('selected');
         });
-
+        */
         $('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
             $(this).prev().focus();
         });
