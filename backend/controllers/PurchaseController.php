@@ -72,6 +72,7 @@ class PurchaseController extends CController
      */
     public function actionCreate()
     {
+        //$this->layout = 'main';
         $model = new Purchase();
         $model->pur_user = $this->user->name;
         $model->pur_date = date("Y-m-d H:i");

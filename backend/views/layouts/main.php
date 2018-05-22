@@ -43,6 +43,7 @@ AppAsset::register($this);
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/respond.min.js"></script>
     <![endif]-->
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl?>/resource/css/indexCss.css">
+     <?php $this->head() ?>
 </head>
 <body class="login-layout my-login-layout">
     <?php $this->beginBody() ?>

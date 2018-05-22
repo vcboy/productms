@@ -144,6 +144,7 @@ if(!isset($this -> context -> subject)){
 
     <!-- 框架自定义css-->
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/css/default.css" />
+     <?php //$this->head() ?>
 <?php //头部数据块
 if (isset($this->blocks['head'])) {
     echo $this->blocks['head'];
@@ -194,6 +195,7 @@ if (isset($this->blocks['head'])) {
 </style>
 </head>
 <body>
+<?php $this->beginBody() ?>
 <?php //顶部组件 ?>
 <?= TopWidget::widget();?>
 
@@ -548,5 +550,6 @@ if (isset($this->blocks['head'])) {
 if (isset($this->blocks['foot'])) {
     echo $this->blocks['foot'];
 }?>
+<?php $this->endBody() ?>
 </body>
 <?php $this->endPage() ?>
