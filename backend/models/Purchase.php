@@ -1,7 +1,7 @@
 <?php
 
 namespace backend\models;
-
+use yii\helpers\ArrayHelper;
 use Yii;
 
 /**
@@ -28,6 +28,12 @@ use Yii;
  */
 class Purchase extends \yii\db\ActiveRecord
 {
+    
+    /*public $refcode;
+    public function init(){
+        $this->refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
+        return $this->refcode;
+    }*/
     /**
      * @inheritdoc
      */
@@ -76,5 +82,9 @@ class Purchase extends \yii\db\ActiveRecord
             'comment' => '验收意见',
             'is_del' => '是否删除 1是，0否',
         ];
+    }
+
+    public function getFoodclass(){
+        //return $this->refcode[$this->foodclass_id];
     }
 }
