@@ -1,23 +1,23 @@
 -- phpMyAdmin SQL Dump
--- version phpStudy 2014
+-- version 4.4.15
 -- http://www.phpmyadmin.net
 --
--- 主机: localhost
--- 生成日期: 2018 �?05 �?23 �?17:37
--- 服务器版本: 5.1.28-rc-community
--- PHP 版本: 5.5.30
+-- Host: 127.0.0.1
+-- Generation Time: 2018-05-23 23:03:27
+-- 服务器版本： 10.1.8-MariaDB
+-- PHP Version: 5.6.14
 
-SET SQL_MODE="NO_AUTO_VALUE_ON_ZERO";
+SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
 
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
 /*!40101 SET @OLD_COLLATION_CONNECTION=@@COLLATION_CONNECTION */;
-/*!40101 SET NAMES utf8 */;
+/*!40101 SET NAMES utf8mb4 */;
 
 --
--- 数据库: `productms`
+-- Database: `productms`
 --
 
 -- --------------------------------------------------------
@@ -27,7 +27,7 @@ SET time_zone = "+00:00";
 --
 
 CREATE TABLE IF NOT EXISTS `wx_admin` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `username` varchar(100) DEFAULT NULL COMMENT '用户登录名',
   `password` varchar(32) DEFAULT NULL COMMENT '密码',
   `name` varchar(100) DEFAULT NULL COMMENT '姓名',
@@ -39,9 +39,8 @@ CREATE TABLE IF NOT EXISTS `wx_admin` (
   `courseids` varchar(255) DEFAULT NULL COMMENT '任课老师课程',
   `disciplineids` varchar(255) DEFAULT NULL COMMENT '任课老师的专业',
   `p_id` tinyint(2) NOT NULL,
-  `level` tinyint(2) DEFAULT '0',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+  `level` tinyint(2) DEFAULT '0'
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 --
 -- 转存表中的数据 `wx_admin`
@@ -62,11 +61,7 @@ INSERT INTO `wx_admin` (`id`, `username`, `password`, `name`, `gender`, `corresp
 CREATE TABLE IF NOT EXISTS `wx_auth_assignment` (
   `item_name` varchar(64) NOT NULL,
   `user_id` varchar(64) NOT NULL,
-  `created_at` int(11) DEFAULT NULL,
-  PRIMARY KEY (`item_name`,`user_id`),
-  KEY `user_id` (`user_id`),
-  KEY `created_at` (`created_at`),
-  KEY `item_name` (`item_name`)
+  `created_at` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员授权表';
 
 --
@@ -90,12 +85,7 @@ CREATE TABLE IF NOT EXISTS `wx_auth_item` (
   `data` text COMMENT '数据',
   `created_at` int(11) DEFAULT NULL,
   `updated_at` int(11) DEFAULT NULL,
-  `menu_id` int(11) DEFAULT NULL COMMENT '权限所属菜单',
-  PRIMARY KEY (`name`),
-  KEY `rule_name` (`rule_name`),
-  KEY `type` (`type`),
-  KEY `name` (`name`),
-  KEY `created_at` (`created_at`)
+  `menu_id` int(11) DEFAULT NULL COMMENT '权限所属菜单'
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理权权限条目';
 
 --
@@ -158,10 +148,7 @@ INSERT INTO `wx_auth_item` (`name`, `type`, `description`, `rule_name`, `data`, 
 
 CREATE TABLE IF NOT EXISTS `wx_auth_item_child` (
   `parent` varchar(64) NOT NULL,
-  `child` varchar(64) NOT NULL,
-  PRIMARY KEY (`parent`,`child`),
-  KEY `child` (`child`),
-  KEY `parent` (`parent`)
+  `child` varchar(64) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='管理员权限关系表';
 
 --
@@ -220,19 +207,14 @@ INSERT INTO `wx_auth_item_child` (`parent`, `child`) VALUES
 --
 
 CREATE TABLE IF NOT EXISTS `wx_menu` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `name` varchar(128) NOT NULL COMMENT '名称',
   `parent` int(11) DEFAULT '0' COMMENT '上级菜单',
   `route` varchar(256) DEFAULT NULL,
   `taxis` int(11) DEFAULT '0' COMMENT '排序字段 默认0,以数字倒序排列',
   `data` text,
-  `url` varchar(100) DEFAULT NULL COMMENT '菜单链接地址',
-  PRIMARY KEY (`id`),
-  KEY `parent` (`parent`),
-  KEY `name` (`name`),
-  KEY `route` (`route`(255)),
-  KEY `order` (`taxis`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='系统管理员菜单权限表\r\n' AUTO_INCREMENT=66 ;
+  `url` varchar(100) DEFAULT NULL COMMENT '菜单链接地址'
+) ENGINE=InnoDB AUTO_INCREMENT=66 DEFAULT CHARSET=utf8 COMMENT='系统管理员菜单权限表\r\n';
 
 --
 -- 转存表中的数据 `wx_menu`
@@ -284,25 +266,24 @@ INSERT INTO `wx_menu` (`id`, `name`, `parent`, `route`, `taxis`, `data`, `url`) 
 --
 
 CREATE TABLE IF NOT EXISTS `wx_procut` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `booker_id` int(11) DEFAULT NULL COMMENT '配货人',
+  `id` int(11) NOT NULL,
+  `booker_user` varchar(32) DEFAULT NULL COMMENT '配货人',
   `book_date` int(11) NOT NULL COMMENT '配货时间',
   `book_comment` int(11) DEFAULT NULL COMMENT '配货意见',
   `arrive_date` int(11) NOT NULL COMMENT '需要达到时间',
   `is_customer` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0：本单位 1：其他单位',
-  `total_price` float DEFAULT NULL COMMENT '总价',
-  `sender_id` int(11) DEFAULT NULL COMMENT '发货人',
+  `total_price` decimal(10,2) DEFAULT NULL COMMENT '总价',
+  `sender_user` varchar(32) DEFAULT NULL COMMENT '发货人',
   `send_date` int(11) DEFAULT NULL COMMENT '发货时间',
   `send_status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '发货状态 0：未发货 1：已发货',
   `send_comment` text COMMENT '发货意见',
-  `inspector_id` int(11) DEFAULT NULL COMMENT '验货人',
+  `inspector_user` varchar(32) DEFAULT NULL COMMENT '验货人',
   `inspect_date` int(11) DEFAULT NULL COMMENT '验货时间（入库时间）',
   `inspect_status` tinyint(4) DEFAULT NULL COMMENT '验货状态 0：未验货 1：已入库',
   `inspect_comment` text COMMENT '验收意见',
   `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否',
-  `customer` varchar(128) DEFAULT NULL COMMENT '配送客户名称',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品配、发、验货主表' AUTO_INCREMENT=1 ;
+  `customer` varchar(128) DEFAULT NULL COMMENT '配送客户名称'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品配、发、验货主表';
 
 -- --------------------------------------------------------
 
@@ -311,7 +292,7 @@ CREATE TABLE IF NOT EXISTS `wx_procut` (
 --
 
 CREATE TABLE IF NOT EXISTS `wx_product_consume` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `productclass_id` int(11) NOT NULL COMMENT '成品分类',
   `product_id` int(11) NOT NULL COMMENT '成品名称',
   `unitprice` float NOT NULL COMMENT '销售单价',
@@ -319,9 +300,8 @@ CREATE TABLE IF NOT EXISTS `wx_product_consume` (
   `count` int(11) NOT NULL DEFAULT '0' COMMENT '消耗数量',
   `consume_type` tinyint(4) NOT NULL COMMENT '消耗方式 1：销售 2：损耗',
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '审核状态 1：销售默认审核通过 0：报损需要指定人员审核',
-  `create_dt` int(11) NOT NULL COMMENT '添加时间',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品消耗表' AUTO_INCREMENT=1 ;
+  `create_dt` int(11) NOT NULL COMMENT '添加时间'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品消耗表';
 
 -- --------------------------------------------------------
 
@@ -330,7 +310,7 @@ CREATE TABLE IF NOT EXISTS `wx_product_consume` (
 --
 
 CREATE TABLE IF NOT EXISTS `wx_product_entry` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `productclass_id` int(11) NOT NULL COMMENT '成品分类',
   `product_id` int(11) NOT NULL COMMENT '成品名称',
   `unitprice` float NOT NULL COMMENT '基准价',
@@ -339,9 +319,8 @@ CREATE TABLE IF NOT EXISTS `wx_product_entry` (
   `book_count` int(11) NOT NULL DEFAULT '0' COMMENT '配货数量',
   `send_count` int(11) NOT NULL DEFAULT '0' COMMENT '实际发货数量',
   `depot_count` int(11) NOT NULL DEFAULT '0' COMMENT '验货数量（入库数量',
-  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否入库 0：未入库 1：已入库',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品配、发、验货详细表（成品库存表）' AUTO_INCREMENT=1 ;
+  `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否入库 0：未入库 1：已入库'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品配、发、验货详细表（成品库存表）';
 
 -- --------------------------------------------------------
 
@@ -350,14 +329,13 @@ CREATE TABLE IF NOT EXISTS `wx_product_entry` (
 --
 
 CREATE TABLE IF NOT EXISTS `wx_product_template` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `productclass_id` int(11) DEFAULT NULL COMMENT '成品分类',
   `product_id` int(11) DEFAULT NULL COMMENT '成品名称',
   `unitprice` float DEFAULT NULL COMMENT '基准价',
   `unit` varchar(32) DEFAULT NULL COMMENT '单位',
-  `is_del` int(11) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='成品模板主表' AUTO_INCREMENT=2 ;
+  `is_del` int(11) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COMMENT='成品模板主表';
 
 --
 -- 转存表中的数据 `wx_product_template`
@@ -373,13 +351,12 @@ INSERT INTO `wx_product_template` (`id`, `productclass_id`, `product_id`, `unitp
 --
 
 CREATE TABLE IF NOT EXISTS `wx_product_template_entry` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
-  `ptid` int(11) DEFAULT NULL,
+  `id` int(11) NOT NULL,
+  `ptid` int(11) DEFAULT NULL COMMENT '父类id product_template.id',
   `foodclass_id` int(11) DEFAULT NULL COMMENT '食材分类',
   `food_id` int(11) DEFAULT NULL COMMENT '食材名称',
-  `count` int(11) DEFAULT NULL COMMENT '数量',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品模板明细表' AUTO_INCREMENT=1 ;
+  `count` int(11) DEFAULT NULL COMMENT '数量'
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品模板明细表';
 
 -- --------------------------------------------------------
 
@@ -388,33 +365,37 @@ CREATE TABLE IF NOT EXISTS `wx_product_template_entry` (
 --
 
 CREATE TABLE IF NOT EXISTS `wx_purchase` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `foodclass_id` int(11) DEFAULT NULL COMMENT '食材分类',
   `food_id` int(11) DEFAULT NULL COMMENT '食材名称',
   `param_id` int(11) DEFAULT NULL COMMENT '规格参数',
   `book_count` int(11) NOT NULL DEFAULT '0' COMMENT '采购数量',
-  `price` float DEFAULT NULL COMMENT '单价',
+  `price` decimal(10,2) DEFAULT NULL COMMENT '单价',
   `unit` varchar(32) DEFAULT NULL COMMENT '单位',
   `brand` varchar(128) DEFAULT NULL COMMENT '品牌',
   `supplier` varchar(128) DEFAULT NULL COMMENT '供应商',
-  `pur_user` int(11) NOT NULL COMMENT '采购人',
+  `pur_user` varchar(32) DEFAULT NULL COMMENT '采购人',
   `pur_date` int(11) NOT NULL COMMENT '采购时间',
-  `depot_user` int(11) NOT NULL COMMENT '入库人',
+  `depot_user` varchar(32) DEFAULT NULL COMMENT '入库人',
   `depot_count` int(11) NOT NULL DEFAULT '0' COMMENT '入库数量',
   `depot_date` int(11) NOT NULL COMMENT '入库时间',
   `sycount` int(11) NOT NULL DEFAULT '0' COMMENT '剩余数量',
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '0：未入库，1已入库',
   `comment` text NOT NULL COMMENT '验收意见',
-  `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否',
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='采购表（市场库存表）' AUTO_INCREMENT=2 ;
+  `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='采购表（市场库存表）';
 
 --
 -- 转存表中的数据 `wx_purchase`
 --
 
 INSERT INTO `wx_purchase` (`id`, `foodclass_id`, `food_id`, `param_id`, `book_count`, `price`, `unit`, `brand`, `supplier`, `pur_user`, `pur_date`, `depot_user`, `depot_count`, `depot_date`, `sycount`, `status`, `comment`, `is_del`) VALUES
-(1, 2, 3, 7, 21, 100, '111', '11', '111', 2222, 222, 222, 22, 22, 22, 22, '22', 22);
+(1, 2, 3, 7, 21, '100.00', '111', '11', '111', '1', 222, '222', 22, 22, 22, 22, '22', 22),
+(2, 2, 8, 9, 100, '5.00', NULL, '22', '6', '1', 1526832000, '0', 0, 0, 0, 0, '', 0),
+(3, 2, 3, 7, 23, '234.33', NULL, '22', '6', '1', 1526486400, '0', 0, 0, 0, 0, '', 0),
+(4, 2, 3, 7, 30, '23.50', NULL, '22', '6', '1', 1527004800, '0', 0, 0, 0, 0, '', 0),
+(5, 2, 3, 7, 343, '4.00', NULL, '', '', '高级管理员', 1527004800, NULL, 0, 0, 0, 0, '', 0),
+(6, 2, 3, 7, 3, '4.00', NULL, '22', '6', '超级管理员2', 1527004800, NULL, 0, 0, 0, 0, '', 0);
 
 -- --------------------------------------------------------
 
@@ -423,16 +404,14 @@ INSERT INTO `wx_purchase` (`id`, `foodclass_id`, `food_id`, `param_id`, `book_co
 --
 
 CREATE TABLE IF NOT EXISTS `wx_refcode` (
-  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `id` int(11) NOT NULL,
   `nm` varchar(128) DEFAULT NULL,
   `value` varchar(64) DEFAULT NULL COMMENT '对应的值',
   `type` varchar(32) DEFAULT NULL COMMENT '类型',
   `pid` int(11) DEFAULT NULL COMMENT '父类id',
   `pid2` int(11) DEFAULT NULL COMMENT '食材单位',
-  `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否',
-  PRIMARY KEY (`id`),
-  KEY `type` (`type`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='基础表' AUTO_INCREMENT=22 ;
+  `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
+) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='基础表';
 
 --
 -- 转存表中的数据 `wx_refcode`
@@ -459,8 +438,148 @@ INSERT INTO `wx_refcode` (`id`, `nm`, `value`, `type`, `pid`, `pid2`, `is_del`) 
 (18, '磅', NULL, 'productunit', NULL, NULL, 0),
 (19, '只', NULL, 'foodunit', NULL, NULL, 0),
 (20, '斤', NULL, 'foodunit', NULL, NULL, 0),
-(21, '磅', NULL, 'foodunit', NULL, NULL, 0);
+(21, '磅', NULL, 'foodunit', NULL, NULL, 0),
+(22, '双汇', NULL, 'brand', NULL, NULL, 0);
 
+--
+-- Indexes for dumped tables
+--
+
+--
+-- Indexes for table `wx_admin`
+--
+ALTER TABLE `wx_admin`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wx_auth_assignment`
+--
+ALTER TABLE `wx_auth_assignment`
+  ADD PRIMARY KEY (`item_name`,`user_id`),
+  ADD KEY `user_id` (`user_id`),
+  ADD KEY `created_at` (`created_at`),
+  ADD KEY `item_name` (`item_name`);
+
+--
+-- Indexes for table `wx_auth_item`
+--
+ALTER TABLE `wx_auth_item`
+  ADD PRIMARY KEY (`name`),
+  ADD KEY `rule_name` (`rule_name`),
+  ADD KEY `type` (`type`),
+  ADD KEY `name` (`name`),
+  ADD KEY `created_at` (`created_at`);
+
+--
+-- Indexes for table `wx_auth_item_child`
+--
+ALTER TABLE `wx_auth_item_child`
+  ADD PRIMARY KEY (`parent`,`child`),
+  ADD KEY `child` (`child`),
+  ADD KEY `parent` (`parent`);
+
+--
+-- Indexes for table `wx_menu`
+--
+ALTER TABLE `wx_menu`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `parent` (`parent`),
+  ADD KEY `name` (`name`),
+  ADD KEY `route` (`route`(255)),
+  ADD KEY `order` (`taxis`);
+
+--
+-- Indexes for table `wx_procut`
+--
+ALTER TABLE `wx_procut`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wx_product_consume`
+--
+ALTER TABLE `wx_product_consume`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wx_product_entry`
+--
+ALTER TABLE `wx_product_entry`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wx_product_template`
+--
+ALTER TABLE `wx_product_template`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wx_product_template_entry`
+--
+ALTER TABLE `wx_product_template_entry`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wx_purchase`
+--
+ALTER TABLE `wx_purchase`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Indexes for table `wx_refcode`
+--
+ALTER TABLE `wx_refcode`
+  ADD PRIMARY KEY (`id`),
+  ADD KEY `type` (`type`);
+
+--
+-- AUTO_INCREMENT for dumped tables
+--
+
+--
+-- AUTO_INCREMENT for table `wx_admin`
+--
+ALTER TABLE `wx_admin`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=5;
+--
+-- AUTO_INCREMENT for table `wx_menu`
+--
+ALTER TABLE `wx_menu`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=66;
+--
+-- AUTO_INCREMENT for table `wx_procut`
+--
+ALTER TABLE `wx_procut`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `wx_product_consume`
+--
+ALTER TABLE `wx_product_consume`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `wx_product_entry`
+--
+ALTER TABLE `wx_product_entry`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `wx_product_template`
+--
+ALTER TABLE `wx_product_template`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=2;
+--
+-- AUTO_INCREMENT for table `wx_product_template_entry`
+--
+ALTER TABLE `wx_product_template_entry`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+--
+-- AUTO_INCREMENT for table `wx_purchase`
+--
+ALTER TABLE `wx_purchase`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `wx_refcode`
+--
+ALTER TABLE `wx_refcode`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
 --
 -- 限制导出的表
 --

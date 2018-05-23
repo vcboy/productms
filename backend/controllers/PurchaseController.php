@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\Purchase;
 use backend\models\PurchaseSearch;
+use backend\models\Admin;
 use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -86,12 +87,10 @@ class PurchaseController extends CController
     {
         //$this->layout = 'main';
         $model = new Purchase();
-        $model->pur_user = $this->user->name;
-        $model->pur_date = date("Y-m-d"); 
+        //$model->pur_user = $this->user->name;
+        //$model->pur_date = date("Y-m-d"); 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            $pur_userid = $this->request->post('pur_userid');
             $model->pur_date = strtotime($model->pur_date);
-            $model->pur_user = $pur_userid;
             $model->save();
             //var_dump($model->getErrors());
             return $this->redirect(['index']);
@@ -111,8 +110,9 @@ class PurchaseController extends CController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->pur_date = strtotime($model->pur_date);
+            $model->save();
             return $this->redirect(['index']);
         } else {
             return $this->render('update', [

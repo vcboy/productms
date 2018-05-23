@@ -12,6 +12,15 @@ $foodclasslist = Refcode::getRefcodeBytype('foodclass');
 $brandlist = Refcode::getRefcodeBytype('brand');
 $supplierlist = Refcode::getRefcodeBytype('supplier');
 $foodunitlist = Refcode::getRefcodeBytype('foodunit');
+$foodlist = $paramlist = [];
+if($model->foodclass_id){
+    //$foodlist = Refcode::getRefcodeBytype('food');
+    $foodlist = Refcode::getFood($model->foodclass_id);
+}
+if($model->food_id){
+    $paramlist = Refcode::getFood($model->food_id);
+}
+
 ?>
 <div class="page-header">
     <h1><?=$this->title?></h1>
@@ -22,9 +31,9 @@ $foodunitlist = Refcode::getRefcodeBytype('foodunit');
 
     <?= $form->field($model, 'foodclass_id')->dropDownList(array(''=>'--请选择--')+$foodclasslist,['id'=>'foodclass_id']) ?>
 
-    <?= $form->field($model, 'food_id')->dropDownList(array(''=>'--请选择--'),['id'=>'food_id']) ?>
+    <?= $form->field($model, 'food_id')->dropDownList(array(''=>'--请选择--')+$foodlist,['id'=>'food_id']) ?>
 
-    <?= $form->field($model, 'param_id')->dropDownList(array(''=>'--请选择--'),['id'=>'param_id']) ?>
+    <?= $form->field($model, 'param_id')->dropDownList(array(''=>'--请选择--')+$paramlist,['id'=>'param_id']) ?>
 
     <?= $form->field($model, 'book_count')->textInput() ?>
 
@@ -36,10 +45,9 @@ $foodunitlist = Refcode::getRefcodeBytype('foodunit');
 
     <?= $form->field($model, 'supplier')->dropDownList(array(''=>'--请选择--')+$supplierlist) ?>
 
-    <?= $form->field($model, 'pur_user')->textInput() ?>
-    <?=Html::input('hidden','pur_userid',Yii::$app->user->identity->id,['id' => 'pur_userid']);?>
+    <?= $form->field($model, 'pur_user')->textInput(['value'=>$model->pur_user?$model->pur_user:Yii::$app->user->identity->name]) ?>
 
-    <?= $form->field($model, 'pur_date')->textInput() ?>
+    <?= $form->field($model, 'pur_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->pur_date?date("Y-m-d",$model->pur_date):date("Y-m-d")]) ?>
 
     <?//= $form->field($model, 'depot_user')->textInput() ?>
 

@@ -38,7 +38,8 @@ if($model->food_id){
 
     <?= $form->field($model, 'param_id')->dropDownList(array(''=>'--请选择--')+$paramlist,['id'=>'param_id']) ?>
 
-    <?= $form->field($model, 'pur_date') ?>
+    <?//= $form->field($model, 'pur_date') ?>
+    <?= $form->field($model, 'pur_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
 
     <?php // echo $form->field($model, 'price') ?>
 

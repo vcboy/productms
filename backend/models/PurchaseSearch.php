@@ -18,9 +18,9 @@ class PurchaseSearch extends Purchase
     public function rules()
     {
         return [
-            [['id', 'foodclass_id', 'food_id', 'param_id', 'book_count', 'pur_user', 'pur_date', 'depot_user', 'depot_count', 'depot_date', 'sycount', 'status', 'is_del'], 'integer'],
+            [['id', 'foodclass_id', 'food_id', 'param_id', 'book_count', 'depot_count', 'sycount', 'status', 'is_del'], 'integer'],
             [['price'], 'number'],
-            [['unit', 'brand', 'supplier', 'comment'], 'safe'],
+            [['unit', 'brand', 'supplier', 'comment','pur_date','depot_date', 'pur_user', 'depot_user'], 'safe'],
         ];
     }
 
@@ -63,8 +63,7 @@ class PurchaseSearch extends Purchase
             'param_id' => $this->param_id,
             'book_count' => $this->book_count,
             'price' => $this->price,
-            'pur_user' => $this->pur_user,
-            'pur_date' => $this->pur_date,
+            'pur_user' => $this->pur_user,            
             'depot_user' => $this->depot_user,
             'depot_count' => $this->depot_count,
             'depot_date' => $this->depot_date,
@@ -72,6 +71,10 @@ class PurchaseSearch extends Purchase
             'status' => $this->status,
             'is_del' => $this->is_del,
         ]);
+
+        if($this->pur_date){
+            $query->andFilterWhere(['pur_date' => strtotime($this->pur_date)]);
+        }
 
         $query->andFilterWhere(['like', 'unit', $this->unit])
             ->andFilterWhere(['like', 'brand', $this->brand])
