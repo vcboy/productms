@@ -101,7 +101,6 @@ class ProductTemplateController extends CController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             ProductTemplateEntry::deleteAll('ptid = :ptid', [':ptid' => $model->id]);
             $ftype_txt = $request->post('ftype_txt');
@@ -124,7 +123,7 @@ class ProductTemplateController extends CController
             $pte_arr_txt = "";
             $now = time()-10;
             $foodclasslist = Refcode::getRefcodeBytype('foodclass');
-
+            
             foreach ($pte_arr as $key => $pte) {
                 $temp = $now - $key;
                 $foodclasslist_txt = "";
@@ -137,7 +136,12 @@ class ProductTemplateController extends CController
                     $foodclasslist_txt .= "<option value='".$fkey."' ".$flag.">".$fval."</option>";
                 }
 
-                $pte_info = "<tr id='tr_".$temp."'><td><select class='ftype form-control' onchange='_changeFtype(this,".$temp.")'><option value=''>--请选择--</option>".$foodclasslist_txt."</select></td><td><select class='form-control fid food_"+temp+"' onchange='_changeFood(this,"+temp+")'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>"
+                $pte_info = "<tr id='tr_".$temp."'>
+                        <td><select class='ftype form-control' onchange='_changeFtype(this,".$temp.")'><option value=''>--请选择--</option>".$foodclasslist_txt."</select></td>
+                        <td><select class='form-control fid food_".$temp."' onchange='_changeFood(this,".$temp.")'><option value=''>--请选择--</option></select></td>
+                        <td><input class='form-control num num_".$temp."' value='".$pte['count']."'></td>
+                        <td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\"".$temp."\")'><i class='icon-trash bigger-120'></i></button></td>
+                        </tr>";
             }
             return $this->render('update', [
                 'model' => $model,
