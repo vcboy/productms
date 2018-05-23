@@ -29,10 +29,13 @@ $foodclasslist = Refcode::getRefcodeBytype('foodclass');
     <?= $form->field($model, 'unit')->dropDownList(array(''=>'--请选择--')+$productunitlist,['id'=>'unit']) ?>
 
     <? //$form->field($model, 'is_del')->textInput() ?>
-
+    <input type="hidden" name="ftype_txt" id="ftype_txt">
+    <input type="hidden" name="food_txt" id="food_txt">
+    <input type="hidden" name="fnum_txt" id="fnum_txt">
     <table class="table table-striped table-bordered" id="food_tb">
         <tr><th colspan="4"><?=  Html::a('添加食材配额','#',['class'=>'btn btn-sm btn-success','onclick'=>'_addPurchase()'])?></th></tr>
         <tr><th>食材分类</th><th>食材名称</th><th>食材数量</th><th class="action-column">操作</th></tr>
+        <?=$pte_arr_txt?>
     </table>
 
     <div class="form-group">
@@ -69,7 +72,7 @@ $foodclasslist = Refcode::getRefcodeBytype('foodclass');
      */
     function _addPurchase(){
         var temp = new Date().getTime();
-        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype' style='width:100%;' onchange='_changeFtype(this,"+temp+")'><option value=''>--请选择--</option><? foreach ($foodclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";}?></select></td><td><select  style='width:100%;' class='fid food_"+temp+"' onchange='_changeFood(this,"+temp+")'><option value=''>--请选择--</option></select></td><td><input class='num num_"+temp+"'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
+        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changeFtype(this,"+temp+")'><option value=''>--请选择--</option><? foreach ($foodclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";}?></select></td><td><select class='form-control fid food_"+temp+"' onchange='_changeFood(this,"+temp+")'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
         $('#food_tb').append(txt);
     }
 
@@ -89,41 +92,68 @@ $foodclasslist = Refcode::getRefcodeBytype('foodclass');
     }
 
     function _changeFtype(obj,tempkey){
-        var id = $(obj).val();
+        var foodclass_id = $(obj).val();
+        var Content = {foodclass_id: foodclass_id};
+        var url = "<?=Url::to(['purchase/getfood'])?>";
+        $.post(url,Content,function(rsp){
+            if(rsp){
+                var obj = JSON.parse(rsp);
+                var optionstr = '<option value="">--请选择--</option>';
+                for(var i in obj){
+                    optionstr+="<option value="+i+">"+obj[i]+"</option>";
+                }
+                $(".food_"+tempkey+" option").remove();
+                $(".food_"+tempkey).append(optionstr);
+            }
+        })
+
+        
     }
 
     function _checkSub(){
         var flag = 1;
         var ftype_txt = "";
+        var food_txt = "";
+        var fnum_txt = "";
         var err_msg = "";
-        $('.ftype').each(function(){
-            var ft_txt = $(this).val();
-            if(ft_txt!=""){
-                ftype_txt = ftype_txt + "";    
-            }else{
-                flag=0;
-                err_msg = err_msg + "食品类型没有选择。";
-            }
-        });
+        if($('.ftype').size()>0){
+            $('.ftype').each(function(){
+                var ft_txt = $(this).val();
+                if(ft_txt!=""){
+                    ftype_txt = ftype_txt + ft_txt + ",";    
+                }else{
+                    flag=0;
+                    err_msg = err_msg + "食品类型没有选择。";
+                }
+            });
 
-        $('.fid').each(function(){
-            var ft_txt = $(this).val();
-            if(ft_txt!=""){
-                ftype_txt = ftype_txt + "";    
-            }else{
-                flag=0;
-                err_msg = err_msg + "食品名称没有选择。";
-            }
-        });
+            $('.fid').each(function(){
+                var ft_txt = $(this).val();
+                if(ft_txt!=""){
+                    food_txt = food_txt + ft_txt + ",";    
+                }else{
+                    flag=0;
+                    err_msg = err_msg + "食品名称没有选择。";
+                }
+            });
 
-        $('.num').each(function(){
-            var ft_txt = $(this).val();
-            if(ft_txt!=""&&!isNaN(ft_txt)){
-                ftype_txt = ftype_txt + "";    
-            }else{
-                flag=0;
-                err_msg = err_msg + "食品配额数量没有填写或填写有误。";
-            }
-        });
+            $('.num').each(function(){
+                var ft_txt = $(this).val();
+                if(ft_txt!=""&&!isNaN(ft_txt)){
+                    fnum_txt = fnum_txt + ft_txt + ",";    
+                }else{
+                    flag=0;
+                    err_msg = err_msg + "食品配额数量没有填写或填写有误。";
+                }
+            });
+        }else{
+            err_msg = err_msg + "请添加成品所需要的食材配比。";
+        }
+
+        if(flag==0){
+            swal(err_msg);
+        }else{
+            $('form').submit();
+        }
     }
 </script>

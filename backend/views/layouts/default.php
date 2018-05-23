@@ -15,7 +15,7 @@ if(!isset($this -> context -> subject)){
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
-<html lang="en">
+<html lang="zh-CN">
 <head>
     <meta charset="utf-8" />
     <title><?=Yii::$app->params['appname']?></title>
@@ -53,13 +53,13 @@ if(!isset($this -> context -> subject)){
 
     <!--[if !IE]> -->
     <script type="text/javascript">
-        window.jQuery || document.write("<script src='<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-2.0.3.min.js'>"+"<"+"script>");
+        window.jQuery || document.write("<script src='<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-2.0.3.min.js'>"+"</"+"script>");
     </script>
     <!-- <![endif]-->
 
     <!--[if IE]>
     <script type="text/javascript">
-        window.jQuery || document.write("<script src='<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-1.10.2.min.js'>"+"<"+"script>");
+        window.jQuery || document.write("<script src='<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-1.10.2.min.js'>"+"</"+"script>");
     </script>
     <![endif]-->
 
@@ -351,6 +351,7 @@ if (isset($this->blocks['head'])) {
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
         jQuery(function($) {
+            /*
         $('.easy-pie-chart.percentage').each(function(){
             var $box = $(this).closest('.infobox');
             var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
@@ -372,7 +373,7 @@ if (isset($this->blocks['head'])) {
             var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
             $(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
         });
-
+    */
         var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
         var data = [
             { label: "social networks",  data: 38.7, color: "#68BC31"},

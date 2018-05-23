@@ -13,6 +13,7 @@ $this->params['breadcrumbs'][] = $this->title;
 <div class="product-template-create">
     <?= $this->render('_form', [
         'model' => $model,
+        'pte_arr_txt' => (empty($pte_arr_txt)?"":$pte_arr_txt),
     ]) ?>
 
 </div>

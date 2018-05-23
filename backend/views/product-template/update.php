@@ -11,11 +11,9 @@ $this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' 
 $this->params['breadcrumbs'][] = 'Update';
 ?>
 <div class="product-template-update">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
     <?= $this->render('_form', [
         'model' => $model,
+        'pte_arr_txt' => (empty($pte_arr_txt)?"":$pte_arr_txt),
     ]) ?>
 
 </div>

@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\ProductTemplate;
 use backend\models\ProductTemplateSearch;
+use backend\models\ProductTemplateEntry;
 use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -68,6 +69,21 @@ class ProductTemplateController extends CController
         $model = new ProductTemplate();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            $request = Yii::$app->request;
+            $ftype_txt = $request->post('ftype_txt');
+            $food_txt = $request->post('food_txt');
+            $fnum_txt = $request->post('fnum_txt');
+            $ftype_txt_arr = explode(',', $ftype_txt);
+            $food_txt_arr = explode(',', $food_txt);
+            $fnum_txt_arr = explode(',', $fnum_txt);
+            foreach ($ftype_txt_arr as $key => $val) {
+                $pte = new ProductTemplateEntry();
+                $pte['ptid'] = $model->id;
+                $pte['foodclass_id'] = $val;
+                $pte['food_id'] = $food_txt_arr[$key];
+                $pte['count'] = $fnum_txt_arr[$key];
+                $pte->save();
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
             return $this->render('create', [
@@ -87,10 +103,45 @@ class ProductTemplateController extends CController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            ProductTemplateEntry::deleteAll('ptid = :ptid', [':ptid' => $model->id]);
+            $ftype_txt = $request->post('ftype_txt');
+            $food_txt = $request->post('food_txt');
+            $fnum_txt = $request->post('fnum_txt');
+            $ftype_txt_arr = explode(',', $ftype_txt);
+            $food_txt_arr = explode(',', $food_txt);
+            $fnum_txt_arr = explode(',', $fnum_txt);
+            foreach ($ftype_txt_arr as $key => $val) {
+                $pte = new ProductTemplateEntry();
+                $pte['ptid'] = $model->id;
+                $pte['foodclass_id'] = $val;
+                $pte['food_id'] = $food_txt_arr[$key];
+                $pte['count'] = $fnum_txt_arr[$key];
+                $pte->save();
+            }
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $pte_arr = ProductTemplateEntry::find()->andWhere(['ptid'=>$model->id])->all();
+            $pte_arr_txt = "";
+            $now = time()-10;
+            $foodclasslist = Refcode::getRefcodeBytype('foodclass');
+
+            foreach ($pte_arr as $key => $pte) {
+                $temp = $now - $key;
+                $foodclasslist_txt = "";
+
+                foreach ($foodclasslist as $fkey => $fval) {
+                    $flag = "";
+                    if($fkey==$pte['foodclass_id']){
+                        $flag = " selected ";
+                    }
+                    $foodclasslist_txt .= "<option value='".$fkey."' ".$flag.">".$fval."</option>";
+                }
+
+                $pte_info = "<tr id='tr_".$temp."'><td><select class='ftype form-control' onchange='_changeFtype(this,".$temp.")'><option value=''>--请选择--</option>".$foodclasslist_txt."</select></td><td><select class='form-control fid food_"+temp+"' onchange='_changeFood(this,"+temp+")'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>"
+            }
             return $this->render('update', [
                 'model' => $model,
+                'pte_arr_txt' => $pte_arr_txt,
             ]);
         }
     }
