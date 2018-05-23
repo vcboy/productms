@@ -2,10 +2,19 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use backend\models\Refcode;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\ProductTemplateSearch */
 /* @var $form yii\widgets\ActiveForm */
+
+$productclasslist = Refcode::getRefcodeBytype('productclass');
+$productlist = [];
+if(!empty($model->productclass_id)){
+    $productlist = ArrayHelper::map(Refcode::find()->andWhere(['pid'=>$model->productclass_id,'is_del'=>0])->all(),'id','nm');
+}
 ?>
 
 <div class="product-template-search">
@@ -14,24 +23,37 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+    <div class="tabfield">
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($model, 'productclass_id')->dropDownList(array(''=>'--请选择--')+$productclasslist,['id'=>'productclass_id']) ?>
 
-    <?= $form->field($model, 'productclass_id') ?>
+    <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
 
-    <?= $form->field($model, 'product_id') ?>
-
-    <?= $form->field($model, 'unitprice') ?>
-
-    <?= $form->field($model, 'unit') ?>
-
-    <?php // echo $form->field($model, 'is_del') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
     </div>
-
+    <div class="form-group">
+        <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
+        <?= Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
+    </div>
     <?php ActiveForm::end(); ?>
 
 </div>
+<script type="text/javascript">
+     $(document).ready(function(){
+        $("#productclass_id").change(function(){
+            var productclass_id = $(this).val();
+            var Content = {productclass_id: productclass_id};
+            var url = "<?=Url::to(['getproduct'])?>";
+            $.post(url,Content,function(rsp){
+                if(rsp){
+                    var obj = JSON.parse(rsp);
+                    var optionstr = '<option value="">--请选择--</option>';
+                    for(var i in obj){
+                        optionstr+="<option value="+i+">"+obj[i]+"</option>";
+                    }
+                    $("#product_id option").remove();
+                    $("#product_id").append(optionstr);
+                }
+            })
+        });
+    });
+</script>

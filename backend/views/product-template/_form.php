@@ -4,6 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 use backend\models\Refcode;
 use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\ProductTemplate */
@@ -11,6 +12,10 @@ use yii\helpers\Url;
 $productclasslist = Refcode::getRefcodeBytype('productclass');
 $productunitlist = Refcode::getRefcodeBytype('productunit');
 $foodclasslist = Refcode::getRefcodeBytype('foodclass');
+$productlist = [];
+if(!empty($model->productclass_id)){
+    $productlist = ArrayHelper::map(Refcode::find()->andWhere(['pid'=>$model->productclass_id,'is_del'=>0])->all(),'id','nm');
+}
 ?>
 <div class="page-header">
     <h1><?=$this->title?></h1>
@@ -22,7 +27,7 @@ $foodclasslist = Refcode::getRefcodeBytype('foodclass');
 
     <?= $form->field($model, 'productclass_id')->dropDownList(array(''=>'--请选择--')+$productclasslist,['id'=>'productclass_id']) ?>
 
-    <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--'),['id'=>'product_id']) ?>
+    <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
 
     <?= $form->field($model, 'unitprice')->textInput() ?>
 
@@ -153,6 +158,9 @@ $foodclasslist = Refcode::getRefcodeBytype('foodclass');
         if(flag==0){
             swal(err_msg);
         }else{
+            $('#ftype_txt').val(ftype_txt.substring(0,ftype_txt.length-1));
+            $('#food_txt').val(food_txt.substring(0,food_txt.length-1));
+            $('#fnum_txt').val(fnum_txt.substring(0,fnum_txt.length-1));
             $('form').submit();
         }
     }

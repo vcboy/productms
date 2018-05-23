@@ -25,9 +25,7 @@ class ProductTemplateController extends CController
         return [
             'verbs' => [
                 'class' => VerbFilter::className(),
-                'actions' => [
-                    'delete' => ['POST'],
-                ],
+                'actions' => [],
             ],
         ];
     }
@@ -103,6 +101,7 @@ class ProductTemplateController extends CController
         $model = $this->findModel($id);
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             ProductTemplateEntry::deleteAll('ptid = :ptid', [':ptid' => $model->id]);
+            $request = Yii::$app->request;
             $ftype_txt = $request->post('ftype_txt');
             $food_txt = $request->post('food_txt');
             $fnum_txt = $request->post('fnum_txt');
@@ -117,16 +116,26 @@ class ProductTemplateController extends CController
                 $pte['count'] = $fnum_txt_arr[$key];
                 $pte->save();
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             $pte_arr = ProductTemplateEntry::find()->andWhere(['ptid'=>$model->id])->all();
             $pte_arr_txt = "";
             $now = time()-10;
             $foodclasslist = Refcode::getRefcodeBytype('foodclass');
-            
+
+            $foodArr = [];
+            $foodObj = Refcode::find()->where(['is_del'=>0,'type'=>'food'])->all();
+            foreach ($foodObj as $key => $value) {
+                $unitName = $value->unitName;
+                $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+                $info['id'] = $value->id;
+                $info['nm'] = $nm;
+                $foodArr[$value->pid][] = $info;
+            }
             foreach ($pte_arr as $key => $pte) {
                 $temp = $now - $key;
                 $foodclasslist_txt = "";
+                $foodlist_txt = "";
 
                 foreach ($foodclasslist as $fkey => $fval) {
                     $flag = "";
@@ -135,13 +144,18 @@ class ProductTemplateController extends CController
                     }
                     $foodclasslist_txt .= "<option value='".$fkey."' ".$flag.">".$fval."</option>";
                 }
+                if(!empty($foodArr[$pte['foodclass_id']])){
+                    foreach ($foodArr[$pte['foodclass_id']] as $fkey => $fval) {
+                        $flag = "";
+                        if($fval['id']==$pte['food_id']){
+                            $flag = " selected ";
+                        }
+                        $foodlist_txt .= "<option value='".$fval['id']."' ".$flag.">".$fval['nm']."</option>";
+                    }    
+                }
 
-                $pte_info = "<tr id='tr_".$temp."'>
-                        <td><select class='ftype form-control' onchange='_changeFtype(this,".$temp.")'><option value=''>--请选择--</option>".$foodclasslist_txt."</select></td>
-                        <td><select class='form-control fid food_".$temp."' onchange='_changeFood(this,".$temp.")'><option value=''>--请选择--</option></select></td>
-                        <td><input class='form-control num num_".$temp."' value='".$pte['count']."'></td>
-                        <td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\"".$temp."\")'><i class='icon-trash bigger-120'></i></button></td>
-                        </tr>";
+                $pte_info = "<tr id='tr_".$temp."'><td><select class='ftype form-control' onchange='_changeFtype(this,".$temp.")'><option value=''>--请选择--</option>".$foodclasslist_txt."</select></td><td><select class='form-control fid food_".$temp."' onchange='_changeFood(this,".$temp.")'><option value=''>--请选择--</option>".$foodlist_txt."</select></td><td><input class='form-control num num_".$temp."' value='".$pte['count']."'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\"".$temp."\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
+                $pte_arr_txt .= $pte_info;
             }
             return $this->render('update', [
                 'model' => $model,
@@ -158,8 +172,9 @@ class ProductTemplateController extends CController
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
-
+        $model = $this->findModel($id);
+        $model['is_del'] = 1;
+        $model->save();
         return $this->redirect(['index']);
     }
 

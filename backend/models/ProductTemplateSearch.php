@@ -60,11 +60,10 @@ class ProductTemplateSearch extends ProductTemplate
 
         // grid filtering conditions
         $query->andFilterWhere([
-            'id' => $this->id,
             'productclass_id' => $this->productclass_id,
             'product_id' => $this->product_id,
             'unitprice' => $this->unitprice,
-            'is_del' => $this->is_del,
+            'is_del' => 0,
         ]);
 
         $query->andFilterWhere(['like', 'unit', $this->unit]);

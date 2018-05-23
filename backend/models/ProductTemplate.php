@@ -1,7 +1,7 @@
 <?php
 
 namespace backend\models;
-
+use backend\models\Refcode;
 use Yii;
 
 /**
@@ -50,5 +50,17 @@ class ProductTemplate extends \yii\db\ActiveRecord
             'unit' => '单位',
             'is_del' => '是否删除',
         ];
+    }
+
+     public function getProductclass(){
+        return $this->hasOne(Refcode::className(), ['id' => 'productclass_id']);
+    }
+
+    public function getProduct(){
+        return $this->hasOne(Refcode::className(), ['id' => 'product_id']);
+    }
+
+    public function getUnitinfo(){
+        return $this->hasOne(Refcode::className(), ['id' => 'unit']);
     }
 }
