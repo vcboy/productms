@@ -47,9 +47,21 @@ class PurchaseController extends CController
         $searchModel = new PurchaseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
+        /*$foodclasslist = Refcode::getRefcodeBytype('foodclass');
+        $foodlist = $paramlist = [];
+        if($model->foodclass_id){
+            //$foodlist = Refcode::getRefcodeBytype('food');
+            $foodlist = Refcode::getFood($model->foodclass_id);
+        }
+        if($model->food_id){
+            $paramlist = Refcode::getFood($model->food_id);
+        }
+        $searchArr = ['foodclasslist'=>$foodclasslist,'foodlist'=>$foodlist,'paramlist'=>$paramlist];*/
+        $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'refcode' => $refcode
         ]);
     }
 
@@ -75,7 +87,7 @@ class PurchaseController extends CController
         //$this->layout = 'main';
         $model = new Purchase();
         $model->pur_user = $this->user->name;
-        $model->pur_date = date("Y-m-d H:i");
+        $model->pur_date = date("Y-m-d"); 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $pur_userid = $this->request->post('pur_userid');
             $model->pur_date = strtotime($model->pur_date);
@@ -142,12 +154,13 @@ class PurchaseController extends CController
     public function actionGetfood(){
         $foodclass_id = $this->request->post('foodclass_id');
         //$foodArr = ArrayHelper::map(Refcode::find()->where(['pid'=>$foodclass_id,'is_del'=>0])->all(),'id','nm');
-        $foodObj = Refcode::find()->where(['pid'=>$foodclass_id,'is_del'=>0])->all();
+        /*$foodObj = Refcode::find()->where(['pid'=>$foodclass_id,'is_del'=>0])->all();
         foreach ($foodObj as $key => $value) {
             $unitName = $value->unitName;
             $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
             $foodArr[$value->id] = $nm;
-        }
+        }*/
+        $foodArr = Refcode::getFood($foodclass_id);
         echo json_encode($foodArr);
     }
 }

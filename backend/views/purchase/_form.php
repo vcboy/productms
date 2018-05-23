@@ -87,9 +87,7 @@ $foodunitlist = Refcode::getRefcodeBytype('foodunit');
                 }
             })
         });
-    })
 
-    $(document).ready(function(){
         $("#food_id").change(function(){
             var foodclass_id = $(this).val();
             var Content = {foodclass_id: foodclass_id};

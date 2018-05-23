@@ -83,4 +83,18 @@ class Refcode extends \yii\db\ActiveRecord
         }
         return $parentName;
     }
+
+    /**
+     * 获取食材名称
+     */
+    public static function getFood($foodclass_id){
+        $foodObj = Refcode::find()->where(['pid'=>$foodclass_id,'is_del'=>0])->all();
+        $foodArr = [];
+        foreach ($foodObj as $key => $value) {
+            $unitName = $value->unitName;
+            $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+            $foodArr[$value->id] = $nm;
+        }
+        return $foodArr;
+    }
 }

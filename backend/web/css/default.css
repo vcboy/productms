@@ -150,4 +150,10 @@
         margin-right: 10px;
     }
 
+    .tabfield div select{
+        width: 70%;
+        display: inline-block;
+        margin-right: 10px;
+    }
+
 }
