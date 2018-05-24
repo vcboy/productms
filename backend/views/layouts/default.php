@@ -23,7 +23,11 @@ if(!isset($this -> context -> subject)){
     <!-- 基本样式 -->
     <link href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/bootstrap.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/font-awesome.min.css" />
-
+    <!--[if !IE]> -->
+    <script type="text/javascript">
+        window.jQuery || document.write("<script src='<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-2.0.3.min.js'>"+"</"+"script>");
+    </script>
+    <!-- <![endif]-->
     <!-- 只有IE7可见-->
     <!--[if IE 7]>
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/font-awesome-ie7.min.css" />
@@ -51,11 +55,7 @@ if(!isset($this -> context -> subject)){
     <![endif]-->
     <link href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/pagination.css" rel="stylesheet" type="text/css" />
 
-    <!--[if !IE]> -->
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-2.0.3.min.js'>"+"</"+"script>");
-    </script>
-    <!-- <![endif]-->
+    
 
     <!--[if IE]>
     <script type="text/javascript">
@@ -476,7 +476,7 @@ if (isset($this->blocks['head'])) {
         });*/
 
 
-        $('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+        //$('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
         function tooltip_placement(context, source) {
             var $source = $(source);
             var $parent = $source.closest('.tab-content')
@@ -546,6 +546,9 @@ if (isset($this->blocks['head'])) {
                 window.open(push_url);
             }
         }
+
+        
+
     </script>
 <?php //底部数据块
 if (isset($this->blocks['foot'])) {
