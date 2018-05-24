@@ -13,7 +13,8 @@ use backend\components\CController;
 use backend\models\Menu;
 use yii\rbac\Role;
 use yii\rbac\ManagerInterface;
-
+use yii\helpers\ArrayHelper;
+use backend\models\AuthItemChild;
 /**
  * RoleFormController implements the CRUD actions for RoleForm model.
  */
@@ -44,7 +45,7 @@ class RoleFormController extends CController
         $request = Yii::$app->request;
         $searchModel = new RoleFormSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        //dump(Yii::$app->session['itemchild']);
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -169,6 +170,9 @@ class RoleFormController extends CController
                     $auth->addChild($myRole,$child);
                 }
             }
+            $role_name = Yii::$app->user->identity->role_name;
+            $itemchild = ArrayHelper::map(AuthItemChild::find()->where(['parent'=>$role_name])->all(),'child','child');
+            Yii::$app->session['itemchild'] = $itemchild;
             return $this->redirect(['index']);
             //print_r($request->post('ckbox'));
         }

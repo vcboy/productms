@@ -44,6 +44,10 @@ class PurchaseSearch extends Purchase
     {
         $query = Purchase::find();
 
+        $query->where(['is_del'=>0]);
+
+        $query->orderBy('id desc');
+
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
         ]);

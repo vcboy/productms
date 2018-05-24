@@ -3,10 +3,11 @@ namespace backend\controllers;
 use backend\models\Notice;
 use Yii;
 use yii\filters\AccessControl;
-//use backend\models\LoginForm;
+use backend\models\AuthItemChild;
 use common\models\LoginForm;
 use yii\filters\VerbFilter;
 use yii\web\Controller;
+use yii\helpers\ArrayHelper;
 
 /**
  * Site controller
@@ -71,7 +72,10 @@ class DefaultController extends Controller
 
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
-            //return $this->goBack();
+            $role_name = Yii::$app->user->identity->role_name;
+            $itemchild = ArrayHelper::map(AuthItemChild::find()->where(['parent'=>$role_name])->all(),'child','child');
+            Yii::$app->session['itemchild'] = $itemchild;
+            //dump(Yii::$app->session['itemchild']);
             return $this->redirect(['index']);
         } else {
             return $this->render('login', [

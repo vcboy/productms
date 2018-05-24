@@ -1,7 +1,8 @@
 <?php
 
 use yii\helpers\Html;
-use yii\grid\GridView;
+use job\lib\JobGridView;
+use backend\models\Admin;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\PurchaseSearch */
@@ -11,7 +12,7 @@ $this->title = 'Purchases';
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="purchase-index">
-<div class="widget-box">
+    <div class="widget-box">
 		<div class="widget-header">
 			<h4>查询条件</h4>
 		</div>
@@ -22,7 +23,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 	</div>
 
-    <?= GridView::widget([
+    <?= JobGridView::widget([
         'dataProvider' => $dataProvider,
         'summary' => '',
         'columns' =>  [
@@ -56,15 +57,24 @@ $this->params['breadcrumbs'][] = $this->title;
             // 'depot_count',
             // 'depot_date',
             // 'sycount',
-            // 'status',
+            'statustext:html',
             // 'comment:ntext',
             // 'is_del',
 
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{update} {delete}',
+                'template' => '{view} {update} {delete}',
                 'buttons' => [
+                    'view' => function($url,$model){
+                        $options = [
+                            'title' => '查看',
+                            'aria-label' => Yii::t('yii', 'View'),
+                            'data-pjax' => '0',
+                            'class' => 'btn-xs btn btn-warning',
+                        ];
+                        return Html::a('<i class="icon-zoom-in bigger-120"></i>', $url, $options);
+                    },
                     'update' => function ($url, $model, $key) {
                         $options = [
                             'title' => '修改',
@@ -72,7 +82,11 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
 							'class' => 'btn btn-xs btn-info',
                         ];
-                        return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
+                        //$auth = Yii::$app->authManager;
+                        //$userid = Yii::$app->user->identity->id;
+                        if(Admin::checkAccess('purchase_edit')) {
+                            return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
+                        }
                     },
                     'delete' => function ($url, $model, $key) {
                         $options = [
@@ -83,7 +97,11 @@ $this->params['breadcrumbs'][] = $this->title;
 							'class' => 'btn btn-xs btn-danger',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
                         ];
-                        return Html::button('<i class="icon-trash bigger-120"></i>', $options);
+                        //$auth = Yii::$app->authManager;
+                        //$userid = Yii::$app->user->identity->id;
+                        if(Admin::checkAccess('purchase_del')) {
+                            return Html::button('<i class="icon-trash bigger-120"></i>', $options);
+                        }
                     },
                 ]
             ],

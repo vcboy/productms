@@ -73,8 +73,10 @@ class PurchaseController extends CController
      */
     public function actionView($id)
     {
+        $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'refcode' => $refcode,
         ]);
     }
 
@@ -130,7 +132,7 @@ class PurchaseController extends CController
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model['is_delete'] = 1;
+        $model['is_del'] = 1;
         $model->save();
         return $this->redirect(['index']);
     }

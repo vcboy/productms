@@ -199,4 +199,16 @@ class Admin extends \yii\db\ActiveRecord implements IdentityInterface
         $role = $auth ->getRole($this->role_name);
         $auth->assign($role,$this->id);
     }
+
+    /**
+     * 判断栏目的功能权限
+     * @return [type] [description]
+     */
+    public static function checkAccess($child){
+        $itemchild = Yii::$app->session['itemchild'];
+        if(array_key_exists($child, $itemchild)){
+            return true;
+        }
+        return false;
+    }
 }

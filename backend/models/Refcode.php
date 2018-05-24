@@ -97,4 +97,11 @@ class Refcode extends \yii\db\ActiveRecord
         }
         return $foodArr;
     }
+
+    public static function getFoodbyid($food_id){
+        $foodObj = self::findOne(['id'=>$food_id]);
+        $unitName = $foodObj->unitName;
+        $nm = $unitName?$foodObj->nm.' ('.$unitName.')':$foodObj->nm;
+        return $nm;
+    }
 }

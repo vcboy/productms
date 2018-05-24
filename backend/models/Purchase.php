@@ -78,13 +78,13 @@ class Purchase extends \yii\db\ActiveRecord
             'depot_count' => '入库数量',
             'depot_date' => '入库时间',
             'sycount' => '剩余数量',
-            'status' => '0：未入库，1已入库',
+            'statustext' => '入库状态',
             'comment' => '验收意见',
             'is_del' => '是否删除 1是，0否',
         ];
     }
 
-    public function getFoodclass(){
-        //return $this->refcode[$this->foodclass_id];
+    public function getStatustext(){
+        return $this->status == 1?'<font color="green">已入库</font>':'<font color="red">未入库</font>';
     }
 }
