@@ -55,25 +55,11 @@ if(!isset($this -> context -> subject)){
     <![endif]-->
     <link href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/pagination.css" rel="stylesheet" type="text/css" />
 
-    
-
-    <!--[if IE]>
-    <script type="text/javascript">
-        window.jQuery || document.write("<script src='<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-1.10.2.min.js'>"+"</"+"script>");
-    </script>
-    <![endif]-->
-
-    <script type="text/javascript">
-        if("ontouchend" in document) document.write("<script src='<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.mobile.custom.min.js'>"+"<"+"script>");
-    </script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/bootstrap.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/typeahead-bs2.min.js"></script>
 
     <!-- page specific plugin scripts -->
 
-    <!--[if lte IE 8]>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/excanvas.min.js"></script>
-    <![endif]-->
 
     <!--<script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.ui.touch-punch.min.js"></script>

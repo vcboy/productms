@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use job\lib\JobGridView;
 use backend\models\Admin;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\PurchaseSearch */
@@ -18,7 +19,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		<div class="widget-body">
 			<div class="widget-main">
-			                <?php echo $this->render('_search', ['model' => $searchModel,'depot'=>false]); ?>
+			                <?php echo $this->render('_search', ['model' => $searchModel,'depot'=>true]); ?>
             			</div>
 		</div>
 	</div>
@@ -73,19 +74,19 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
                             'class' => 'btn-xs btn btn-warning',
                         ];
+                        $url = Url::to(['depotview','id'=>$model->id]);                        
                         return Html::a('<i class="icon-zoom-in bigger-120"></i>', $url, $options);
                     },
                     'update' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '修改',
+                            'title' => '入库',
                             'aria-label' => Yii::t('yii', 'Update'),
                             'data-pjax' => '0',
 							'class' => 'btn btn-xs btn-info',
                         ];
-                        //$auth = Yii::$app->authManager;
-                        //$userid = Yii::$app->user->identity->id;
-                        if(Admin::checkAccess('purchase_edit')) {
-                            return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
+                        if($model->status == 0) {
+                            $url = Url::to(['depotupdate','id'=>$model->id]);         
+                            return Html::a('<i class="icon-download bigger-120"></i>', $url, $options);
                         }
                     },
                     'delete' => function ($url, $model, $key) {

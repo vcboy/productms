@@ -24,6 +24,10 @@ class CController extends Controller
         return $params;
     }
     public function init(){
+        /*$controller     = Yii::$app->controller->id;            //得到当前控制器名称
+        $action         = Yii::$app->controller->action->id;    //得到当前action名称        
+        $current_url    = $controller.'/'.$action;*/
+        
         //$this->childSubject = '欢迎页面';
         $this->request = Yii::$app->request;
         $this->user = Yii::$app->user->identity;

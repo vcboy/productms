@@ -51,10 +51,20 @@ class Purchase extends \yii\db\ActiveRecord
             [['foodclass_id', 'food_id', 'param_id', 'book_count', 'depot_count', 'sycount', 'status', 'is_del'], 'integer'],
             [['price'], 'number'],
             [['foodclass_id', 'food_id','price','book_count','pur_user', 'pur_date'], 'required'],
+            [['depot_user', 'depot_date', 'depot_count'], 'required', 'on' => 'depot'],
             [['comment'], 'string'],
             [['unit','pur_user', 'depot_user'], 'string', 'max' => 32],
             [['brand', 'supplier'], 'string', 'max' => 128],
+            [["depot_count"], "checkdepotcount", 'skipOnEmpty' => false, 'skipOnError' => false],
         ];
+    }
+
+    public function checkdepotcount($attribute, $params)
+    {
+        if ($this->book_count != $this->$attribute) 
+        {
+            $this->addError($attribute, "入库数量必须和采购数量一致.");
+        }
     }
 
     /**

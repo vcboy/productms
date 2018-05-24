@@ -70,8 +70,11 @@ if($model->food_id){
     </div>
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
-        <?= Html::a('重置', ['index'], ['class' => 'btn btn-sm btn-primary']) ?>
-        <?= Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
+        <?= Html::a('重置', ['index'], ['class' => 'btn btn-sm btn-primary']) ?>       
+        <? 
+        if(empty($depot))
+            echo Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success'])
+        ?>
     </div>
 
     <?php ActiveForm::end(); ?>

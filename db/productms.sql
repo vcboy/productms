@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-05-23 23:03:27
+-- Generation Time: 2018-05-24 22:29:13
 -- 服务器版本： 10.1.8-MariaDB
 -- PHP Version: 5.6.14
 
@@ -377,7 +377,7 @@ CREATE TABLE IF NOT EXISTS `wx_purchase` (
   `pur_user` varchar(32) DEFAULT NULL COMMENT '采购人',
   `pur_date` int(11) NOT NULL COMMENT '采购时间',
   `depot_user` varchar(32) DEFAULT NULL COMMENT '入库人',
-  `depot_count` int(11) NOT NULL DEFAULT '0' COMMENT '入库数量',
+  `depot_count` int(11) DEFAULT NULL COMMENT '入库数量',
   `depot_date` int(11) NOT NULL COMMENT '入库时间',
   `sycount` int(11) NOT NULL DEFAULT '0' COMMENT '剩余数量',
   `status` int(11) NOT NULL DEFAULT '0' COMMENT '0：未入库，1已入库',
@@ -390,12 +390,12 @@ CREATE TABLE IF NOT EXISTS `wx_purchase` (
 --
 
 INSERT INTO `wx_purchase` (`id`, `foodclass_id`, `food_id`, `param_id`, `book_count`, `price`, `unit`, `brand`, `supplier`, `pur_user`, `pur_date`, `depot_user`, `depot_count`, `depot_date`, `sycount`, `status`, `comment`, `is_del`) VALUES
-(1, 2, 3, 7, 21, '100.00', '111', '11', '111', '1', 222, '222', 22, 22, 22, 22, '22', 22),
-(2, 2, 8, 9, 100, '5.00', NULL, '22', '6', '1', 1526832000, '0', 0, 0, 0, 0, '', 0),
+(1, 2, 3, 7, 21, '100.00', '111', '11', '111', '1', 222, '222', 22, 22, 22, 1, '22', 1),
+(2, 2, 8, 9, 100, '5.00', NULL, '22', '6', '1', 1526832000, '0', 0, 0, 0, 1, '', 0),
 (3, 2, 3, 7, 23, '234.33', NULL, '22', '6', '1', 1526486400, '0', 0, 0, 0, 0, '', 0),
 (4, 2, 3, 7, 30, '23.50', NULL, '22', '6', '1', 1527004800, '0', 0, 0, 0, 0, '', 0),
-(5, 2, 3, 7, 343, '4.00', NULL, '', '', '高级管理员', 1527004800, NULL, 0, 0, 0, 0, '', 0),
-(6, 2, 3, 7, 3, '4.00', NULL, '22', '6', '超级管理员2', 1527004800, NULL, 0, 0, 0, 0, '', 0);
+(5, 2, 3, 7, 343, '4.00', NULL, '', '', '高级管理员', 1527004800, '超级管理员', 343, 1527091200, 343, 1, 'aaaaaaaaaaaa', 0),
+(6, 2, 3, 7, 3, '4.00', NULL, '22', '6', '超级管理员2', 1527004800, '超级管理员', 3, 1527091200, 0, 1, 'sdfsdf', 0);
 
 -- --------------------------------------------------------
 

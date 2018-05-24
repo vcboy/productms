@@ -45,21 +45,32 @@ class PurchaseController extends CController
      */
     public function actionIndex()
     {
+        $this->childSubject = '采购管理';
         $searchModel = new PurchaseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        /*$foodclasslist = Refcode::getRefcodeBytype('foodclass');
-        $foodlist = $paramlist = [];
-        if($model->foodclass_id){
-            //$foodlist = Refcode::getRefcodeBytype('food');
-            $foodlist = Refcode::getFood($model->foodclass_id);
-        }
-        if($model->food_id){
-            $paramlist = Refcode::getFood($model->food_id);
-        }
-        $searchArr = ['foodclasslist'=>$foodclasslist,'foodlist'=>$foodlist,'paramlist'=>$paramlist];*/
+        //$dataProvider->query->where(['is_del'=>0]);
+        $dataProvider->query->orderBy('id desc');
         $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
         return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'refcode' => $refcode
+        ]);
+    }
+
+    /**
+     * 采购入库
+     * @return mixed
+     */
+    public function actionDepot()
+    {
+        //dump(Yii::$app->session['menu']);
+        $this->childSubject = '验货入库';
+        $searchModel = new PurchaseSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->orderBy('status asc,id desc');
+        $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
+        return $this->render('depot', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
             'refcode' => $refcode
@@ -81,6 +92,20 @@ class PurchaseController extends CController
     }
 
     /**
+     * Displays a single Purchase model.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionDepotview($id)
+    {
+        $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
+        return $this->render('depotview', [
+            'model' => $this->findModel($id),
+            'refcode' => $refcode,
+        ]);
+    }
+
+    /**
      * Creates a new Purchase model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
@@ -88,6 +113,7 @@ class PurchaseController extends CController
     public function actionCreate()
     {
         //$this->layout = 'main';
+        $this->childSubject = '添加采购';
         $model = new Purchase();
         //$model->pur_user = $this->user->name;
         //$model->pur_date = date("Y-m-d"); 
@@ -119,6 +145,24 @@ class PurchaseController extends CController
         } else {
             return $this->render('update', [
                 'model' => $model,
+            ]);
+        }
+    }
+
+    public function actionDepotupdate($id){
+        $model = $this->findModel($id);
+        $model->setScenario('depot');
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->depot_date = strtotime($model->depot_date);
+            $model->status = 1;
+            $model->sycount = $model->depot_count;
+            $model->save();
+            return $this->redirect(['depot']);
+        } else {
+            $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
+            return $this->render('depotupdate', [
+                'model' => $model,
+                'refcode' => $refcode,
             ]);
         }
     }
