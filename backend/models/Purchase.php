@@ -55,7 +55,7 @@ class Purchase extends \yii\db\ActiveRecord
             [['comment'], 'string'],
             [['unit','pur_user', 'depot_user'], 'string', 'max' => 32],
             [['brand', 'supplier'], 'string', 'max' => 128],
-            [["depot_count"], "checkdepotcount", 'skipOnEmpty' => false, 'skipOnError' => false],
+            [["depot_count"], "checkdepotcount"],
         ];
     }
 

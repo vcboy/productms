@@ -116,7 +116,7 @@ class PurchaseController extends CController
         $this->childSubject = '添加采购';
         $model = new Purchase();
         //$model->pur_user = $this->user->name;
-        //$model->pur_date = date("Y-m-d"); 
+        $model->pur_date = date("Y-m-d"); 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->pur_date = strtotime($model->pur_date);
             $model->save();
@@ -143,6 +143,7 @@ class PurchaseController extends CController
             $model->save();
             return $this->redirect(['index']);
         } else {
+            $model->pur_date = date("Y-m-d",$model->pur_date);
             return $this->render('update', [
                 'model' => $model,
             ]);

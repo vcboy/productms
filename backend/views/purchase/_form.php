@@ -47,7 +47,7 @@ if($model->food_id){
 
     <?= $form->field($model, 'pur_user')->textInput(['value'=>$model->pur_user?$model->pur_user:Yii::$app->user->identity->name]) ?>
 
-    <?= $form->field($model, 'pur_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->pur_date?date("Y-m-d",$model->pur_date):date("Y-m-d")]) ?>
+    <?= $form->field($model, 'pur_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->pur_date]) ?>
 
     <?//= $form->field($model, 'depot_user')->textInput() ?>
 
