@@ -29,6 +29,8 @@ use backend\models\Refcode;
         case 'product':
             $downlist = Refcode::getRefcodeBytype('productclass');
             echo $form->field($model, 'pid')->label('成品分类')->dropDownList(array(''=>'--请选择--')+$downlist);
+            $unitlist = Refcode::getRefcodeBytype('productunit');
+            echo $form->field($model, 'pid2')->label('成品单位')->dropDownList(array(''=>'--请选择--')+$unitlist);
             break;
         default:
             break;

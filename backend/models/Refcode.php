@@ -34,7 +34,16 @@ class Refcode extends \yii\db\ActiveRecord
             [['nm'], 'required', 'message'=>'{attribute}不能为空'],
             [['value'], 'string', 'max' => 64],
             [['type'], 'string', 'max' => 32],
+            [["nm"], "checkrepeat",'skipOnEmpty' => false, 'skipOnError' => false],
         ];
+    }
+
+    public function checkrepeat($attribute, $params){
+        if($this->isNewRecord){
+            $num = self::find()->where(['type'=>$this->type,'nm'=>$this->$attribute])->count();
+            if($num > 0)
+                $this->addError($attribute, "该名称已经存在.");
+        }
     }
 
     /**
@@ -49,7 +58,7 @@ class Refcode extends \yii\db\ActiveRecord
             'type' => '类型',
             'is_del' => '是否删除 1是，0否',
             'parentName' => '所属分类',
-            'unitName' => '食材单位',
+            'unitName' => '单位',
         ];
     }
 

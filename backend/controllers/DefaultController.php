@@ -56,6 +56,11 @@ class DefaultController extends Controller
      * @return string
      */
     public function actionIndex(){
+        if(!Yii::$app->session['itemchild']){
+            $role_name = Yii::$app->user->identity->role_name;
+            $itemchild = ArrayHelper::map(AuthItemChild::find()->where(['parent'=>$role_name])->all(),'child','child');
+            Yii::$app->session['itemchild'] = $itemchild;
+        }
         return $this -> render('index');
     }
 

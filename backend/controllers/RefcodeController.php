@@ -89,10 +89,12 @@ class RefcodeController extends CController
         $type_codeArr = Yii::$app->params['type_code'];
         $type_name = array_key_exists($type_code,$type_codeArr)?$type_codeArr[$type_code]:'';
         
-        if ($model->load(Yii::$app->request->post())) {
+        if ($model->load(Yii::$app->request->post()) && 1==2) {
             $model->type = $type_code;
             $model->save();
-            return $this->redirect(['index', 'type_code' => $model->type]);
+
+            var_dump($model->validate());
+            //return $this->redirect(['index', 'type_code' => $model->type]);
         } else {
             return $this->render('create', [
                 'model' => $model,

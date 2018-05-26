@@ -47,6 +47,10 @@ if($type_code == 'food'){
 if($type_code == 'food' || $type_code == 'param' || $type_code == 'product')
     array_push($columns,'parentName');
 
+if($type_code == 'product'){
+    array_push($columns,'unitName');
+}
+
 $columns[] = $domenu;
 ?>
 <div class="refcode-index">
