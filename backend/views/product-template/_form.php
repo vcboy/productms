@@ -29,7 +29,7 @@ if(!empty($model->productclass_id)){
 
     <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
 
-    <?= $form->field($model, 'unitprice')->textInput() ?>
+    <?= $form->field($model, 'unitprice')->textInput(['readonly'=>'readonly']) ?>
 
     <?= $form->field($model, 'unit')->dropDownList(array(''=>'--请选择--')+$productunitlist,['id'=>'unit']) ?>
 
@@ -77,7 +77,7 @@ if(!empty($model->productclass_id)){
      */
     function _addPurchase(){
         var temp = new Date().getTime();
-        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changeFtype(this,"+temp+")'><option value=''>--请选择--</option><? foreach ($foodclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";}?></select></td><td><select class='form-control fid food_"+temp+"' onchange='_changeFood(this,"+temp+")'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
+        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changeFtype(this,"+temp+")'><option value=''>--请选择--</option><? foreach ($foodclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";}?></select></td><td><select class='form-control fid food_"+temp+"' onchange='_getUnitprice()'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"' onchange='_getUnitprice()'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
         $('#food_tb').append(txt);
     }
 
@@ -110,12 +110,11 @@ if(!empty($model->productclass_id)){
                 $(".food_"+tempkey+" option").remove();
                 $(".food_"+tempkey).append(optionstr);
             }
-        })
-
-        
+        });
     }
 
     function _checkSub(){
+        _getUnitprice();
         var flag = 1;
         var ftype_txt = "";
         var food_txt = "";
@@ -154,7 +153,6 @@ if(!empty($model->productclass_id)){
         }else{
             err_msg = err_msg + "请添加成品所需要的食材配比。";
         }
-
         if(flag==0){
             swal(err_msg);
         }else{
@@ -162,6 +160,31 @@ if(!empty($model->productclass_id)){
             $('#food_txt').val(food_txt.substring(0,food_txt.length-1));
             $('#fnum_txt').val(fnum_txt.substring(0,fnum_txt.length-1));
             $('form').submit();
+        }
+    }
+
+    function _getUnitprice(){
+        var gp_arr = "";
+        $('#food_tb').find('tr').each(function(){
+            var temp = $(this).attr('id');
+            if(temp!=undefined){
+                temp = temp.substring(3,temp.length);
+                var pid = $('.food_'+temp).val()-0;
+                var num = $('.num_'+temp).val()-0;
+                if(pid>0 && !isNaN(num) && num>0){
+                    gp_arr = gp_arr + pid + '_' + num + "|";
+                }
+            }
+        });
+        if(gp_arr!=""){
+            gp_arr = gp_arr.substring(0,gp_arr.length-1);
+            var Content = {'gp_arr': gp_arr};
+            var url = "<?=Url::to(['getuprice'])?>";
+            $.post(url,Content,function(rsp){
+                if(rsp){
+                    $("#producttemplate-unitprice").val(rsp);
+                }
+            })
         }
     }
 </script>

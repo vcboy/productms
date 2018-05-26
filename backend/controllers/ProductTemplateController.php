@@ -11,6 +11,7 @@ use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
 use backend\models\Refcode;
+use backend\models\Purchase;
 
 /**
  * ProductTemplateController implements the CRUD actions for ProductTemplate model.
@@ -154,7 +155,7 @@ class ProductTemplateController extends CController
                     }    
                 }
 
-                $pte_info = "<tr id='tr_".$temp."'><td><select class='ftype form-control' onchange='_changeFtype(this,".$temp.")'><option value=''>--请选择--</option>".$foodclasslist_txt."</select></td><td><select class='form-control fid food_".$temp."' onchange='_changeFood(this,".$temp.")'><option value=''>--请选择--</option>".$foodlist_txt."</select></td><td><input class='form-control num num_".$temp."' value='".$pte['count']."'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\"".$temp."\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
+                $pte_info = "<tr id='tr_".$temp."'><td><select class='ftype form-control' onchange='_changeFtype(this,".$temp.")'><option value=''>--请选择--</option>".$foodclasslist_txt."</select></td><td><select class='form-control fid food_".$temp."' onchange='_getUnitprice()'><option value=''>--请选择--</option>".$foodlist_txt."</select></td><td><input onchange='_getUnitprice()' class='form-control num num_".$temp."' value='".$pte['count']."'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\"".$temp."\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
                 $pte_arr_txt .= $pte_info;
             }
             return $this->render('update', [
@@ -202,5 +203,25 @@ class ProductTemplateController extends CController
         //$productArr = ArrayHelper::map(Refcode::find()->where(['pid'=>$productclass_id,'is_del'=>0])->all(),'id','nm');
         $productArr = Refcode::getFood($productclass_id);
         echo json_encode($productArr);
+    }
+
+    public function actionGetuprice(){
+        $gp = Yii::$app->request->post('gp_arr');
+        $gp_arr = explode('|',$gp);
+        $gp_list = [];
+        foreach ($gp_arr as $key => $val) {
+            $info = [];
+            $v_arr = explode('_',$val);
+            $info['id'] = $v_arr[0];
+            $info['num'] = $v_arr[1];
+            $gp_list[] = $info;
+        }
+        $pids = ArrayHelper::getColumn($gp_list,'id');
+        $pp_arr = ArrayHelper::map(Purchase::find()->andWhere(['id'=>$pids])->all(),'id','price');
+        $pprice = 0;
+        foreach ($gp_list as $key => $val) {
+            $pprice = $pprice + ($val['num']-0)*($pp_arr[$val['id']]-0);
+        }
+        echo json_encode($pprice);
     }
 }
