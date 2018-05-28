@@ -42,7 +42,7 @@ class ProductTemplateSearch extends ProductTemplate
      */
     public function search($params)
     {
-        $query = ProductTemplate::find();
+        $query = ProductTemplate::find()->with(['productclass','product']);
 
         // add conditions that should always apply here
 

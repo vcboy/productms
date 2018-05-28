@@ -27,14 +27,18 @@ $this->params['breadcrumbs'][] = $this->title;
         'summary' => '',
         'columns' =>  [
         ['class' => 'yii\grid\SerialColumn','header' => '序号'],
-
-            'id',
-            'productclass_id',
-            'product_id',
-            'unitprice',
+            'productclass.nm:text:成品类型',
+            'product.nm:text:成品名称',
+            'unitprice',           
+            'count',
             'price',
-            // 'count',
-            // 'consume_type',
+            [
+                'attribute' => 'consume_type',
+                'value' => function($model){
+                    return $model->consume_type == 1?'销售':'损耗';
+                }
+            ],
+            'statustext:html',
             // 'status',
             // 'create_dt',
 

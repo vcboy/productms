@@ -52,7 +52,7 @@ class ProductTemplate extends \yii\db\ActiveRecord
         ];
     }
 
-     public function getProductclass(){
+    public function getProductclass(){
         return $this->hasOne(Refcode::className(), ['id' => 'productclass_id']);
     }
 

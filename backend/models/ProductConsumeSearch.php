@@ -41,7 +41,7 @@ class ProductConsumeSearch extends ProductConsume
      */
     public function search($params)
     {
-        $query = ProductConsume::find();
+        $query = ProductConsume::find()->with(['productclass','product']);
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,

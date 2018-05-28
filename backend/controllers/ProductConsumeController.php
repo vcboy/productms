@@ -62,9 +62,13 @@ class ProductConsumeController extends CController
     {
         $model = new ProductConsume();
         $this->childSubject = '消耗添加';
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->create_dt = strtotime($model->create_dt);
+            $model->status = $model->consume_type == 1?1:0;
+            $model->save();
             return $this->redirect(['index']);
         } else {
+            $model->create_dt = date("Y-m-d"); 
             return $this->render('create', [
                 'model' => $model,
             ]);
@@ -80,10 +84,13 @@ class ProductConsumeController extends CController
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+        $this->childSubject = '消耗修改';
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->create_dt = strtotime($model->create_dt);
+            $model->save();
             return $this->redirect(['index']);
         } else {
+            $model->create_dt = date("Y-m-d",$model->create_dt);
             return $this->render('update', [
                 'model' => $model,
             ]);

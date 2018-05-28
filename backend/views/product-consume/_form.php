@@ -26,18 +26,17 @@ if(!empty($model->productclass_id)){
 
     <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
 
-    <?= $form->field($model, 'unitprice')->textInput() ?>
+    <?= $form->field($model, 'unitprice')->textInput(['id'=>'unitprice']) ?>
 
-    <?= $form->field($model, 'price')->textInput() ?>
+    <?= $form->field($model, 'count')->textInput(['id'=>'count']) ?>
 
-    <?= $form->field($model, 'count')->textInput() ?>
+    <?= $form->field($model, 'price')->textInput(['readonly'=>true,'id'=>'price']) ?>
 
-    <?= $form->field($model, 'consume_type')->textInput() ?>
+    <?= $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type']) ?>
 
-    <?= $form->field($model, 'status')->textInput() ?>
+    <?//= $form->field($model, 'status')->textInput() ?>
 
-    <?= $form->field($model, 'create_dt')->textInput() ?>
-
+    <?= $form->field($model, 'create_dt')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->create_dt]) ?>
 
     <div class="form-group">
     <?=  Html::submitButton($model->isNewRecord ? '保存' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
@@ -65,5 +64,26 @@ if(!empty($model->productclass_id)){
                 }
             })
         });
+
+        $("#count").change(function(){
+            var unitprice = $("#unitprice").val();
+            var count = $(this).val();
+            var price = 0;
+            if(typeof(unitprice)!='undefind' && typeof(count)!='undefind'){
+                var price = unitprice * count;
+                price = price.toFixed(2);
+            }
+            $("#price").val(price);
+        })
+        $("#price").focus(function(){
+            var unitprice = $("#unitprice").val();
+            var count = $("#count").val();
+            var price = 0;
+            if(typeof(unitprice)!='undefind' && typeof(count)!='undefind'){
+                var price = unitprice * count;
+                price = price.toFixed(2);
+            }
+            $("#price").val(price);
+        })
     });
 </script>
