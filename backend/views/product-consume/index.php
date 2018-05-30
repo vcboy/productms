@@ -37,11 +37,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model){
                     return $model->consume_type == 1?'销售':'损耗';
                 }
+            ],            
+            // 'status',
+            //'create_dt:date',
+            [
+                'attribute' => 'create_dt',
+                'value'     => function($model) {return date("Y-m-d",$model->create_dt);},
             ],
             'statustext:html',
-            // 'status',
-            // 'create_dt',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',

@@ -68,7 +68,7 @@ class ProductConsumeController extends CController
             $model->save();
             return $this->redirect(['index']);
         } else {
-            $model->create_dt = date("Y-m-d"); 
+            $model->create_dt = date("Y-m-d H:i:s"); 
             return $this->render('create', [
                 'model' => $model,
             ]);

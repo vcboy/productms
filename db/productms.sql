@@ -3,7 +3,7 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-05-24 22:29:13
+-- Generation Time: 2018-05-30 23:01:21
 -- 服务器版本： 10.1.8-MariaDB
 -- PHP Version: 5.6.14
 
@@ -255,9 +255,9 @@ INSERT INTO `wx_menu` (`id`, `name`, `parent`, `route`, `taxis`, `data`, `url`) 
 (60, '发货完成基准价', 57, NULL, NULL, NULL, 'product/groupproduct'),
 (61, '成品消耗基准价', 57, NULL, NULL, NULL, 'consume/groupproduct'),
 (62, '成品消耗', 0, NULL, 5, NULL, ''),
-(63, '消耗管理', 62, NULL, 3, NULL, 'consume/index'),
-(64, '消耗添加', 62, NULL, 4, NULL, 'consume/create'),
-(65, '报损审核', 62, NULL, NULL, NULL, 'consume/sh');
+(63, '消耗管理', 62, NULL, 3, NULL, 'product-consume/index'),
+(64, '消耗添加', 62, NULL, 4, NULL, 'product-consume/create'),
+(65, '报损审核', 62, NULL, NULL, NULL, 'product-consume/sh');
 
 -- --------------------------------------------------------
 
@@ -300,8 +300,42 @@ CREATE TABLE IF NOT EXISTS `wx_product_consume` (
   `count` int(11) NOT NULL DEFAULT '0' COMMENT '消耗数量',
   `consume_type` tinyint(4) NOT NULL COMMENT '消耗方式 1：销售 2：损耗',
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '审核状态 1：销售默认审核通过 0：报损需要指定人员审核',
-  `create_dt` int(11) NOT NULL COMMENT '添加时间'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品消耗表';
+  `create_dt` int(11) NOT NULL COMMENT '添加时间',
+  `create_user` varchar(32) DEFAULT NULL COMMENT '添加人'
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='成品消耗表';
+
+--
+-- 转存表中的数据 `wx_product_consume`
+--
+
+INSERT INTO `wx_product_consume` (`id`, `productclass_id`, `product_id`, `unitprice`, `price`, `count`, `consume_type`, `status`, `create_dt`, `create_user`) VALUES
+(1, 10, 14, 33.62, 11531.7, 343, 2, 0, 1527436800, NULL),
+(2, 13, 15, 44, 88, 2, 1, 0, 1527436800, NULL),
+(3, 10, 14, 44, 1452, 33, 1, 1, 1527609600, NULL),
+(4, 10, 14, 55, 1155, 21, 1, 1, 1527691197, NULL),
+(5, 10, 14, 55, 1375, 25, 1, 1, 1527692315, NULL),
+(6, 10, 14, 55, 1375, 25, 1, 1, 1527692393, NULL);
+
+-- --------------------------------------------------------
+
+--
+-- 表的结构 `wx_product_consume_entry`
+--
+
+CREATE TABLE IF NOT EXISTS `wx_product_consume_entry` (
+  `id` int(11) NOT NULL,
+  `product_consume_id` int(11) DEFAULT NULL COMMENT '成品消耗表id',
+  `product_entry_id` int(11) DEFAULT NULL COMMENT '成品库存表id',
+  `count` int(11) DEFAULT NULL COMMENT '消耗数量'
+) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='成品消耗子表';
+
+--
+-- 转存表中的数据 `wx_product_consume_entry`
+--
+
+INSERT INTO `wx_product_consume_entry` (`id`, `product_consume_id`, `product_entry_id`, `count`) VALUES
+(5, 6, 1, 10),
+(6, 6, 2, 15);
 
 -- --------------------------------------------------------
 
@@ -319,8 +353,17 @@ CREATE TABLE IF NOT EXISTS `wx_product_entry` (
   `book_count` int(11) NOT NULL DEFAULT '0' COMMENT '配货数量',
   `send_count` int(11) NOT NULL DEFAULT '0' COMMENT '实际发货数量',
   `depot_count` int(11) NOT NULL DEFAULT '0' COMMENT '验货数量（入库数量',
+  `sycount` int(11) NOT NULL DEFAULT '0' COMMENT '剩余数量',
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否入库 0：未入库 1：已入库'
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='成品配、发、验货详细表（成品库存表）';
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COMMENT='成品配、发、验货详细表（成品库存表）';
+
+--
+-- 转存表中的数据 `wx_product_entry`
+--
+
+INSERT INTO `wx_product_entry` (`id`, `productclass_id`, `product_id`, `unitprice`, `unit`, `price`, `book_count`, `send_count`, `depot_count`, `sycount`, `status`) VALUES
+(1, 10, 14, 33, '', 330, 10, 10, 10, 0, 1),
+(2, 10, 14, 34, '', 1020, 30, 30, 30, 15, 1);
 
 -- --------------------------------------------------------
 
@@ -411,7 +454,7 @@ CREATE TABLE IF NOT EXISTS `wx_refcode` (
   `pid` int(11) DEFAULT NULL COMMENT '父类id',
   `pid2` int(11) DEFAULT NULL COMMENT '食材单位',
   `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除 1是，0否'
-) ENGINE=InnoDB AUTO_INCREMENT=23 DEFAULT CHARSET=utf8 COMMENT='基础表';
+) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8 COMMENT='基础表';
 
 --
 -- 转存表中的数据 `wx_refcode`
@@ -422,7 +465,7 @@ INSERT INTO `wx_refcode` (`id`, `nm`, `value`, `type`, `pid`, `pid2`, `is_del`) 
 (2, '禽类21', NULL, 'foodclass', NULL, NULL, 0),
 (3, '鸡肉', '20', 'food', 2, NULL, 0),
 (4, '鸭肉', '10', 'food', 2, NULL, 1),
-(5, '蔬菜', NULL, 'foodclass', NULL, NULL, 0),
+(5, '蔬菜', NULL, 'foodclass', NULL, NULL, 1),
 (6, '食材1公司', NULL, 'supplier', NULL, NULL, 0),
 (7, '年份', NULL, 'param', 3, NULL, 0),
 (8, '鸭肉', '30', 'food', 2, 19, 0),
@@ -431,15 +474,17 @@ INSERT INTO `wx_refcode` (`id`, `nm`, `value`, `type`, `pid`, `pid2`, `is_del`) 
 (11, '湘菜', NULL, 'productclass', NULL, NULL, 0),
 (12, '川菜', NULL, 'productclass', NULL, NULL, 0),
 (13, '江浙菜', NULL, 'productclass', NULL, NULL, 0),
-(14, '龙虎斗', NULL, 'product', 10, NULL, 0),
-(15, '兴宁烤鸡', NULL, 'product', 13, NULL, 0),
+(14, '龙虎斗', NULL, 'product', 10, 16, 0),
+(15, '兴宁烤鸡', NULL, 'product', 13, 18, 0),
 (16, '斤', NULL, 'productunit', NULL, NULL, 0),
 (17, '公斤', NULL, 'productunit', NULL, NULL, 0),
 (18, '磅', NULL, 'productunit', NULL, NULL, 0),
 (19, '只', NULL, 'foodunit', NULL, NULL, 0),
 (20, '斤', NULL, 'foodunit', NULL, NULL, 0),
 (21, '磅', NULL, 'foodunit', NULL, NULL, 0),
-(22, '双汇', NULL, 'brand', NULL, NULL, 0);
+(22, '双汇', NULL, 'brand', NULL, NULL, 0),
+(26, '蔬菜', NULL, 'foodclass', NULL, NULL, 0),
+(27, '蔬菜222', NULL, 'foodclass', NULL, NULL, 0);
 
 --
 -- Indexes for dumped tables
@@ -501,6 +546,12 @@ ALTER TABLE `wx_product_consume`
   ADD PRIMARY KEY (`id`);
 
 --
+-- Indexes for table `wx_product_consume_entry`
+--
+ALTER TABLE `wx_product_consume_entry`
+  ADD PRIMARY KEY (`id`);
+
+--
 -- Indexes for table `wx_product_entry`
 --
 ALTER TABLE `wx_product_entry`
@@ -554,12 +605,17 @@ ALTER TABLE `wx_procut`
 -- AUTO_INCREMENT for table `wx_product_consume`
 --
 ALTER TABLE `wx_product_consume`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+--
+-- AUTO_INCREMENT for table `wx_product_consume_entry`
+--
+ALTER TABLE `wx_product_consume_entry`
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT for table `wx_product_entry`
 --
 ALTER TABLE `wx_product_entry`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT for table `wx_product_template`
 --
@@ -579,7 +635,7 @@ ALTER TABLE `wx_purchase`
 -- AUTO_INCREMENT for table `wx_refcode`
 --
 ALTER TABLE `wx_refcode`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=23;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=28;
 --
 -- 限制导出的表
 --

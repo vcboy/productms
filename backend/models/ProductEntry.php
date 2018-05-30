@@ -34,7 +34,7 @@ class ProductEntry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['productclass_id', 'product_id', 'unitprice', 'unit', 'price'], 'required'],
+            [['productclass_id', 'product_id', 'unitprice', 'price'], 'required'],
             [['productclass_id', 'product_id', 'book_count', 'send_count', 'depot_count', 'status'], 'integer'],
             [['unitprice', 'price'], 'number'],
             [['unit'], 'string', 'max' => 32],

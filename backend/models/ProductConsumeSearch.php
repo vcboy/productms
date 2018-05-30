@@ -42,6 +42,7 @@ class ProductConsumeSearch extends ProductConsume
     public function search($params)
     {
         $query = ProductConsume::find()->with(['productclass','product']);
+        $query->orderBy('status asc,id desc');
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
