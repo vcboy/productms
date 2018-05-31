@@ -4,15 +4,15 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\Procut */
+/* @var $model backend\models\Product */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="procut-form">
+<div class="product-form">
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'booker_id')->textInput() ?>
+    <?= $form->field($model, 'booker_user')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'book_date')->textInput() ?>
 
@@ -22,9 +22,9 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'is_customer')->textInput() ?>
 
-    <?= $form->field($model, 'total_price')->textInput() ?>
+    <?= $form->field($model, 'total_price')->textInput(['maxlength' => true]) ?>
 
-    <?= $form->field($model, 'sender_id')->textInput() ?>
+    <?= $form->field($model, 'sender_user')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'send_date')->textInput() ?>
 
@@ -32,7 +32,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'send_comment')->textarea(['rows' => 6]) ?>
 
-    <?= $form->field($model, 'inspector_id')->textInput() ?>
+    <?= $form->field($model, 'inspector_user')->textInput(['maxlength' => true]) ?>
 
     <?= $form->field($model, 'inspect_date')->textInput() ?>
 

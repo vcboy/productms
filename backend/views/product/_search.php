@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\ProcutSearch */
+/* @var $model backend\models\ProductSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="procut-search">
+<div class="product-search">
 
     <?php $form = ActiveForm::begin([
         'action' => ['index'],
@@ -17,7 +17,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'id') ?>
 
-    <?= $form->field($model, 'booker_id') ?>
+    <?= $form->field($model, 'booker_user') ?>
 
     <?= $form->field($model, 'book_date') ?>
 
@@ -29,7 +29,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'total_price') ?>
 
-    <?php // echo $form->field($model, 'sender_id') ?>
+    <?php // echo $form->field($model, 'sender_user') ?>
 
     <?php // echo $form->field($model, 'send_date') ?>
 
@@ -37,7 +37,7 @@ use yii\widgets\ActiveForm;
 
     <?php // echo $form->field($model, 'send_comment') ?>
 
-    <?php // echo $form->field($model, 'inspector_id') ?>
+    <?php // echo $form->field($model, 'inspector_user') ?>
 
     <?php // echo $form->field($model, 'inspect_date') ?>
 
