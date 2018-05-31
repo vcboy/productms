@@ -79,7 +79,8 @@ class ProductConsume extends \yii\db\ActiveRecord
         if($insert) {
             //这里是新增数据
             if($this->status == 1){
-                $this->needcount = $this->count;
+                $this->setConsumecount($this->count,$this->product_id,$this->id);
+                /*$this->needcount = $this->count;
                 $objs = ProductEntry::find()->where(['and',['product_id'=>$this->product_id],['>','sycount',0],['status'=>1]])->orderBy('id asc')->all();
                 foreach ($objs as $key => $value) {
                     $sycount = $value->sycount;
@@ -106,11 +107,44 @@ class ProductConsume extends \yii\db\ActiveRecord
                         $value->save();
                         break;
                     }
-                }
+                }*/
             }
         } else {
             //这里是更新数据
-            
+            if($changedAttributes['status'] && $this->status == 1){
+                $this->setConsumecount($this->count,$this->product_id,$this->id);
+            }           
+        }
+    }
+
+    public function setConsumecount($count,$product_id,$id){
+        $this->needcount = $count;
+        $objs = ProductEntry::find()->where(['and',['product_id'=>$product_id],['>','sycount',0],['status'=>1]])->orderBy('id asc')->all();
+        foreach ($objs as $key => $value) {
+            $sycount = $value->sycount;
+            $this->needcount = $this->needcount - $sycount;
+            //一条库存记录的剩余数量不够消耗
+            if($this->needcount>0){                   
+                $pceobj = new ProductConsumeEntry();
+                $pceobj->product_consume_id = $id;
+                $pceobj->product_entry_id = $value->id;
+                $pceobj->count = $value->sycount;
+                $pceobj->save();
+                $value->sycount = 0;
+                $value->save();
+                //var_dump($value->getErrors());
+            }else{
+                $consumecount = abs($this->needcount);
+                $this->needcount = $sycount - $consumecount;
+                $pceobj = new ProductConsumeEntry();
+                $pceobj->product_consume_id = $id;
+                $pceobj->product_entry_id = $value->id;
+                $pceobj->count = $this->needcount;
+                $pceobj->save();
+                $value->sycount = $consumecount;
+                $value->save();
+                break;
+            }
         }
     }
 }
