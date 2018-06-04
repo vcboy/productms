@@ -49,6 +49,13 @@ if(!empty($model->productclass_id)){
 </div>
 <script type="text/javascript">
     $(document).ready(function(){
+        <?php
+        if($model->count){
+        ?>
+        $("#count").attr('readonly',true);
+        <?
+        }
+        ?>
         $("#productclass_id").change(function(){
             var productclass_id = $(this).val();
             var Content = {productclass_id: productclass_id};

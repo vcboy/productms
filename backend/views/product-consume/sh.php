@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use job\lib\JobGridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductConsumeSearch */
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
 		</div>
 		<div class="widget-body">
 			<div class="widget-main">
-			                <?php echo $this->render('_search', ['model' => $searchModel,'sh'=>false]); ?>
+			                <?php echo $this->render('_search', ['model' => $searchModel,'sh'=>true]); ?>
             			</div>
 		</div>
 	</div>
@@ -48,7 +49,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{view} {update} {delete}',
+                'template' => '{view} {delete}',
                 'buttons' => [
                     'view' => function($url,$model){
                         $options = [
@@ -57,17 +58,21 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
                             'class' => 'btn-xs btn btn-warning',
                         ];
+                        $url = Url::to(['view','id'=>$model->id,'sh'=>1]);   
                         return Html::a('<i class="icon-zoom-in bigger-120"></i>', $url, $options);
                     },
-                    'update' => function ($url, $model, $key) {
+                    /*'update' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '修改',
+                            'title' => '审核',
                             'aria-label' => Yii::t('yii', 'Update'),
                             'data-pjax' => '0',
 							'class' => 'btn btn-xs btn-info',
                         ];
-                        return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
-                    },
+                        if($model->status == 0) {
+                            $url = Url::to(['depotupdate','id'=>$model->id]);     
+                            return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
+                        }
+                    },*/
                     'delete' => function ($url, $model, $key) {
                         $options = [
                             'title' => '删除',

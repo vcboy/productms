@@ -38,7 +38,10 @@ if(!empty($model->productclass_id)){
     <?php // echo $form->field($model, 'consume_type') ?>
 
     <?php //echo $form->field($model, 'status') ?>
-    <?= $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type']) ?>
+    <?
+    if(empty($sh))
+    echo $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type']) 
+    ?>
 
     <?php // echo $form->field($model, 'create_dt') ?>
 
@@ -46,7 +49,10 @@ if(!empty($model->productclass_id)){
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
         <?= Html::a('重置', ['index'], ['class' => 'btn btn-sm btn-primary']) ?>
-        <?= Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
+        <?
+        if(empty($sh))
+        echo  Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']) 
+        ?>
     </div>
 
     <?php ActiveForm::end(); ?>

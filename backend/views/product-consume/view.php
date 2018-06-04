@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\ProductConsume */
@@ -12,32 +13,34 @@ $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="product-consume-view">
 
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
     <?= DetailView::widget([
         'model' => $model,
         'attributes' => [
-            'id',
-            'productclass_id',
-            'product_id',
+            'productclass.nm:text:成品类型',
+            'product.nm:text:成品名称',
             'unitprice',
             'price',
             'count',
-            'consume_type',
-            'status',
-            'create_dt',
+            [
+                'attribute' => 'consume_type',
+                'value' => function($model){
+                    return $model->consume_type == 1?'销售':'损耗';
+                }
+            ],
+            'statustext:html',
+            'create_dt:datetime',
         ],
     ]) ?>
+    <div class="form-group">
 
+    <?php
+    if(empty($sh)){
+        echo Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary']);
+    }else{
+        echo Html::a('审核通过',Url::toRoute(["dosh",'sh'=>1]),['class'=>'btn btn-success'])."&nbsp&nbsp"; 
+        echo Html::a('返回',Url::toRoute("sh"),['class'=>'btn btn-primary']);
+    }
+
+    ?>
+    </div>
 </div>

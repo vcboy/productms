@@ -42,14 +42,32 @@ class ProductConsumeController extends CController
     }
 
     /**
+     * 报损审核
+     * @return mixed
+     */
+    public function actionSh()
+    {
+        $searchModel = new ProductConsumeSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['status'=>0]);
+        $this->childSubject = '报损审核';
+        return $this->render('sh', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
      * Displays a single ProductConsume model.
      * @param integer $id
      * @return mixed
      */
     public function actionView($id)
     {
+        $sh = $this->request->get('sh');
         return $this->render('view', [
             'model' => $this->findModel($id),
+            'sh' => $sh,
         ]);
     }
 
@@ -106,9 +124,18 @@ class ProductConsumeController extends CController
     public function actionDelete($id)
     {
         $model = $this->findModel($id);
-        $model['is_delete'] = 1;
+        $model['is_del'] = 1;
         $model->save();
         return $this->redirect(['index']);
+    }
+
+    /**
+     * 通过审核
+     * @return [type] [description]
+     */
+    public function actionDosh(){
+        $sh = $this->request->get('sh');
+        
     }
 
     /**

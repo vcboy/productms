@@ -38,7 +38,25 @@ class ProductConsume extends \yii\db\ActiveRecord
             [['productclass_id', 'product_id', 'count', 'consume_type', 'status'], 'integer'],
             [['unitprice', 'price'], 'number'],
             //需要做销售数量和剩余数量判断
+            [["count"], "checkcount"],
         ];
+    }
+
+    /**
+     * 判断消耗数量和库存数量
+     * @param  [type] $attribute [description]
+     * @param  [type] $params    [description]
+     * @return [type]            [description]
+     */
+    public function checkcount($attribute, $params){
+        if($this->isNewRecord){
+            if($this->consume_type == 1){
+                $sycount = ProductEntry::find()->where(['product_id'=>$this->product_id,'status'=>1])->sum('sycount');
+                if($this->$attribute > $sycount){                   
+                    $this->addError($attribute, "消耗数量大于库存剩余数量，无法添加");
+                }
+            }
+        }
     }
 
     /**
@@ -110,10 +128,18 @@ class ProductConsume extends \yii\db\ActiveRecord
                 }*/
             }
         } else {
-            //这里是更新数据
-            if($changedAttributes['status'] && $this->status == 1){
-                $this->setConsumecount($this->count,$this->product_id,$this->id);
-            }           
+            //审核通过，更新库存
+            if(isset($changedAttributes['status'])){
+                if($changedAttributes['status'] == 0 && $this->status == 1){
+                    $this->setConsumecount($this->count,$this->product_id,$this->id);
+                } 
+            }
+            //更新消耗子表
+            if(isset($changedAttributes['is_del'])){
+                if($changedAttributes['is_del'] == 0 && $this->is_del == 1){
+                    ProductConsumeEntry::updateAll(['is_del'=>1],['product_consume_id'=>$this->id]);
+                } 
+             }        
         }
     }
 
@@ -124,7 +150,7 @@ class ProductConsume extends \yii\db\ActiveRecord
             $sycount = $value->sycount;
             $this->needcount = $this->needcount - $sycount;
             //一条库存记录的剩余数量不够消耗
-            if($this->needcount>0){                   
+            if($this->needcount>0){
                 $pceobj = new ProductConsumeEntry();
                 $pceobj->product_consume_id = $id;
                 $pceobj->product_entry_id = $value->id;
