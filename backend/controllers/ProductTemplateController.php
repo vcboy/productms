@@ -224,4 +224,16 @@ class ProductTemplateController extends CController
         }
         echo json_encode($pprice);
     }
+
+    public function actionFlashtpprice(){
+        $pt_arr = ProductTemplate::find()->andWhere(['is_del=0'])->all();
+        $f_arr = Purchase::find()->andWhere(['is_del=0'])->orderBy('pur_date desc')->all();
+        $fMap = [];
+        foreach ($f_arr as $key => $val) {
+            if(empty($fMap[$val['food_id']])){
+                $fMap[$val['food_id']] = $val['price'];
+            }
+        }
+        
+    }
 }
