@@ -33,6 +33,7 @@ if(!empty($model->productclass_id)){
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
         <?= Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
+        <?=  Html::Button('刷新成品模板价格', ['class' => 'btn btn-sm btn-danger','onclick'=>'_flashtpprice()']) ?>
     </div>
     <?php ActiveForm::end(); ?>
 
@@ -56,4 +57,15 @@ if(!empty($model->productclass_id)){
             })
         });
     });
+
+    function _flashtpprice(){
+        var url = "<?=Url::to(['product-template/flashtpprice'])?>";
+        $.post(url,'',function(rsp){
+            if(rsp){
+                swal({title:'价格刷新完毕。'},function(){
+                    location.reload();
+                });
+            }
+        });
+    }
 </script>

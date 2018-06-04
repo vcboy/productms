@@ -14,46 +14,17 @@ use yii\widgets\ActiveForm;
         'action' => ['index'],
         'method' => 'get',
     ]); ?>
+    <div class="tabfield">
 
-    <?= $form->field($model, 'id') ?>
+    <?= $form->field($model, 'productclass_id')->dropDownList(array(''=>'--请选择--')+$productclasslist,['id'=>'productclass_id']) ?>
 
-    <?= $form->field($model, 'booker_user') ?>
+    <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
 
-    <?= $form->field($model, 'book_date') ?>
-
-    <?= $form->field($model, 'book_comment') ?>
-
-    <?= $form->field($model, 'arrive_date') ?>
-
-    <?php // echo $form->field($model, 'is_customer') ?>
-
-    <?php // echo $form->field($model, 'total_price') ?>
-
-    <?php // echo $form->field($model, 'sender_user') ?>
-
-    <?php // echo $form->field($model, 'send_date') ?>
-
-    <?php // echo $form->field($model, 'send_status') ?>
-
-    <?php // echo $form->field($model, 'send_comment') ?>
-
-    <?php // echo $form->field($model, 'inspector_user') ?>
-
-    <?php // echo $form->field($model, 'inspect_date') ?>
-
-    <?php // echo $form->field($model, 'inspect_status') ?>
-
-    <?php // echo $form->field($model, 'inspect_comment') ?>
-
-    <?php // echo $form->field($model, 'is_del') ?>
-
-    <?php // echo $form->field($model, 'customer') ?>
-
-    <div class="form-group">
-        <?= Html::submitButton('Search', ['class' => 'btn btn-primary']) ?>
-        <?= Html::resetButton('Reset', ['class' => 'btn btn-default']) ?>
     </div>
-
+    <div class="form-group">
+        <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
+        <?= Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
+    </div>
     <?php ActiveForm::end(); ?>
 
 </div>

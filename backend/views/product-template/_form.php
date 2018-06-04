@@ -45,7 +45,6 @@ if(!empty($model->productclass_id)){
 
     <div class="form-group">
     <?=  Html::Button($model->isNewRecord ? '保存' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
-    <?=  Html::Button('刷新成品模板价格', ['class' => 'btn btn-primary','onclick'=>'_flashtpprice()']) ?>
     <?=  Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary'])?>
     </div>
 
@@ -187,14 +186,5 @@ if(!empty($model->productclass_id)){
                 }
             })
         }
-    }
-
-    function _flashtpprice(){
-        var url = "<?=Url::to(['/flashtpprice'])?>";
-        $.post(url,'',function(rsp){
-            if(rsp){
-                swal('价格刷新完毕。');
-            }
-        });
     }
 </script>

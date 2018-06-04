@@ -33,11 +33,11 @@ class ProductController extends CController
      * Lists all Product models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionCreatelist()
     {
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $dataProvider->query->orderBy('id desc');
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

@@ -217,23 +217,39 @@ class ProductTemplateController extends CController
             $gp_list[] = $info;
         }
         $pids = ArrayHelper::getColumn($gp_list,'id');
-        $pp_arr = ArrayHelper::map(Purchase::find()->andWhere(['id'=>$pids])->all(),'id','price');
-        $pprice = 0;
-        foreach ($gp_list as $key => $val) {
-            $pprice = $pprice + ($val['num']-0)*($pp_arr[$val['id']]-0);
-        }
-        echo json_encode($pprice);
-    }
-
-    public function actionFlashtpprice(){
-        $pt_arr = ProductTemplate::find()->andWhere(['is_del=0'])->all();
-        $f_arr = Purchase::find()->andWhere(['is_del=0'])->orderBy('pur_date desc')->all();
+        $f_arr = Purchase::find()->andWhere(['is_del'=>0,'food_id'=>$pids])->orderBy('pur_date desc')->all();
         $fMap = [];
         foreach ($f_arr as $key => $val) {
             if(empty($fMap[$val['food_id']])){
                 $fMap[$val['food_id']] = $val['price'];
             }
         }
-        
+        $pprice = 0;
+        foreach ($gp_list as $key => $val) {
+            $pprice = $pprice + ($val['num']-0)*($fMap[$val['id']]-0);
+        }
+        echo json_encode($pprice);
+    }
+
+    public function actionFlashtpprice(){
+        $pt_arr = ProductTemplate::find()->andWhere(['is_del'=>0])->all();
+        $f_arr = Purchase::find()->andWhere(['is_del'=>0])->orderBy('pur_date desc')->all();
+        $fMap = [];
+        foreach ($f_arr as $key => $val) {
+            if(empty($fMap[$val['food_id']])){
+                $fMap[$val['food_id']] = $val['price'];
+            }
+        }
+        foreach ($pt_arr as $key => $val) {
+            $pte_arr = ProductTemplateEntry::find()->andWhere(['ptid'=>$val['id']])->all();
+            $price = 0;
+            foreach ($pte_arr as $k => $v) {
+                $t_price = empty($fMap[$v['food_id']])?0:$fMap[$v['food_id']];
+                $price = $price + $t_price;
+            }
+            $val['unitprice'] = $price;
+            $val->save();
+        }
+        echo json_encode(['flag'=>'T']);
     }
 }
