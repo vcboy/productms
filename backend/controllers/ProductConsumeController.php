@@ -5,6 +5,7 @@ namespace backend\controllers;
 use Yii;
 use backend\models\ProductConsume;
 use backend\models\ProductConsumeSearch;
+use backend\models\ProductEntry;
 use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -65,9 +66,11 @@ class ProductConsumeController extends CController
     public function actionView($id)
     {
         $sh = $this->request->get('sh');
+        $error = $this->request->get('error');
         return $this->render('view', [
             'model' => $this->findModel($id),
             'sh' => $sh,
+            'error' => $error,
         ]);
     }
 
@@ -134,8 +137,19 @@ class ProductConsumeController extends CController
      * @return [type] [description]
      */
     public function actionDosh(){
-        $sh = $this->request->get('sh');
-        
+        $sh = intval($this->request->get('sh'));
+        $id = intval($this->request->get('id'));
+        $model = $this->findModel($id);
+        $count = $model['count'];
+        $product_id = $model['product_id'];
+        $sycount = ProductEntry::find()->where(['product_id'=>$product_id,'status'=>1])->sum('sycount');
+        if($count > $sycount){
+            return $this->redirect(['view','sh'=>$sh,'id'=>$id,'error'=>1]);
+        }else{
+            $model['status'] = $sh;
+            $model->save();
+            return $this->redirect(['sh']);
+        }        
     }
 
     /**
