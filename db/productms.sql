@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-05-30 23:01:21
--- 服务器版本： 10.1.8-MariaDB
--- PHP Version: 5.6.14
+-- Generation Time: 2018-06-05 17:31:43
+-- 服务器版本： 10.1.9-MariaDB
+-- PHP Version: 7.0.1
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -99,6 +99,8 @@ INSERT INTO `wx_auth_item` (`name`, `type`, `description`, `rule_name`, `data`, 
 ('admin_update', 2, '用户修改', NULL, NULL, NULL, NULL, 33),
 ('brand', 2, '品牌', NULL, NULL, NULL, NULL, 41),
 ('consume_add', 2, '添加', NULL, NULL, NULL, NULL, 64),
+('consume_del', 2, '消耗删除', NULL, NULL, NULL, NULL, 63),
+('consume_edit', 2, '消耗编辑', NULL, NULL, NULL, NULL, 63),
 ('consume_groupproduct', 2, '查询', NULL, NULL, NULL, NULL, 61),
 ('consume_index', 2, '列表', NULL, NULL, NULL, NULL, 63),
 ('consume_sh', 2, '审核', NULL, NULL, NULL, NULL, 65),
@@ -162,6 +164,8 @@ INSERT INTO `wx_auth_item_child` (`parent`, `child`) VALUES
 ('zongadming', 'admin_update'),
 ('zongadming', 'brand'),
 ('zongadming', 'consume_add'),
+('zongadming', 'consume_del'),
+('zongadming', 'consume_edit'),
 ('zongadming', 'consume_groupproduct'),
 ('zongadming', 'consume_index'),
 ('zongadming', 'consume_sh'),
@@ -253,7 +257,7 @@ INSERT INTO `wx_menu` (`id`, `name`, `parent`, `route`, `taxis`, `data`, `url`) 
 (58, '食材库查询', 57, NULL, NULL, NULL, 'purchase/search'),
 (59, '成品库查询', 57, NULL, NULL, NULL, 'product/search'),
 (60, '发货完成基准价', 57, NULL, NULL, NULL, 'product/groupproduct'),
-(61, '成品消耗基准价', 57, NULL, NULL, NULL, 'consume/groupproduct'),
+(61, '成品消耗基准价', 57, NULL, NULL, NULL, 'product-consume/search'),
 (62, '成品消耗', 0, NULL, 5, NULL, ''),
 (63, '消耗管理', 62, NULL, 3, NULL, 'product-consume/index'),
 (64, '消耗添加', 62, NULL, 4, NULL, 'product-consume/create'),
@@ -301,20 +305,22 @@ CREATE TABLE IF NOT EXISTS `wx_product_consume` (
   `consume_type` tinyint(4) NOT NULL COMMENT '消耗方式 1：销售 2：损耗',
   `status` tinyint(4) NOT NULL DEFAULT '0' COMMENT '审核状态 1：销售默认审核通过 0：报损需要指定人员审核',
   `create_dt` int(11) NOT NULL COMMENT '添加时间',
-  `create_user` varchar(32) DEFAULT NULL COMMENT '添加人'
-) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='成品消耗表';
+  `create_user` varchar(32) DEFAULT NULL COMMENT '添加人',
+  `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除'
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COMMENT='成品消耗表';
 
 --
 -- 转存表中的数据 `wx_product_consume`
 --
 
-INSERT INTO `wx_product_consume` (`id`, `productclass_id`, `product_id`, `unitprice`, `price`, `count`, `consume_type`, `status`, `create_dt`, `create_user`) VALUES
-(1, 10, 14, 33.62, 11531.7, 343, 2, 0, 1527436800, NULL),
-(2, 13, 15, 44, 88, 2, 1, 0, 1527436800, NULL),
-(3, 10, 14, 44, 1452, 33, 1, 1, 1527609600, NULL),
-(4, 10, 14, 55, 1155, 21, 1, 1, 1527691197, NULL),
-(5, 10, 14, 55, 1375, 25, 1, 1, 1527692315, NULL),
-(6, 10, 14, 55, 1375, 25, 1, 1, 1527692393, NULL);
+INSERT INTO `wx_product_consume` (`id`, `productclass_id`, `product_id`, `unitprice`, `price`, `count`, `consume_type`, `status`, `create_dt`, `create_user`, `is_del`) VALUES
+(1, 10, 14, 33.62, 11531.7, 343, 2, 0, 1527436800, NULL, 0),
+(2, 13, 15, 44, 88, 2, 1, 0, 1527436800, NULL, 0),
+(3, 10, 14, 44, 1452, 33, 1, 1, 1527609600, NULL, 0),
+(4, 10, 14, 55, 1155, 21, 1, 1, 1527691197, NULL, 0),
+(5, 10, 14, 55, 1375, 25, 1, 1, 1527692315, NULL, 0),
+(6, 10, 14, 55, 1375, 25, 1, 1, 1527692393, NULL, 0),
+(7, 10, 14, 0, 0, 33, 2, 0, 1528186993, NULL, 0);
 
 -- --------------------------------------------------------
 
@@ -326,16 +332,17 @@ CREATE TABLE IF NOT EXISTS `wx_product_consume_entry` (
   `id` int(11) NOT NULL,
   `product_consume_id` int(11) DEFAULT NULL COMMENT '成品消耗表id',
   `product_entry_id` int(11) DEFAULT NULL COMMENT '成品库存表id',
-  `count` int(11) DEFAULT NULL COMMENT '消耗数量'
+  `count` int(11) DEFAULT NULL COMMENT '消耗数量',
+  `is_del` tinyint(4) NOT NULL DEFAULT '0' COMMENT '是否删除'
 ) ENGINE=InnoDB AUTO_INCREMENT=7 DEFAULT CHARSET=utf8 COMMENT='成品消耗子表';
 
 --
 -- 转存表中的数据 `wx_product_consume_entry`
 --
 
-INSERT INTO `wx_product_consume_entry` (`id`, `product_consume_id`, `product_entry_id`, `count`) VALUES
-(5, 6, 1, 10),
-(6, 6, 2, 15);
+INSERT INTO `wx_product_consume_entry` (`id`, `product_consume_id`, `product_entry_id`, `count`, `is_del`) VALUES
+(5, 6, 1, 10, 0),
+(6, 6, 2, 15, 0);
 
 -- --------------------------------------------------------
 
@@ -436,7 +443,7 @@ INSERT INTO `wx_purchase` (`id`, `foodclass_id`, `food_id`, `param_id`, `book_co
 (1, 2, 3, 7, 21, '100.00', '111', '11', '111', '1', 222, '222', 22, 22, 22, 1, '22', 1),
 (2, 2, 8, 9, 100, '5.00', NULL, '22', '6', '1', 1526832000, '0', 0, 0, 0, 1, '', 0),
 (3, 2, 3, 7, 23, '234.33', NULL, '22', '6', '1', 1526486400, '0', 0, 0, 0, 0, '', 0),
-(4, 2, 3, 7, 30, '23.50', NULL, '22', '6', '1', 1527004800, '0', 0, 0, 0, 0, '', 0),
+(4, 2, 3, 7, 30, '23.50', NULL, '22', '6', '1', 1527004800, '0', 0, 0, 22, 1, '', 0),
 (5, 2, 3, 7, 343, '4.00', NULL, '', '', '高级管理员', 1527004800, '超级管理员', 343, 1527091200, 343, 1, 'aaaaaaaaaaaa', 0),
 (6, 2, 3, 7, 3, '4.00', NULL, '22', '6', '超级管理员2', 1527004800, '超级管理员', 3, 1527091200, 0, 1, 'sdfsdf', 0);
 
@@ -605,7 +612,7 @@ ALTER TABLE `wx_procut`
 -- AUTO_INCREMENT for table `wx_product_consume`
 --
 ALTER TABLE `wx_product_consume`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT,AUTO_INCREMENT=8;
 --
 -- AUTO_INCREMENT for table `wx_product_consume_entry`
 --
