@@ -3,7 +3,7 @@
 use yii\helpers\Html;
 use job\lib\JobGridView;
 use yii\helpers\Url;
-
+use backend\models\Admin;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductConsumeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -82,7 +82,9 @@ $this->params['breadcrumbs'][] = $this->title;
 							'class' => 'btn btn-xs btn-danger',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
                         ];
-                        return Html::button('<i class="icon-trash bigger-120"></i>', $options);
+                        if(Admin::checkAccess('consume_del')) {
+                            return Html::button('<i class="icon-trash bigger-120"></i>', $options);
+                        }
                     },
                 ]
             ],

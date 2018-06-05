@@ -39,7 +39,7 @@ if($model->food_id){
     <?= $form->field($model, 'param_id')->dropDownList(array(''=>'--请选择--')+$paramlist,['id'=>'param_id']) ?>
 
     <?//= $form->field($model, 'pur_date') ?>
-    <?= $form->field($model, 'pur_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
+    <?//= $form->field($model, 'pur_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
 
     <?php // echo $form->field($model, 'price') ?>
 
@@ -70,11 +70,7 @@ if($model->food_id){
     </div>
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
-        <?= Html::a('重置', [$depot?'depot':'index'], ['class' => 'btn btn-sm btn-primary']) ?>       
-        <? 
-        if(empty($depot))
-            echo Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success'])
-        ?>
+        <?= Html::a('重置', ['search'], ['class' => 'btn btn-sm btn-primary']) ?>       
     </div>
 
     <?php ActiveForm::end(); ?>

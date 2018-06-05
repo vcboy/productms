@@ -167,4 +167,20 @@ class ProductConsumeController extends CController
             throw new NotFoundHttpException('The requested page does not exist.');
         }
     }
+
+    /**
+     * Lists all ProductConsume models.
+     * @return mixed
+     */
+    public function actionSearch()
+    {
+        $searchModel = new ProductConsumeSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['status'=>1]);
+        $this->childSubject = '成品消耗基准价';
+        return $this->render('search', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 }

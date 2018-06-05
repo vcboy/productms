@@ -48,6 +48,7 @@ class PurchaseController extends CController
         $this->childSubject = '采购管理';
         $searchModel = new PurchaseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
         //$dataProvider->query->where(['is_del'=>0]);
         $dataProvider->query->orderBy('id desc');
         $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
@@ -68,6 +69,25 @@ class PurchaseController extends CController
         $this->childSubject = '验货入库';
         $searchModel = new PurchaseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $foodclass_id = intval($this->request->get('foodclass_id'));
+        $food_id = intval($this->request->get('food_id'));
+        $status = intval($this->request->get('status'));
+        $param_id = intval($this->request->get('param_id'));
+        if($foodclass_id){
+            $dataProvider->query->andWhere(['foodclass_id'=>$foodclass_id]);
+            $searchModel->foodclass_id = $foodclass_id;
+        }
+        if($food_id){
+            $dataProvider->query->andWhere(['food_id'=>$food_id]);
+            $searchModel->food_id = $food_id;
+        }
+        if($param_id){
+            $dataProvider->query->andWhere(['param_id'=>$param_id]);
+            $searchModel->param_id = $param_id;
+        }
+        if($status){
+            $dataProvider->query->andWhere(['and',['status'=>$status],['!=','sycount',0]]);
+        }
         $dataProvider->query->orderBy('status asc,id desc');
         $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
         return $this->render('depot', [
@@ -209,5 +229,28 @@ class PurchaseController extends CController
         }*/
         $foodArr = Refcode::getFood($foodclass_id);
         echo json_encode($foodArr);
+    }
+
+    /**
+     * 食材库查询
+     * @return mixed
+     */
+    public function actionSearch()
+    {
+        //dump(Yii::$app->session['menu']);
+        $this->childSubject = '食材库查询';
+        $searchModel = new PurchaseSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->select(['sum(sycount) as totalsycount,foodclass_id,food_id,param_id']);
+        $dataProvider->query->andWhere(['status'=>1]);
+        $dataProvider->query->groupBy(['food_id']);
+        $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
+        $foodvalue =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0,'type'=>'food'])->all(),'id','value');
+        return $this->render('search', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+            'refcode' => $refcode,
+            'foodvalue' => $foodvalue,
+        ]);
     }
 }

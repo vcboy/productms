@@ -15,11 +15,14 @@ class ProductConsumeSearch extends ProductConsume
     /**
      * @inheritdoc
      */
+    public $create_dt_s;
+    public $create_dt_e;
     public function rules()
     {
         return [
             [['id', 'productclass_id', 'product_id', 'count', 'consume_type', 'status', 'create_dt'], 'integer'],
             [['unitprice', 'price'], 'number'],
+            [['create_dt_s', 'create_dt_e'], 'safe'],
         ];
     }
 
@@ -55,6 +58,14 @@ class ProductConsumeSearch extends ProductConsume
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+
+        if($this->create_dt_s){
+            $query->andFilterWhere(['>=','create_dt' ,strtotime($this->create_dt_s)]);
+        }
+        if($this->create_dt_e){
+            //echo $this->create_dt_e+1;
+            $query->andFilterWhere(['<','create_dt' ,strtotime("$this->create_dt_e + 1 day")]);
         }
 
         $query->andFilterWhere([

@@ -37,6 +37,8 @@ class Purchase extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $totalsycount;
+    
     public static function tableName()
     {
         return '{{%purchase}}';
