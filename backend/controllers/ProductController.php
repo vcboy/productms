@@ -37,8 +37,9 @@ class ProductController extends CController
     {
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->orderBy('id desc');
-        return $this->render('index', [
+        $dataProvider->query->andWhere(['send_status'=>0]);
+        $dataProvider->query->orderBy('book_date desc');
+        return $this->render('createlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
         ]);
@@ -68,6 +69,7 @@ class ProductController extends CController
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
         } else {
+            $model->book_date = date('Y-m-d',time());
             return $this->render('create', [
                 'model' => $model,
             ]);

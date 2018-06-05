@@ -42,7 +42,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             [['book_date', 'arrive_date'], 'required'],
-            [['book_date', 'book_comment', 'arrive_date', 'is_customer', 'send_date', 'send_status', 'inspect_date', 'inspect_status', 'is_del'], 'integer'],
+            [['book_comment', 'is_customer', 'send_status',  'inspect_status', 'is_del'], 'integer'],
             [['total_price'], 'number'],
             [['send_comment', 'inspect_comment'], 'string'],
             [['booker_user', 'sender_user', 'inspector_user'], 'string', 'max' => 32],
@@ -61,17 +61,17 @@ class Product extends \yii\db\ActiveRecord
             'book_date' => '配货时间',
             'book_comment' => '配货意见',
             'arrive_date' => '需要达到时间',
-            'is_customer' => '0：本单位 1：其他单位',
+            'is_customer' => '是否本单位',
             'total_price' => '总价',
             'sender_user' => '发货人',
             'send_date' => '发货时间',
-            'send_status' => '发货状态 0：未发货 1：已发货',
+            'send_status' => '发货状态',
             'send_comment' => '发货意见',
             'inspector_user' => '验货人',
             'inspect_date' => '验货时间（入库时间）',
-            'inspect_status' => '验货状态 0：未验货 1：已入库',
+            'inspect_status' => '验货状态',
             'inspect_comment' => '验收意见',
-            'is_del' => '是否删除 1是，0否',
+            'is_del' => '是否删除',
             'customer' => '配送客户名称',
         ];
     }
