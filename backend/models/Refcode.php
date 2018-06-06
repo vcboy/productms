@@ -119,4 +119,20 @@ class Refcode extends \yii\db\ActiveRecord
         $nm = $unitName?$foodObj->nm.' ('.$unitName.')':$foodObj->nm;
         return $nm;
     }
+
+    /**
+     * [getProduct 获取成品名称根据成品类型ID]
+     * @param  [type] $productclass_id  [成品类型ID]
+     * @return [type]                   [description]
+     */
+    public static function getProduct($productclass_id){
+        $productObj = Refcode::find()->where(['pid'=>$productclass_id,'is_del'=>0])->all();
+        $productArr = [];
+        foreach ($productObj as $key => $value) {
+            $unitName = $value->unitName;
+            $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+            $productArr[$value->id] = $nm;
+        }
+        return $productArr;
+    }
 }

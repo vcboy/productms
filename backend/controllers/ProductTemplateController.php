@@ -83,7 +83,7 @@ class ProductTemplateController extends CController
                 $pte['count'] = $fnum_txt_arr[$key];
                 $pte->save();
             }
-            return $this->redirect(['view', 'id' => $model->id]);
+            return $this->redirect(['index']);
         } else {
             return $this->render('create', [
                 'model' => $model,

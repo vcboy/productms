@@ -27,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header' => '序号'],
             'customer',
-            'arrive_date',
+            'arrive_date:date',
             [
                 'attribute' => 'is_customer',
                 'label' => '是否本单位',
@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'booker_user',
-            'book_date',
+            'book_date:date',
             'book_comment',
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',

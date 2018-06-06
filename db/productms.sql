@@ -273,7 +273,7 @@ CREATE TABLE IF NOT EXISTS `wx_procut` (
   `id` int(11) NOT NULL,
   `booker_user` varchar(32) DEFAULT NULL COMMENT '配货人',
   `book_date` int(11) NOT NULL COMMENT '配货时间',
-  `book_comment` int(11) DEFAULT NULL COMMENT '配货意见',
+  `book_comment` text DEFAULT NULL COMMENT '配货意见',
   `arrive_date` int(11) NOT NULL COMMENT '需要达到时间',
   `is_customer` tinyint(4) NOT NULL DEFAULT '0' COMMENT '0：本单位 1：其他单位',
   `total_price` decimal(10,2) DEFAULT NULL COMMENT '总价',
@@ -352,6 +352,7 @@ INSERT INTO `wx_product_consume_entry` (`id`, `product_consume_id`, `product_ent
 
 CREATE TABLE IF NOT EXISTS `wx_product_entry` (
   `id` int(11) NOT NULL,
+  `pid` int(11) NOT NULL COMMENT '主表id',
   `productclass_id` int(11) NOT NULL COMMENT '成品分类',
   `product_id` int(11) NOT NULL COMMENT '成品名称',
   `unitprice` float NOT NULL COMMENT '基准价',

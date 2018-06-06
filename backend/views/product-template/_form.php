@@ -159,6 +159,7 @@ if(!empty($model->productclass_id)){
             $('#ftype_txt').val(ftype_txt.substring(0,ftype_txt.length-1));
             $('#food_txt').val(food_txt.substring(0,food_txt.length-1));
             $('#fnum_txt').val(fnum_txt.substring(0,fnum_txt.length-1));
+            swal("保存成功", "成品模板保存成功","success");
             $('form').submit();
         }
     }

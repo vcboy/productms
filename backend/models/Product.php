@@ -42,9 +42,9 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             [['book_date', 'arrive_date'], 'required'],
-            [['book_comment', 'is_customer', 'send_status',  'inspect_status', 'is_del'], 'integer'],
+            [[ 'is_customer', 'send_status',  'inspect_status', 'is_del'], 'integer'],
             [['total_price'], 'number'],
-            [['send_comment', 'inspect_comment'], 'string'],
+            [['book_comment','send_comment', 'inspect_comment'], 'string'],
             [['booker_user', 'sender_user', 'inspector_user'], 'string', 'max' => 32],
             [['customer'], 'string', 'max' => 128],
         ];
