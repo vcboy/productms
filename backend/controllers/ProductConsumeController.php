@@ -34,6 +34,31 @@ class ProductConsumeController extends CController
     public function actionIndex()
     {
         $searchModel = new ProductConsumeSearch();
+        
+        $productclass_id = intval($this->request->get('productclass_id'));
+        $product_id = intval($this->request->get('product_id'));
+        $status = intval($this->request->get('status'));
+        $consume_type = intval($this->request->get('consume_type'));
+        $create_dt_s = $this->request->get('create_dt_s');
+        $create_dt_e = $this->request->get('create_dt_e');
+        if($productclass_id){
+            $searchModel->productclass_id = $productclass_id;
+        }
+        if($product_id){
+            $searchModel->product_id = $product_id;
+        }
+        if($consume_type){
+            $searchModel->consume_type = $consume_type;
+        }
+        if($status){
+             $searchModel->status = $status;
+        }
+        if($create_dt_s){
+             $searchModel->create_dt_s = $create_dt_s;
+        }
+        if($create_dt_e){
+             $searchModel->create_dt_e = $create_dt_e;
+        }
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $this->childSubject = '消耗管理';
         return $this->render('index', [
@@ -176,7 +201,9 @@ class ProductConsumeController extends CController
     {
         $searchModel = new ProductConsumeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->select(['sum(count) as totalcount,sum(price) as totalprice,avg(unitprice) as avgprice,productclass_id,product_id']);
         $dataProvider->query->andWhere(['status'=>1]);
+        $dataProvider->query->groupBy(['product_id']);
         $this->childSubject = '成品消耗基准价';
         return $this->render('search', [
             'searchModel' => $searchModel,

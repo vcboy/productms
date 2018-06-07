@@ -23,6 +23,11 @@ class ProductConsume extends \yii\db\ActiveRecord
      * @inheritdoc
      */
     public $needcount;
+    public $totalcount;
+    public $totalprice;
+    public $avgprice;
+    public $create_dt_s;
+    public $create_dt_e;
     public static function tableName()
     {
         return '{{%product_consume}}';

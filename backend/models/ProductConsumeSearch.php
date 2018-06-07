@@ -15,8 +15,7 @@ class ProductConsumeSearch extends ProductConsume
     /**
      * @inheritdoc
      */
-    public $create_dt_s;
-    public $create_dt_e;
+    
     public function rules()
     {
         return [
