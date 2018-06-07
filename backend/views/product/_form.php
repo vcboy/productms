@@ -35,7 +35,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <table class="table table-striped table-bordered" id="product_tb">
         <tr><th colspan="4"><?=  Html::a('添加配货成品','javascript:;',['class'=>'btn btn-sm btn-success','onclick'=>'_addProduct()'])?></th></tr>
-        <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th class="action-column">操作</th></tr>
+        <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th>当前配比库存</th><th class="action-column">操作</th></tr>
         <?=$pte_arr_txt?>
     </table>
 
