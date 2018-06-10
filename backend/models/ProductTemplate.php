@@ -33,6 +33,7 @@ class ProductTemplate extends \yii\db\ActiveRecord
             [['productclass_id', 'product_id', 'is_del'], 'integer'],
             [['unitprice'], 'number'],
             [['productclass_id', 'product_id','unitprice','unit'], 'required'],
+            [['product_id'], 'unique'],
             [['unit'], 'string', 'max' => 32],
         ];
     }

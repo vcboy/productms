@@ -35,7 +35,6 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <table class="table table-striped table-bordered" id="product_tb">
         <tr><th colspan="4">
-            <?=  Html::a('添加配货成品','javascript:;',['class'=>'btn btn-sm btn-success','onclick'=>'_addProduct()'])?>
             <?=  Html::a('查看库存配比','javascript:;',['class'=>'btn btn-sm btn-danger','onclick'=>'_checkstore()'])?>
         </th></tr>
         <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th class="action-column">操作</th></tr>
@@ -43,7 +42,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
     </table>
 
     <div class="form-group">
-    <?=  Html::Button($model->isNewRecord ? '保存' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
+    <?=  Html::Button('发货', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
     <?=  Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary'])?>
     </div>
 
@@ -51,16 +50,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
 </div>
 <script type="text/javascript">
-    /**
-     *     
-     * [_addPurchase 添加成品]
-     */
-    function _addProduct(){
-        var temp = new Date().getTime();
-        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changePtype(this,"+temp+")'><option value=''>--请选择--</option><? foreach ($productclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";}?></select></td><td><select class='form-control fid product_"+temp+"' onchange='_getUnitprice()'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"' onchange='_getUnitprice()'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
-        $('#product_tb').append(txt);
-    }
-
+    
     /**
      * [_changePtype 根据类型筛选成品]
      * @param  {[type]} obj     [description]
@@ -102,36 +92,6 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
         function(){
             $('#tr_'+tmpkey).remove();
         });
-    }
-
-    /**
-     * [_getUnitprice 计算配送总价]
-     * @return {[type]} [description]
-     */
-    function _getUnitprice(){
-
-        var gp_arr = "";
-        $('#product_tb').find('tr').each(function(){
-            var temp = $(this).attr('id');
-            if(temp!=undefined){
-                temp = temp.substring(3,temp.length);
-                var pid = $('.product_'+temp).val();
-                var num = $('.num_'+temp).val()-0;
-                if(pid>0 && !isNaN(num) && num>0){
-                    gp_arr = gp_arr + pid + '_' + num + "|";
-                }
-            }
-        });
-        if(gp_arr!=""){
-            gp_arr = gp_arr.substring(0,gp_arr.length-1);
-            var Content = {'gp_arr': gp_arr};
-            var url = "<?=Url::to(['getuprice'])?>";
-            $.post(url,Content,function(rsp){
-                if(rsp){
-                    $("#product-total_price").val(rsp);
-                }
-            })
-        }
     }
 
     function _checkstore(){

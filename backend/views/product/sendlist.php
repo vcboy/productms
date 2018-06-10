@@ -47,27 +47,31 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{update} {view}',
+                'template' => '{send} {view}',
                 'buttons' => [
-                    'update' => function ($url, $model, $key) {
+                    'send' => function ($url, $model, $key) {
                         $options = [
                             'title' => '发货',
                             'aria-label' => Yii::t('yii', 'Update'),
                             'data-pjax' => '0',
                             'class' => 'btn btn-xs btn-info',
                         ];
-                        return Html::a('<i class="icon-fa-users  bigger-120"></i>', $url, $options);
+                        $r_txt = "";
+                        if(empty($model->send_status)){
+                            $r_txt = Html::a('<i class="icon-plane  bigger-120"></i>', $url, $options);
+                        }
+                        return $r_txt;
                     },
                     'view' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '删除',
+                            'title' => '查看',
                             'aria-label' => Yii::t('yii', 'view'),
                             //'data-confirm' => Yii::t('yii', '确认删除？'),
                             'data-pjax' => '0',
-                            'class' => 'btn btn-xs btn-danger',
+                            'class' => 'btn btn-xs btn-warning',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
                         ];
-                        return Html::button('<i class="icon-fa-eye  bigger-120"></i>', $options);
+                        return Html::button('<i class="icon-zoom-in  bigger-120"></i>', $options);
                     },
                 ]
             ],
