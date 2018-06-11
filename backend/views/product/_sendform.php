@@ -16,28 +16,30 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <?php $form = ActiveForm::begin(); ?>
 
-    <?= $form->field($model, 'booker_user')->textInput(['value'=>$model->booker_user?$model->booker_user:Yii::$app->user->identity->name]) ?>
+    <?= $form->field($model, 'booker_user')->textInput(['readonly'=>'readonly','value'=>$model->booker_user?$model->booker_user:Yii::$app->user->identity->name]) ?>
 
-    <?= $form->field($model, 'book_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->book_date]) ?>
+    <?= $form->field($model, 'book_date')->textInput(['readonly'=>'readonly','maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->book_date]) ?>
 
-    <?= $form->field($model, 'book_comment')->textInput() ?>
+    <?= $form->field($model, 'book_comment')->textInput(['readonly'=>'readonly']) ?>
 
-    <?= $form->field($model, 'arrive_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
+    <?= $form->field($model, 'arrive_date')->textInput(['readonly'=>'readonly','maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
 
-    <?= $form->field($model, 'is_customer')->label('是否本单位')->dropDownList(array('all'=>'--请选择--',0=>'本单位',1=>'其他单位')) ?>
+    <?= $form->field($model, 'is_customer')->label('是否本单位')->dropDownList(array('all'=>'--请选择--',0=>'本单位',1=>'其他单位'), array('readonly' => 'readonly')) ?>
 
     <?= $form->field($model, 'total_price')->textInput(['readonly'=>'readonly']) ?>
 
-    <?= $form->field($model, 'customer')->textInput(['maxlength' => true]) ?>
+    <?= $form->field($model, 'customer')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
 
-    <input type="hidden" name="product_txt" id="product_txt">
-    <input type="hidden" name="pnum_txt" id="pnum_txt">
+    <?= $form->field($model, 'sender_user')->textInput(['readonly'=>'readonly','value'=>$model->sender_user?$model->sender_user:Yii::$app->user->identity->name]) ?>
 
+    <?= $form->field($model, 'send_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>date('Y-m-d',time()]) ?>
+
+    <?= $form->field($model, 'send_comment')->textInput() ?>
     <table class="table table-striped table-bordered" id="product_tb">
         <tr><th colspan="4">
             <?=  Html::a('查看库存配比','javascript:;',['class'=>'btn btn-sm btn-danger','onclick'=>'_checkstore()'])?>
         </th></tr>
-        <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th class="action-column">操作</th></tr>
+        <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th>发货数量</th></tr>
         <?=$pte_arr_txt?>
     </table>
 
@@ -95,21 +97,8 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
     }
 
     function _checkstore(){
-        var gp_arr = "";
-        $('#product_tb').find('tr').each(function(){
-            var temp = $(this).attr('id');
-            if(temp!=undefined){
-                temp = temp.substring(3,temp.length);
-                var pid = $('.product_'+temp).val();
-                var num = $('.num_'+temp).val()-0;
-                if(pid>0 && !isNaN(num) && num>0){
-                    gp_arr = gp_arr + pid + '_' + num + "|";
-                }
-            }
-        });
-
+        var gp_arr = $('#gp_arr').val();
         if(gp_arr!=""){
-            gp_arr = gp_arr.substring(0,gp_arr.length-1);
             var Content = {'gp_arr': gp_arr};
             var url = "<?=Url::to(['getstoreinfo'])?>";
             $.post(url,Content,function(rsp){
@@ -125,55 +114,23 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
               text: '没有成品或者成品数量未填写'
             });
         }
-
-       
     }
 
     function _checkSub(){
-        _getUnitprice();
-        var flag = 1;
-        var product_txt = "";
-        var pnum_txt = "";
-        var err_msg = "";
-        if($('.ftype').size()>0){
-            $('.ftype').each(function(){
-                var ft_txt = $(this).val();
-                if(ft_txt==""){
-                    flag=0;
-                    err_msg = err_msg + "成品类型没有选择。";
-                }
-            });
-
-            $('.fid').each(function(){
-                var ft_txt = $(this).val();
-                if(ft_txt!=""){
-                    product_txt = product_txt + ft_txt + ",";    
-                }else{
-                    flag=0;
-                    err_msg = err_msg + "成品名称没有选择。";
-                }
-            });
-
-            $('.num').each(function(){
-                var ft_txt = $(this).val();
-                if(ft_txt!=""&&!isNaN(ft_txt)){
-                    pnum_txt = pnum_txt + ft_txt + ",";    
-                }else{
-                    flag=0;
-                    err_msg = err_msg + "成品配货数量没有填写或填写有误。";
-                }
-            });
-        }else{
-            flag = 0;
-            err_msg = err_msg + "请添加所需要配货的成品。";
-        }
-        if(flag==0){
-            swal(err_msg);
-        }else{
-            $('#product_txt').val(product_txt.substring(0,product_txt.length-1));
-            $('#pnum_txt').val(pnum_txt.substring(0,pnum_txt.length-1));
-            swal("保存成功", "成品配货成功","success");
-            $('form').submit();
-        }
+        var gp_arr = $('#gp_arr').val();
+        var Content = {'gp_arr': gp_arr};
+        var url = "<?=Url::to(['hasenough'])?>";
+        $.post(url,Content,function(rsp){
+            if(rsp!=1){
+                swal({ 
+                  title: "库存数量不足,无法完成发货。",
+                  text: rsp, 
+                  html: true 
+                });
+            }else{
+                swal("发货成功", "成品发货成功","success");
+                $('form').submit();
+            }
+        });
     }
 </script>

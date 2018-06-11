@@ -232,38 +232,19 @@ class ProductController extends CController
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->book_date = strtotime($model->book_date);
             $model->arrive_date = strtotime($model->arrive_date);
-
+            $model->send_date = strtotime($model->send_date);
+            $model->send_status = 1;
             $model->save();
-            ProductEntry::deleteAll('pid = :pid', [':pid' => $model->id]);
-            $request = Yii::$app->request;
-            $product_txt = $request->post('product_txt');
-            $pnum_txt = $request->post('pnum_txt');
-            $product_txt_arr = explode(',', $product_txt);
-            $pnum_txt_arr = explode(',', $pnum_txt);
-            $pinfo_arr = Refcode::find()->andWhere(['id'=>$product_txt_arr])->all();
-            $pMap = [];
-            foreach ($pinfo_arr as $key => $val) {
-                $pMap[$val['id']] = $val;
+            if($model->is_customer){//其他单位，发货需要减去库存
+                //获取发货清单
+                //获取库存从大到小
+                //减去库存并且将数据记录到中间表
             }
-            $priceMap = ArrayHelper::map(ProductTemplate::find()->andWhere(['product_id'=>$product_txt_arr])->all(),'product_id','unitprice');
-            foreach ($product_txt_arr as $key => $val) {
-                $pinfo = $pMap[$val];
-                $book_count = $pnum_txt_arr[$key];
-                $price = $priceMap[$val];
-                $pe = new ProductEntry();
-                $pe['pid'] = $model->id;
-                $pe['productclass_id'] = $pinfo['pid'];
-                $pe['product_id'] = $val;
-                $pe['unitprice'] = $price;
-                $pe['unit'] = $pinfo->unitName;
-                $pe['price'] = $price*($book_count-0);
-                $pe['book_count'] = $book_count;
-                $pe->save();
-            }
-            return $this->redirect(['createlist']);
+            return $this->redirect(['sendlist']);
         } else {
             $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
             $pte_arr_txt = "";
+            $pte_info_txt_arr = [];
             $now = time()-10;
             $productclasslist = Refcode::getRefcodeBytype('productclass');
 
@@ -297,7 +278,9 @@ class ProductController extends CController
 
                 $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['book_count']."</td><td>".$pte['book_count']."</td></tr>";
                 $pte_arr_txt .= $pte_info;
+                $pte_info_txt_arr[] = $pte['product_id']."_".$pte['book_count'];
             }
+            $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
             $model->book_date = date('Y-m-d',$model->book_date);
             $model->arrive_date = date('Y-m-d',$model->arrive_date);
             return $this->render('send', [
@@ -427,5 +410,70 @@ class ProductController extends CController
         }
         $table_txt .= '</table>';
         print_r($table_txt);exit;
+    }
+
+
+
+    public function actionHasenough(){
+        $gp = Yii::$app->request->post('gp_arr');
+        $gp_arr = explode('|',$gp);
+        $gp_list = [];
+        foreach ($gp_arr as $key => $val) {
+            $info = [];
+            $v_arr = explode('_',$val);
+            $info['id'] = $v_arr[0];
+            $info['num'] = $v_arr[1];
+            $gp_list[] = $info;
+        }
+        $pids = ArrayHelper::getColumn($gp_list,'id');
+        $p_arr = ProductTemplate::find()->andWhere(['product_id'=>$pids])->all();
+        $pMap = ArrayHelper::map($p_arr,'product_id','id');
+        $ptids = ArrayHelper::getColumn($p_arr,'id');
+
+        $pe_arr = ProductTemplateEntry::find()->andWhere(['ptid'=>$ptids])->all();
+
+        $peMap = [];
+        $foodids = [];
+        $foodids_tmp = [];
+        foreach ($pe_arr as $key => $val) {
+            $peMap[$val['ptid']][] = $val;
+            $foodids_tmp[$val['food_id']]= 1;
+        }
+
+
+        foreach ($foodids_tmp as $key => $val) {
+            $foodids[] = $key;           
+        }
+        $fMap = ArrayHelper::map(Refcode::find()->andWhere(['id'=>$foodids])->all(),'id','nm');
+        $store_arr = Purchase::find()->select(['sum(sycount) as snum,food_id'])->andWhere(['food_id'=>$foodids,'is_del'=>0,'status'=>1])->groupBy(['food_id'])->asArray()->all();
+        $sMap = ArrayHelper::map($store_arr,'food_id','snum');
+        $pf_arr = [];
+        foreach ($gp_list as $key => $val) {
+            $ptid = $pMap[$val['id']];
+            $pnum = $val['num'];
+            $pe_arr = $peMap[$ptid];
+            foreach ($pe_arr as $k => $v) {
+                $fnum = empty($pf_arr[$v['food_id']])?0:$pf_arr[$v['food_id']];
+                $pf_arr[$v['food_id']] = $fnum + $v['count'] * $pnum;
+            }
+        }
+        $flag = 1;
+        $table_txt = '<table class="table table-striped table-bordered"><tr><th>食材名称</th><td>配比所需</td><td>当前库存</td><td>配送后剩余</td></tr>';
+        foreach ($pf_arr as $key => $val) {
+            $fname = $fMap[$key];
+            $fneed = $val;
+            $fhas = empty($sMap[$key])?0:$sMap[$key];
+            $fsycount = $fhas-$fneed;
+            if($fsycount<0){
+                $flag = 0;
+            }
+            $table_txt .= "<tr><td>".$fname."</td><td>".$fneed."</td><td>".$fhas."</td><td>".($fsycount>0?("<font color='green'>".$fsycount."</font>"):("<font color='red'>".$fsycount."【需采购】</font>"))."</td></tr>";
+        }
+        $table_txt .= '</table>';
+        if(empty($flag)){
+            print_r($table_txt);exit;
+        }else{
+            print_r(1);exit;
+        }
     }
 }
