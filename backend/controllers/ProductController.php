@@ -10,10 +10,12 @@ use backend\models\ProductTemplate;
 use backend\models\ProductTemplateEntry;
 use backend\models\ProductEntry;
 use backend\models\Purchase;
+use backend\models\Pfmap;
 use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+
 
 /**
  * ProductController implements the CRUD actions for Product model.
@@ -236,9 +238,76 @@ class ProductController extends CController
             $model->send_status = 1;
             $model->save();
             if($model->is_customer){//其他单位，发货需要减去库存
-                //获取发货清单
-                //获取库存从大到小
-                //减去库存并且将数据记录到中间表
+                $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();//获取发货清单
+                $gp_list = [];
+                foreach ($pte_arr as $key => $val) {
+                    $val->send_count = $val->book_count;
+                    $val->status = 1;
+                    $val->save();
+                    $info = [];
+                    $info['id'] = $val['product_id'];
+                    $info['num'] = $val['send_count'];
+                    $gp_list[] = $info;
+                }
+                $pids = ArrayHelper::getColumn($gp_list,'id');
+                $p_arr = ProductTemplate::find()->andWhere(['product_id'=>$pids])->all();//得到所有的成品模板
+                $pMap = ArrayHelper::map($p_arr,'product_id','id');//获取成品id与模板id的map
+                $ptids = ArrayHelper::getColumn($p_arr,'id');
+                $pe_arr = ProductTemplateEntry::find()->andWhere(['ptid'=>$ptids])->all();//拿到所有成品的明细
+
+                $peMap = [];
+                $foodids = [];//所有配额食物的数量
+                $foodids_tmp = [];
+                foreach ($pe_arr as $key => $val) {
+                    $peMap[$val['ptid']][] = $val;
+                    $foodids_tmp[$val['food_id']]= 1;
+                }
+                foreach ($foodids_tmp as $key => $val) {
+                    $foodids[] = $key;
+                }
+                $fMap = ArrayHelper::map(Refcode::find()->andWhere(['id'=>$foodids])->all(),'id','nm');
+                foreach ($gp_list as $key => $val) {//循环配货表
+                    $ptid = $pMap[$val['id']];//得到食材配比明细
+                    $pnum = $val['num']-0;
+                    $pe_arr = $peMap[$ptid];
+                    foreach ($pe_arr as $k => $v) {//食材模板
+                        $total_pay = 0;
+                        $fnum = $v['count']*$pnum;//需要出库的食物
+                        $store_arr = Purchase::find()->andWhere(['food_id'=>$v['food_id'],'is_del'=>0,'status'=>1])->andWhere(['>','sycount',0])->orderBy('depot_date')->all();//获取库存从大到小
+                        foreach ($store_arr as $skey => $sinfo) {
+                            $st_num = $sinfo['sycount'];
+                            if($fnum>=$st_num){
+                                $sinfo->sycount = 0;
+                                $sinfo->save();//减去库存
+                                $fnum = $fnum - ($st_num-0);
+                                $pfmap = New Pfmap();
+                                $pfmap->pid = $model->id;
+                                $pfmap->product_id = $val['id'];
+                                $pfmap->purchase_id = $sinfo['id'];
+                                $pfmap->num = $st_num;
+                                $pfmap->price = $sinfo['price'];
+                                $pfmap->save();//将数据记录到中间表
+                                $total_pay = $total_pay + ($sinfo['price']-0)*($st_num-0);
+                            }else{
+                                $st_num = ($st_num-0) - $fnum;
+                                $sinfo->sycount = $st_num;
+                                $sinfo->save();//减去库存
+                                $pfmap = New Pfmap();
+                                $pfmap->pid = $model->id;
+                                $pfmap->product_id = $val['id'];
+                                $pfmap->purchase_id = $sinfo['id'];
+                                $pfmap->num = $fnum;
+                                $pfmap->price = $sinfo['price'];
+                                $pfmap->save();//将数据记录到中间表
+                                $total_pay = $total_pay + ($sinfo['price']-0)*($fnum-0);
+                                break;
+                            }
+                        }
+                    }
+                    $val['sycount'] = $pnum;
+                    $val['price'] = $total_pay;
+                    $val['unitprice'] = round($total_pay/$pnum,2);
+                }
             }
             return $this->redirect(['sendlist']);
         } else {

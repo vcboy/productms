@@ -18,13 +18,13 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <?= $form->field($model, 'booker_user')->textInput(['readonly'=>'readonly','value'=>$model->booker_user?$model->booker_user:Yii::$app->user->identity->name]) ?>
 
-    <?= $form->field($model, 'book_date')->textInput(['readonly'=>'readonly','maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->book_date]) ?>
+    <?= $form->field($model, 'book_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
 
     <?= $form->field($model, 'book_comment')->textInput(['readonly'=>'readonly']) ?>
 
-    <?= $form->field($model, 'arrive_date')->textInput(['readonly'=>'readonly','maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
+    <?= $form->field($model, 'arrive_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
 
-    <?= $form->field($model, 'is_customer')->label('是否本单位')->dropDownList(array('all'=>'--请选择--',0=>'本单位',1=>'其他单位'), array('readonly' => 'readonly')) ?>
+    <?= $form->field($model, 'is_customer')->label('是否本单位')->dropDownList((empty($model->is_customer)?array(0=>'本单位'):array(1=>'其他单位')), array('readonly' => 'readonly')) ?>
 
     <?= $form->field($model, 'total_price')->textInput(['readonly'=>'readonly']) ?>
 
@@ -32,7 +32,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <?= $form->field($model, 'sender_user')->textInput(['readonly'=>'readonly','value'=>$model->sender_user?$model->sender_user:Yii::$app->user->identity->name]) ?>
 
-    <?= $form->field($model, 'send_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>date('Y-m-d',time()]) ?>
+    <?= $form->field($model, 'send_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>date('Y-m-d',time())]) ?>
 
     <?= $form->field($model, 'send_comment')->textInput() ?>
     <table class="table table-striped table-bordered" id="product_tb">

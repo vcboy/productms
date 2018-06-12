@@ -27,7 +27,10 @@ $this->params['breadcrumbs'][] = $this->title;
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header' => '序号'],
             'customer',
-            'arrive_date:date',
+            [
+                'attribute' => 'arrive_date',
+                'value'     => function($model) {return date("Y-m-d",$model->arrive_date);},
+            ],
             [
                 'attribute' => 'is_customer',
                 'label' => '是否本单位',
@@ -36,7 +39,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 }
             ],
             'booker_user',
-            'book_date:date',
+            [
+                'attribute' => 'book_date',
+                'value'     => function($model) {return date("Y-m-d",$model->book_date);},
+            ],
             'book_comment',
             [
                 'attribute' => 'send_status',
