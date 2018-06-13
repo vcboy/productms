@@ -1,51 +1,64 @@
 <?php
 
 use yii\helpers\Html;
-use yii\widgets\DetailView;
+use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use backend\models\Refcode;
 
 /* @var $this yii\web\View */
 /* @var $model backend\models\Product */
-
-$this->title = $model->id;
+$this->title = '配发验单据详情';
 $this->params['breadcrumbs'][] = ['label' => 'Products', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = ['label' => $model->id, 'url' => ['view', 'id' => $model->id]];
+$this->params['breadcrumbs'][] = 'Update';
+$productclasslist = Refcode::getRefcodeBytype('productclass');
 ?>
-<div class="product-view">
+<div class="product-update">
 
-    <h1><?= Html::encode($this->title) ?></h1>
+    <div class="product-form">
 
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
+        <?php $form = ActiveForm::begin(); ?>
 
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'booker_user',
-            'book_date',
-            'book_comment',
-            'arrive_date',
-            'is_customer',
-            'total_price',
-            'sender_user',
-            'send_date',
-            'send_status',
-            'send_comment:ntext',
-            'inspector_user',
-            'inspect_date',
-            'inspect_status',
-            'inspect_comment:ntext',
-            'is_del',
-            'customer',
-        ],
-    ]) ?>
+        <?= $form->field($model, 'booker_user')->textInput(['readonly'=>'readonly','value'=>$model->booker_user?$model->booker_user:Yii::$app->user->identity->name]) ?>
 
+        <?= $form->field($model, 'book_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
+
+        <?= $form->field($model, 'book_comment')->textInput(['readonly'=>'readonly']) ?>
+
+        <?= $form->field($model, 'arrive_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
+
+        <?= $form->field($model, 'is_customer')->label('是否本单位')->dropDownList((empty($model->is_customer)?array(0=>'本单位'):array(1=>'其他单位')), array('readonly' => 'readonly')) ?>
+
+        <?= $form->field($model, 'total_price')->textInput(['readonly'=>'readonly']) ?>
+
+        <?= $form->field($model, 'customer')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+
+        <?= $form->field($model, 'sender_user')->textInput(['readonly'=>'readonly','value'=>$model->sender_user?$model->sender_user:Yii::$app->user->identity->name]) ?>
+
+        <?= $form->field($model, 'send_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
+
+        <?= $form->field($model, 'send_comment')->textInput(['readonly'=>'readonly']) ?>
+
+        <?= $form->field($model, 'inspector_user')->textInput(['readonly'=>'readonly','value'=>$model->inspector_user?$model->inspector_user:Yii::$app->user->identity->name]) ?>
+
+        <?= $form->field($model, 'inspect_date')->textInput(['readonly'=>'readonly','maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>date('Y-m-d',time())]) ?>
+
+        <?= $form->field($model, 'inspect_comment')->textInput(['readonly'=>'readonly']) ?>
+
+        <table class="table table-striped table-bordered" id="product_tb">
+            <tr><th colspan="4">
+                <?=  Html::a('查看库存配比','javascript:;',['class'=>'btn btn-sm btn-danger','onclick'=>'_checkstore()'])?>
+            </th></tr>
+            <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th>发货数量</th></tr>
+            <?=$pte_arr_txt?>
+        </table>
+
+        <div class="form-group">
+        <?=  Html::a('返回','javascript:history.back()',['class'=>'btn btn-primary'])?>
+        </div>
+
+        <?php ActiveForm::end(); ?>
+
+    </div>
 </div>

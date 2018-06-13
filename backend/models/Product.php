@@ -42,6 +42,7 @@ class Product extends \yii\db\ActiveRecord
     {
         return [
             [['book_date', 'arrive_date'], 'required'],
+            [['send_date', 'inspect_date'] , 'default' ],
             [[ 'is_customer', 'send_status',  'inspect_status', 'is_del'], 'integer'],
             [['total_price'], 'number'],
             [['book_comment','send_comment', 'inspect_comment'], 'string'],
@@ -68,7 +69,7 @@ class Product extends \yii\db\ActiveRecord
             'send_status' => '发货状态',
             'send_comment' => '发货意见',
             'inspector_user' => '验货人',
-            'inspect_date' => '验货时间（入库时间）',
+            'inspect_date' => '验货时间',
             'inspect_status' => '验货状态',
             'inspect_comment' => '验收意见',
             'is_del' => '是否删除',

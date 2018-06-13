@@ -41,6 +41,38 @@ class ProductController extends CController
      * Lists all Product models.
      * @return mixed
      */
+    public function actionSearch()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['send_status'=>0,'is_del'=>0]);
+        $dataProvider->query->orderBy('book_date desc');
+        return $this->render('search', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Product models.
+     * @return mixed
+     */
+    public function actionGroupproduct()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['is_del'=>0,'send_status'=>1])->andWhere(['or',['is_customer'=>0,'inspect_status'=>1],['is_customer'=>1]]);
+        $dataProvider->query->orderBy('book_date desc');
+        return $this->render('groupproduct', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Lists all Product models.
+     * @return mixed
+     */
     public function actionCreatelist()
     {
         $searchModel = new ProductSearch();
@@ -69,6 +101,24 @@ class ProductController extends CController
         ]);
     }
 
+    /**
+     * Lists all Product models.
+     * @return mixed
+     */
+    public function actionInspectorlist()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['is_del'=>0,'is_customer'=>0,'send_status'=>1]);
+        $dataProvider->query->orderBy('send_date desc');
+        return $this->render('inspectorlist', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    
+
     
 
     /**
@@ -78,8 +128,51 @@ class ProductController extends CController
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
+        $pte_arr_txt = "";
+        $pte_info_txt_arr = [];
+        $now = time()-10;
+        $productclasslist = Refcode::getRefcodeBytype('productclass');
+
+        $productArr = [];
+        $productObj = Refcode::find()->where(['is_del'=>0,'type'=>'product'])->all();
+        foreach ($productObj as $key => $value) {
+            $unitName = $value->unitName;
+            $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+            $info['id'] = $value->id;
+            $info['nm'] = $nm;
+            $productArr[$value->pid][] = $info;
+        }
+        foreach ($pte_arr as $key => $pte) {
+            $temp = $now - $key;
+            $productclasslist_txt = "";
+            $productlist_txt = "";
+            foreach ($productclasslist as $fkey => $fval) {
+                $flag = "";
+                if($fkey==$pte['productclass_id']){
+                    $productclasslist_txt = $fval;
+                }
+            }
+            if(!empty($productArr[$pte['productclass_id']])){
+                foreach ($productArr[$pte['productclass_id']] as $fkey => $fval) {
+                    $flag = "";
+                    if($fval['id']==$pte['product_id']){
+                        $productlist_txt = $fval['nm'];
+                    }
+                }    
+            }
+
+            $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['book_count']."</td><td>".$pte['book_count']."</td></tr>";
+            $pte_arr_txt .= $pte_info;
+            $pte_info_txt_arr[] = $pte['product_id']."_".$pte['book_count'];
+        }
+        $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
+        $model->book_date = date('Y-m-d',$model->book_date);
+        $model->arrive_date = date('Y-m-d',$model->arrive_date);
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'pte_arr_txt' => $pte_arr_txt,
         ]);
     }
 
@@ -230,7 +323,6 @@ class ProductController extends CController
     public function actionSend($id)
     {
         $model = $this->findModel($id);
-
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->book_date = strtotime($model->book_date);
             $model->arrive_date = strtotime($model->arrive_date);
@@ -308,6 +400,12 @@ class ProductController extends CController
                     $val['price'] = $total_pay;
                     $val['unitprice'] = round($total_pay/$pnum,2);
                 }
+            }else{//更新发货数量
+                $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();//获取发货清单
+                foreach ($pte_arr as $key => $val) {
+                    $val->send_count = $val->book_count;
+                    $val->save();
+                }
             }
             return $this->redirect(['sendlist']);
         } else {
@@ -353,6 +451,145 @@ class ProductController extends CController
             $model->book_date = date('Y-m-d',$model->book_date);
             $model->arrive_date = date('Y-m-d',$model->arrive_date);
             return $this->render('send', [
+                'model' => $model,
+                'pte_arr_txt' => $pte_arr_txt,
+            ]);
+        }
+    }
+
+
+    /**
+     * Send an existing Product model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionInspector($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $model->book_date = strtotime($model->book_date);
+            $model->arrive_date = strtotime($model->arrive_date);
+            $model->send_date = strtotime($model->send_date);
+            $model->inspect_date = strtotime($model->inspect_date);
+            $model->inspect_status = 1;
+            $model->save();
+
+            $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();//获取发货清单
+            $gp_list = [];
+            foreach ($pte_arr as $key => $val) {
+                $val->depot_count = $val->book_count;
+                $val->sycount = $val->book_count;
+                $val->status = 1;
+                $val->save();
+                $info = [];
+                $info['id'] = $val['product_id'];
+                $info['num'] = $val['send_count'];
+                $gp_list[] = $info;
+            }
+            $pids = ArrayHelper::getColumn($gp_list,'id');
+            $p_arr = ProductTemplate::find()->andWhere(['product_id'=>$pids])->all();//得到所有的成品模板
+            $pMap = ArrayHelper::map($p_arr,'product_id','id');//获取成品id与模板id的map
+            $ptids = ArrayHelper::getColumn($p_arr,'id');
+            $pe_arr = ProductTemplateEntry::find()->andWhere(['ptid'=>$ptids])->all();//拿到所有成品的明细
+
+            $peMap = [];
+            $foodids = [];//所有配额食物的数量
+            $foodids_tmp = [];
+            foreach ($pe_arr as $key => $val) {
+                $peMap[$val['ptid']][] = $val;
+                $foodids_tmp[$val['food_id']]= 1;
+            }
+            foreach ($foodids_tmp as $key => $val) {
+                $foodids[] = $key;
+            }
+            $fMap = ArrayHelper::map(Refcode::find()->andWhere(['id'=>$foodids])->all(),'id','nm');
+            foreach ($gp_list as $key => $val) {//循环配货表
+                $ptid = $pMap[$val['id']];//得到食材配比明细
+                $pnum = $val['num']-0;
+                $pe_arr = $peMap[$ptid];
+                foreach ($pe_arr as $k => $v) {//食材模板
+                    $total_pay = 0;
+                    $fnum = $v['count']*$pnum;//需要出库的食物
+                    $store_arr = Purchase::find()->andWhere(['food_id'=>$v['food_id'],'is_del'=>0,'status'=>1])->andWhere(['>','sycount',0])->orderBy('depot_date')->all();//获取库存从大到小
+                    foreach ($store_arr as $skey => $sinfo) {
+                        $st_num = $sinfo['sycount'];
+                        if($fnum>=$st_num){
+                            $sinfo->sycount = 0;
+                            $sinfo->save();//减去库存
+                            $fnum = $fnum - ($st_num-0);
+                            $pfmap = New Pfmap();
+                            $pfmap->pid = $model->id;
+                            $pfmap->product_id = $val['id'];
+                            $pfmap->purchase_id = $sinfo['id'];
+                            $pfmap->num = $st_num;
+                            $pfmap->price = $sinfo['price'];
+                            $pfmap->save();//将数据记录到中间表
+                            $total_pay = $total_pay + ($sinfo['price']-0)*($st_num-0);
+                        }else{
+                            $st_num = ($st_num-0) - $fnum;
+                            $sinfo->sycount = $st_num;
+                            $sinfo->save();//减去库存
+                            $pfmap = New Pfmap();
+                            $pfmap->pid = $model->id;
+                            $pfmap->product_id = $val['id'];
+                            $pfmap->purchase_id = $sinfo['id'];
+                            $pfmap->num = $fnum;
+                            $pfmap->price = $sinfo['price'];
+                            $pfmap->save();//将数据记录到中间表
+                            $total_pay = $total_pay + ($sinfo['price']-0)*($fnum-0);
+                            break;
+                        }
+                    }
+                }
+                $val['sycount'] = $pnum;
+                $val['price'] = $total_pay;
+                $val['unitprice'] = round($total_pay/$pnum,2);
+            }
+            return $this->redirect(['sendlist']);
+        } else {
+            $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
+            $pte_arr_txt = "";
+            $pte_info_txt_arr = [];
+            $now = time()-10;
+            $productclasslist = Refcode::getRefcodeBytype('productclass');
+
+            $productArr = [];
+            $productObj = Refcode::find()->where(['is_del'=>0,'type'=>'product'])->all();
+            foreach ($productObj as $key => $value) {
+                $unitName = $value->unitName;
+                $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+                $info['id'] = $value->id;
+                $info['nm'] = $nm;
+                $productArr[$value->pid][] = $info;
+            }
+            foreach ($pte_arr as $key => $pte) {
+                $temp = $now - $key;
+                $productclasslist_txt = "";
+                $productlist_txt = "";
+                foreach ($productclasslist as $fkey => $fval) {
+                    $flag = "";
+                    if($fkey==$pte['productclass_id']){
+                        $productclasslist_txt = $fval;
+                    }
+                }
+                if(!empty($productArr[$pte['productclass_id']])){
+                    foreach ($productArr[$pte['productclass_id']] as $fkey => $fval) {
+                        $flag = "";
+                        if($fval['id']==$pte['product_id']){
+                            $productlist_txt = $fval['nm'];
+                        }
+                    }    
+                }
+
+                $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['book_count']."</td><td>".$pte['book_count']."</td></tr>";
+                $pte_arr_txt .= $pte_info;
+                $pte_info_txt_arr[] = $pte['product_id']."_".$pte['book_count'];
+            }
+            $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
+            $model->book_date = date('Y-m-d',$model->book_date);
+            $model->arrive_date = date('Y-m-d',$model->arrive_date);
+            return $this->render('inspector', [
                 'model' => $model,
                 'pte_arr_txt' => $pte_arr_txt,
             ]);

@@ -15,13 +15,12 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 <div class="product-form">
 
     <?php $form = ActiveForm::begin(); ?>
+    <?= $form->field($model, 'inspector_user')->textInput(['readonly'=>'readonly','value'=>$model->inspector_user?$model->inspector_user:Yii::$app->user->identity->name]) ?>
 
-    <?= $form->field($model, 'sender_user')->textInput(['readonly'=>'readonly','value'=>$model->sender_user?$model->sender_user:Yii::$app->user->identity->name]) ?>
+    <?= $form->field($model, 'inspect_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>date('Y-m-d',time())]) ?>
 
-    <?= $form->field($model, 'send_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>date('Y-m-d',time())]) ?>
+    <?= $form->field($model, 'inspect_comment')->textInput() ?>
 
-    <?= $form->field($model, 'send_comment')->textInput() ?>
-    
     <?= $form->field($model, 'booker_user')->textInput(['readonly'=>'readonly','value'=>$model->booker_user?$model->booker_user:Yii::$app->user->identity->name]) ?>
 
     <?= $form->field($model, 'book_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
@@ -36,7 +35,12 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <?= $form->field($model, 'customer')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
 
-    
+    <?= $form->field($model, 'sender_user')->textInput(['readonly'=>'readonly','value'=>$model->sender_user?$model->sender_user:Yii::$app->user->identity->name]) ?>
+
+    <?= $form->field($model, 'send_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
+
+    <?= $form->field($model, 'send_comment')->textInput(['readonly'=>'readonly']) ?>
+
     <table class="table table-striped table-bordered" id="product_tb">
         <tr><th colspan="4">
             <?=  Html::a('查看库存配比','javascript:;',['class'=>'btn btn-sm btn-danger','onclick'=>'_checkstore()'])?>
@@ -125,12 +129,12 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
         $.post(url,Content,function(rsp){
             if(rsp!=1){
                 swal({ 
-                  title: "库存数量不足,无法完成发货。",
+                  title: "库存数量不足,无法完成验货。",
                   text: rsp, 
                   html: true 
                 });
             }else{
-                swal("发货成功", "成品发货成功","success");
+                swal("验货成功", "成品验货成功","success");
                 $('form').submit();
             }
         });

@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="widget-body">
             <div class="widget-main">
-                <?php echo $this->render('_searchsend', ['model' => $searchModel]); ?>
+                <?php echo $this->render('_searchinspector', ['model' => $searchModel]); ?>
             </div>
         </div>
     </div>
@@ -38,39 +38,39 @@ $this->params['breadcrumbs'][] = $this->title;
                     return $model->is_customer == 1?'其他单位':'本单位';
                 }
             ],
-            'booker_user',
-            [
-                'attribute' => 'book_date',
-                'value'     => function($model) {return date("Y-m-d",$model->book_date);},
-            ],
-            'book_comment',
             'sender_user',
             [
                 'attribute' => 'send_date',
                 'value'     => function($model) {return (empty($model->send_date)?"-":date("Y-m-d",$model->send_date));},
             ],
             'send_comment',
+            'inspector_user',
             [
-                'attribute' => 'send_status',
-                'label' => '是否发货',
+                'attribute' => 'inspect_date',
+                'value'     => function($model) {return (empty($model->inspect_date)?"-":date("Y-m-d",$model->inspect_date));},
+            ],
+            'inspect_comment',
+            [
+                'attribute' => 'inspect_status',
+                'label' => '是否验收',
                 'value' => function($model){
-                    return $model->send_status == 1?'已发货':'未发货';
+                    return $model->inspect_status == 1?'已验收':'未验收';
                 }
             ],
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{send} {view}',
+                'template' => '{inspector} {view}',
                 'buttons' => [
-                    'send' => function ($url, $model, $key) {
+                    'inspector' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '发货',
+                            'title' => '验收',
                             'aria-label' => Yii::t('yii', 'Update'),
                             'data-pjax' => '0',
-                            'class' => 'btn btn-xs btn-info',
+                            'class' => 'btn btn-xs btn-success',
                         ];
                         $r_txt = "";
-                        if(empty($model->send_status)){
-                            $r_txt = Html::a('<i class="icon-road  bigger-120"></i>', $url, $options);
+                        if(empty($model->inspect_status)){
+                            $r_txt = Html::a('<i class="icon-bookmark  bigger-120"></i>', $url, $options);
                         }
                         return $r_txt;
                     },

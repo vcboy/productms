@@ -8,7 +8,7 @@ use job\lib\JobGridView;
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Products';
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['breadcrumbs'][] = '发货完成基准价';
 ?>
 <div class="product-index">
     <div class="widget-box">
@@ -17,7 +17,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="widget-body">
             <div class="widget-main">
-                <?php echo $this->render('_searchsend', ['model' => $searchModel]); ?>
+                <?php echo $this->render('_searchgp', ['model' => $searchModel]); ?>
             </div>
         </div>
     </div>
@@ -32,10 +32,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function($model) {return date("Y-m-d",$model->arrive_date);},
             ],
             [
+                'attribute' => 'total_price',
+                'value'     => function($model) {return (empty($model->total_price)?"-":("￥".$model->total_price.'元'));},
+            ],
+            [
                 'attribute' => 'is_customer',
                 'label' => '是否本单位',
                 'value' => function($model){
-                    return $model->is_customer == 1?'其他单位':'本单位';
+                    return '本单位';
                 }
             ],
             'booker_user',
@@ -43,38 +47,21 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'book_date',
                 'value'     => function($model) {return date("Y-m-d",$model->book_date);},
             ],
-            'book_comment',
             'sender_user',
             [
                 'attribute' => 'send_date',
                 'value'     => function($model) {return (empty($model->send_date)?"-":date("Y-m-d",$model->send_date));},
             ],
-            'send_comment',
+            'inspector_user',
             [
-                'attribute' => 'send_status',
-                'label' => '是否发货',
-                'value' => function($model){
-                    return $model->send_status == 1?'已发货':'未发货';
-                }
+                'attribute' => 'inspect_date',
+                'value'     => function($model) {return (empty($model->inspect_date)?"-":date("Y-m-d",$model->inspect_date));},
             ],
             [   'class' => 'yii\grid\ActionColumn',
-                'header' => '操作',
-                'template' => '{send} {view}',
+                'header' => '明细',
+                'template' => ' {gview}',
                 'buttons' => [
-                    'send' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '发货',
-                            'aria-label' => Yii::t('yii', 'Update'),
-                            'data-pjax' => '0',
-                            'class' => 'btn btn-xs btn-info',
-                        ];
-                        $r_txt = "";
-                        if(empty($model->send_status)){
-                            $r_txt = Html::a('<i class="icon-road  bigger-120"></i>', $url, $options);
-                        }
-                        return $r_txt;
-                    },
-                    'view' => function ($url, $model, $key) {
+                    'gview' => function ($url, $model, $key) {
                         $options = [
                             'title' => '查看',
                             'aria-label' => Yii::t('yii', 'view'),
