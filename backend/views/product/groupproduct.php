@@ -59,9 +59,9 @@ $this->params['breadcrumbs'][] = '发货完成基准价';
             ],
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '明细',
-                'template' => ' {gview}',
+                'template' => ' {groupproductdetail}',
                 'buttons' => [
-                    'gview' => function ($url, $model, $key) {
+                    'groupproductdetail' => function ($url, $model, $key) {
                         $options = [
                             'title' => '查看',
                             'aria-label' => Yii::t('yii', 'view'),

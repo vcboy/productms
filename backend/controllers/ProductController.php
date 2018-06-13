@@ -598,6 +598,64 @@ class ProductController extends CController
 
 
     /**
+     * Send an existing Product model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionGroupproductdetail($id)
+    {
+        $model = $this->findModel($id);
+        $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
+        $pte_arr_txt = "";
+        $pte_info_txt_arr = [];
+        $now = time()-10;
+        $productclasslist = Refcode::getRefcodeBytype('productclass');
+
+        $productArr = [];
+        $productObj = Refcode::find()->where(['is_del'=>0,'type'=>'product'])->all();
+        foreach ($productObj as $key => $value) {
+            $unitName = $value->unitName;
+            $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+            $info['id'] = $value->id;
+            $info['nm'] = $nm;
+            $productArr[$value->pid][] = $info;
+        }
+        foreach ($pte_arr as $key => $pte) {
+            $temp = $now - $key;
+            $productclasslist_txt = "";
+            $productlist_txt = "";
+            foreach ($productclasslist as $fkey => $fval) {
+                $flag = "";
+                if($fkey==$pte['productclass_id']){
+                    $productclasslist_txt = $fval;
+                }
+            }
+            if(!empty($productArr[$pte['productclass_id']])){
+                foreach ($productArr[$pte['productclass_id']] as $fkey => $fval) {
+                    $flag = "";
+                    if($fval['id']==$pte['product_id']){
+                        $productlist_txt = $fval['nm'];
+                    }
+                }    
+            }
+
+            $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['book_count']."</td><td>￥".$pte['unitprice']."元</td><td>￥".$pte['price']."元</td></tr>";
+            $pte_arr_txt .= $pte_info;
+            $pte_info_txt_arr[] = $pte['product_id']."_".$pte['book_count'];
+        }
+        $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
+        $model->book_date = date('Y-m-d',$model->book_date);
+        $model->arrive_date = date('Y-m-d',$model->arrive_date);
+        return $this->render('groupproductdetail', [
+            'model' => $model,
+            'pte_arr_txt' => $pte_arr_txt,
+        ]);
+    
+    }
+
+
+    /**
      * Deletes an existing Product model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
@@ -782,4 +840,7 @@ class ProductController extends CController
             print_r(1);exit;
         }
     }
+
+
+
 }

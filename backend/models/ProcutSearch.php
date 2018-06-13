@@ -18,7 +18,7 @@ class ProcutSearch extends Procut
     public function rules()
     {
         return [
-            [['id', 'booker_id', 'book_date', 'book_comment', 'arrive_date', 'is_customer', 'sender_id', 'send_date', 'send_status', 'inspector_id', 'inspect_date', 'inspect_status', 'is_del'], 'integer'],
+            [['id', 'booker_id',  'book_comment','is_customer', 'sender_id',  'send_status', 'inspector_id', 'inspect_status', 'is_del'], 'integer'],
             [['total_price'], 'number'],
             [['send_comment', 'inspect_comment', 'customer'], 'safe'],
         ];
@@ -62,16 +62,16 @@ class ProcutSearch extends Procut
         $query->andFilterWhere([
             'id' => $this->id,
             'booker_id' => $this->booker_id,
-            'book_date' => $this->book_date,
+            'book_date' => strtotime($this->book_date),
             'book_comment' => $this->book_comment,
-            'arrive_date' => $this->arrive_date,
+            'arrive_date' => strtotime($this->arrive_date),
             'is_customer' => $this->is_customer,
             'total_price' => $this->total_price,
             'sender_id' => $this->sender_id,
-            'send_date' => $this->send_date,
+            'send_date' => strtotime($this->send_date),
             'send_status' => $this->send_status,
             'inspector_id' => $this->inspector_id,
-            'inspect_date' => $this->inspect_date,
+            'inspect_date' => strtotime($this->inspect_date),
             'inspect_status' => $this->inspect_status,
             'is_del' => $this->is_del,
         ]);

@@ -2,28 +2,57 @@
 
 use yii\helpers\Html;
 use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use backend\models\Refcode;
+use yii\helpers\ArrayHelper;
 
 /* @var $this yii\web\View */
-/* @var $model backend\models\ProductSearch */
+/* @var $model backend\models\ProductConsumeSearch */
 /* @var $form yii\widgets\ActiveForm */
+$productclasslist = Refcode::getRefcodeBytype('productclass');
+$productlist = [];
+if(!empty($model->productclass_id)){
+    $productlist = ArrayHelper::map(Refcode::find()->andWhere(['pid'=>$model->productclass_id,'is_del'=>0])->all(),'id','nm');
+}
 ?>
 
-<div class="product-search">
+<div class="product-consume-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['createlist'],
         'method' => 'get',
     ]); ?>
     <div class="tabfield">
 
-    <?= $form->field($model, 'customer')->label('配送客户') ?>
-    <?= $form->field($model, 'book_date')->label('配货时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
-    <?= $form->field($model, 'arrive_date')->label('需要到达时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
+    <?= $form->field($model, 'productclass_id')->dropDownList(array(''=>'--请选择--')+$productclasslist,['id'=>'productclass_id']) ?>
+
+    <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
+    <?= $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type'])  ?>
+
     </div>
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
-        <?= Html::a('添加配货单', ['create'], ['class' => 'btn btn-sm btn-success']) ?>
     </div>
+
     <?php ActiveForm::end(); ?>
 
 </div>
+<script type="text/javascript">
+     $(document).ready(function(){
+        $("#productclass_id").change(function(){
+            var productclass_id = $(this).val();
+            var Content = {productclass_id: productclass_id};
+            var url = "<?=Url::to(['product-template/getproduct'])?>";
+            $.post(url,Content,function(rsp){
+                if(rsp){
+                    var obj = JSON.parse(rsp);
+                    var optionstr = '<option value="">--请选择--</option>';
+                    for(var i in obj){
+                        optionstr+="<option value="+i+">"+obj[i]+"</option>";
+                    }
+                    $("#product_id option").remove();
+                    $("#product_id").append(optionstr);
+                }
+            })
+        });
+    });
+</script>

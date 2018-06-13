@@ -18,8 +18,8 @@ class ProductSearch extends Product
     public function rules()
     {
         return [
-            [['id', 'book_date', 'book_comment', 'arrive_date', 'is_customer', 'send_date', 'send_status', 'inspect_date', 'inspect_status', 'is_del'], 'integer'],
-            [['booker_user', 'sender_user', 'send_comment', 'inspector_user', 'inspect_comment', 'customer'], 'safe'],
+            [['id',  'book_comment','is_customer',  'send_status',  'inspect_status', 'is_del'], 'integer'],
+            [['booker_user', 'sender_user', 'send_comment', 'inspector_user', 'inspect_comment','send_date', 'inspect_date','arrive_date',  'book_date','customer'], 'safe'],
             [['total_price'], 'number'],
         ];
     }
@@ -61,17 +61,29 @@ class ProductSearch extends Product
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'book_date' => $this->book_date,
             'book_comment' => $this->book_comment,
-            'arrive_date' => $this->arrive_date,
             'is_customer' => $this->is_customer,
             'total_price' => $this->total_price,
-            'send_date' => $this->send_date,
             'send_status' => $this->send_status,
-            'inspect_date' => $this->inspect_date,
             'inspect_status' => $this->inspect_status,
             'is_del' => $this->is_del,
         ]);
+
+        if($this->book_date){
+            $query->andFilterWhere(['book_date' => strtotime($this->book_date)]);
+        }
+
+        if($this->arrive_date){
+            $query->andFilterWhere(['arrive_date' => strtotime($this->arrive_date)]);
+        }
+
+        if($this->send_date){
+            $query->andFilterWhere(['send_date' => strtotime($this->send_date)]);
+        }
+
+        if($this->inspect_date){
+            $query->andFilterWhere(['inspect_date' => strtotime($this->inspect_date)]);
+        }
 
         $query->andFilterWhere(['like', 'booker_user', $this->booker_user])
             ->andFilterWhere(['like', 'sender_user', $this->sender_user])

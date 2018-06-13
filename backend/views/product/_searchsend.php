@@ -11,7 +11,7 @@ use yii\widgets\ActiveForm;
 <div class="product-search">
 
     <?php $form = ActiveForm::begin([
-        'action' => ['createlist'],
+        'action' => ['sendlist'],
         'method' => 'get',
     ]); ?>
     <div class="tabfield">

@@ -1,7 +1,10 @@
 <?php
 
 use yii\helpers\Html;
-use job\lib\JobGridView;
+use yii\widgets\ActiveForm;
+use yii\helpers\Url;
+use yii\helpers\ArrayHelper;
+use backend\models\Refcode;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductSearch */
@@ -10,51 +13,31 @@ use job\lib\JobGridView;
 $this->title = 'Products';
 $this->params['breadcrumbs'][] = '发货完成基准价明细';
 ?>
-<div class="product-index">
-    <div class="widget-box">
-        <div class="widget-header">
-            <h4>查询条件</h4>
-        </div>
-        <div class="widget-body">
-            <div class="widget-main">
-                <?php echo $this->render('_searchsearch', ['model' => $searchModel]); ?>
-            </div>
-        </div>
+
+<div class="product-form">
+
+    <?php $form = ActiveForm::begin(); ?>
+
+    <table class="table table-striped table-bordered" id="product_tb">
+        <tr><th>成品分类</th><th>成品名称</th><th>成品数量</th><th>成品单价</th><th>小计</th></tr>
+        <?=$pte_arr_txt?>
+        <tr><td colspan="3">&nbsp;</td><td>合计</td><td><?="￥".($model->total_price-0)."元"?></td></tr>
+    </table>
+   
+   
+
+    <?= $form->field($model, 'is_customer')->label('是否本单位')->dropDownList((empty($model->is_customer)?array(0=>'本单位'):array(1=>'其他单位')), array('readonly' => 'readonly')) ?>
+
+    <?= $form->field($model, 'total_price')->textInput(['readonly'=>'readonly']) ?>
+
+    <?= $form->field($model, 'customer')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
+
+    <?= $form->field($model, 'arrive_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
+
+    <div class="form-group">
+    <?=  Html::a('返回',"javascript:history.back()",['class'=>'btn btn-primary'])?>
     </div>
-    <?= JobGridView::widget([
-        'dataProvider' => $dataProvider,
-        'summary'=>'',
-        'columns' => [
-            ['class' => 'yii\grid\SerialColumn','header' => '序号'],
-            'booker_user',
-            'book_date',
-            'book_comment',
-            [   'class' => 'yii\grid\ActionColumn',
-                'header' => '操作',
-                'template' => '{update} {delete}',
-                'buttons' => [
-                    'update' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '修改',
-                            'aria-label' => Yii::t('yii', 'Update'),
-                            'data-pjax' => '0',
-                            'class' => 'btn btn-xs btn-info',
-                        ];
-                        return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
-                    },
-                    'delete' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '删除',
-                            'aria-label' => Yii::t('yii', 'Delete'),
-                            //'data-confirm' => Yii::t('yii', '确认删除？'),
-                            'data-pjax' => '0',
-                            'class' => 'btn btn-xs btn-danger',
-                            'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
-                        ];
-                        return Html::button('<i class="icon-trash bigger-120"></i>', $options);
-                    },
-                ]
-            ],
-        ],
-    ]); ?>
+
+    <?php ActiveForm::end(); ?>
+
 </div>
