@@ -23,10 +23,8 @@ if(!empty($model->productclass_id)){
     ]); ?>
     <div class="tabfield">
 
-    <?= $form->field($model, 'productclass_id')->dropDownList(array(''=>'--请选择--')+$productclasslist,['id'=>'productclass_id']) ?>
-
-    <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
-    <?= $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type'])  ?>
+    <?= $form->field($model, 'productclass_id')->label('成品类型')->dropDownList(array(''=>'--请选择--')+$productclasslist,['id'=>'productclass_id']) ?>
+    <?= $form->field($model, 'product_id')->label('成品名称')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
 
     </div>
     <div class="form-group">

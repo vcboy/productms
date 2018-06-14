@@ -11,6 +11,7 @@ use backend\models\ProductTemplateEntry;
 use backend\models\ProductEntry;
 use backend\models\Purchase;
 use backend\models\Pfmap;
+use backend\models\ProductEntrySearch;
 use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -32,6 +33,7 @@ class ProductController extends CController
                 'class' => VerbFilter::className(),
                 'actions' => [
                     'delete' => ['POST','GET'],
+                    'view' => ['POST','GET'],
                 ],
             ],
         ];
@@ -43,10 +45,11 @@ class ProductController extends CController
      */
     public function actionSearch()
     {
-        $searchModel = new ProductSearch();
+        $searchModel = new ProductEntrySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['send_status'=>0,'is_del'=>0]);
-        $dataProvider->query->orderBy('book_date desc');
+        $dataProvider->query->select(['sum(sycount) as totalcount,sum(price) as totalprice,round(sum(price)/sum(book_count),2) as avgprice,productclass_id,product_id']);
+        $dataProvider->query->andWhere(['status'=>1]);
+        $dataProvider->query->groupBy(['product_id']);
         return $this->render('search', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -396,7 +399,7 @@ class ProductController extends CController
                             }
                         }
                     }
-                    $val['sycount'] = $pnum;
+                    //$val['sycount'] = $pnum;
                     $val['price'] = $total_pay;
                     $val['unitprice'] = round($total_pay/$pnum,2);
                 }
@@ -841,6 +844,18 @@ class ProductController extends CController
         }
     }
 
+    public function actionSearchdetail(){
+        $product_id = Yii::$app->request->get('product_id');
+        $searchModel = new ProductEntrySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['status'=>1,'product_id'=>$product_id]);
+        $dataProvider->query->orderBy('id desc');
+        return $this->render('searchdetail', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
 
+    
 
 }

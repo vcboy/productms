@@ -20,6 +20,9 @@ use Yii;
  */
 class ProductEntry extends \yii\db\ActiveRecord
 {
+    public $totalcount;
+    public $totalprice;
+    public $avgprice;
     /**
      * @inheritdoc
      */
@@ -58,5 +61,17 @@ class ProductEntry extends \yii\db\ActiveRecord
             'depot_count' => 'Depot Count',
             'status' => 'Status',
         ];
+    }
+
+    public function getProductclass(){
+        return $this->hasOne(Refcode::className(), ['id' => 'productclass_id']);
+    }
+
+    public function getProduct(){
+        return $this->hasOne(Refcode::className(), ['id' => 'product_id']);
+    }
+
+    public function getPinfo(){
+        return $this->hasOne(Product::className(), ['id' => 'pid']);
     }
 }
