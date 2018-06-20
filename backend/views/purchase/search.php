@@ -39,7 +39,13 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'param_id',
-                'value'     => function($model) use($refcode){return $refcode[$model->param_id];},
+                'value'     => function($model) use($refcode){
+                    //return $refcode[$model->param_id];
+                    if(array_key_exists($model->param_id, $refcode))
+                        return $refcode[$model->param_id];
+                    else
+                        return '';
+                },
             ],
             //'food_id',
             //'param_id',

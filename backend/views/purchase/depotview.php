@@ -79,6 +79,6 @@ $this->params['breadcrumbs'][] = $this->title;
         ],
     ]) ?>
     <div class="form-group">
-    <?=  Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary'])?>
+    <?=  Html::a('返回',Url::toRoute("depot"),['class'=>'btn btn-primary'])?>
     </div>
 </div>

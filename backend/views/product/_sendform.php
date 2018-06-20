@@ -47,7 +47,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <div class="form-group">
     <?=  Html::Button('发货', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
-    <?=  Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary'])?>
+    <?=  Html::a('返回',Url::toRoute("sendlist"),['class'=>'btn btn-primary'])?>
     </div>
 
     <?php ActiveForm::end(); ?>
