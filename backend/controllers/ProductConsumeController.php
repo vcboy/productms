@@ -34,7 +34,6 @@ class ProductConsumeController extends CController
     public function actionIndex()
     {
         $searchModel = new ProductConsumeSearch();
-        
         $productclass_id = intval($this->request->get('productclass_id'));
         $product_id = intval($this->request->get('product_id'));
         $status = intval($this->request->get('status'));
