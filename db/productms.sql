@@ -3,9 +3,9 @@
 -- http://www.phpmyadmin.net
 --
 -- Host: 127.0.0.1
--- Generation Time: 2018-06-20 17:33:31
--- 服务器版本： 10.1.9-MariaDB
--- PHP Version: 7.0.1
+-- Generation Time: 2018-06-21 20:05:52
+-- 服务器版本： 10.1.8-MariaDB
+-- PHP Version: 5.6.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -126,8 +126,8 @@ INSERT INTO `wx_auth_item` (`name`, `type`, `description`, `rule_name`, `data`, 
 ('productclass', 2, '成品分类', NULL, NULL, NULL, NULL, 43),
 ('productunit', 2, '成品单位', NULL, NULL, NULL, NULL, 45),
 ('product_add', 2, '配货需求', NULL, NULL, NULL, NULL, 54),
-('product_del', 2, '删除发配货信息', NULL, NULL, NULL, NULL, 55),
-('product_edit', 2, '修改发配货信息', NULL, NULL, NULL, NULL, 55),
+('product_del', 2, '删除发配货信息', NULL, NULL, NULL, NULL, 54),
+('product_edit', 2, '修改发配货信息', NULL, NULL, NULL, NULL, 54),
 ('product_groupproduct', 2, '查询', NULL, NULL, NULL, NULL, 60),
 ('product_inspector', 2, '验货入库', NULL, NULL, NULL, NULL, 56),
 ('product_search', 2, '成品库查询', NULL, NULL, NULL, NULL, 59),

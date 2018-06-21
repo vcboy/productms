@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'summary'=>'',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header' => '序号'],
-            'customer',
+            //'customer',
             [
                 'attribute' => 'arrive_date',
                 'value'     => function($model) {return date("Y-m-d",$model->arrive_date);},
@@ -35,7 +35,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'is_customer',
                 'label' => '是否本单位',
                 'value' => function($model){
-                    return $model->is_customer == 1?'其他单位':'本单位';
+                    return $model->is_customer == 1?$model->customer:'本单位';
                 }
             ],
             'sender_user',
@@ -43,13 +43,13 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'send_date',
                 'value'     => function($model) {return (empty($model->send_date)?"-":date("Y-m-d",$model->send_date));},
             ],
-            'send_comment',
+            //'send_comment',
             'inspector_user',
             [
                 'attribute' => 'inspect_date',
                 'value'     => function($model) {return (empty($model->inspect_date)?"-":date("Y-m-d",$model->inspect_date));},
             ],
-            'inspect_comment',
+            //'inspect_comment',
             [
                 'attribute' => 'inspect_status',
                 'label' => '是否验收',

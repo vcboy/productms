@@ -18,7 +18,7 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'customer')->label('配送客户') ?>
     <?= $form->field($model, 'book_date')->label('配货时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
-    <?= $form->field($model, 'arrive_date')->label('需要到达时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
+    <?= $form->field($model, 'arrive_date')->label('到达时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
     </div>
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>

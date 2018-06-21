@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use job\lib\JobGridView;
+use backend\models\Admin;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductSearch */
@@ -26,7 +27,7 @@ $this->params['breadcrumbs'][] = $this->title;
         'summary'=>'',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header' => '序号'],
-            'customer',
+            //'customer',
             [
                 'attribute' => 'arrive_date',
                 'value'     => function($model) {return date("Y-m-d",$model->arrive_date);},
@@ -35,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'is_customer',
                 'label' => '是否本单位',
                 'value' => function($model){
-                    return $model->is_customer == 1?'其他单位':'本单位';
+                    return $model->is_customer == 1?$model->customer:'本单位';
                 }
             ],
             'booker_user',
@@ -43,7 +44,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'book_date',
                 'value'     => function($model) {return date("Y-m-d",$model->book_date);},
             ],
-            'book_comment',
+            //'book_comment',
             [
                 'attribute' => 'send_status',
                 'label' => '是否发货',
@@ -53,16 +54,16 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{update} {copy} {delete} {view} ',
-                'buttons' => [
-                    'update' => function ($url, $model, $key) {
+                'template' => '{view} {copy} {delete}  {update}',
+                'buttons' => [                    
+                    'view' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '修改',
-                            'aria-label' => Yii::t('yii', 'Update'),
+                            'title' => '查看',
+                            'aria-label' => Yii::t('yii', 'view'),
                             'data-pjax' => '0',
-                            'class' => 'btn btn-xs btn-info',
+                            'class' => 'btn btn-xs btn-warning',
                         ];
-                        return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
+                        return Html::a('<i class="icon-zoom-in  bigger-120"></i>', $url,$options);
                     },
                     'copy' => function ($url, $model, $key) {
                         $options = [
@@ -73,6 +74,17 @@ $this->params['breadcrumbs'][] = $this->title;
                         ];
                         return Html::a('<i class="icon-copy bigger-120"></i>', $url, $options);
                     },
+                    'update' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '修改',
+                            'aria-label' => Yii::t('yii', 'Update'),
+                            'data-pjax' => '0',
+                            'class' => 'btn btn-xs btn-info',
+                        ];
+                        if(Admin::checkAccess('product_edit')) {
+                            return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
+                        }
+                    },
                     'delete' => function ($url, $model, $key) {
                         $options = [
                             'title' => '删除',
@@ -81,17 +93,10 @@ $this->params['breadcrumbs'][] = $this->title;
                             'class' => 'btn btn-xs btn-danger',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
                         ];
-                        return Html::button('<i class="icon-trash bigger-120"></i>', $options);
-                    },
-                    'view' => function ($url, $model, $key) {
-                        $options = [
-                            'title' => '查看',
-                            'aria-label' => Yii::t('yii', 'view'),
-                            'data-pjax' => '0',
-                            'class' => 'btn btn-xs btn-warning',
-                        ];
-                        return Html::a('<i class="icon-zoom-in  bigger-120"></i>', $url,$options);
-                    },
+                        if(Admin::checkAccess('product_del')) {
+                            return Html::button('<i class="icon-trash bigger-120"></i>', $options);
+                        }
+                    },                   
                 ]
             ],
         ],
