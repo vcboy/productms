@@ -228,7 +228,7 @@ class ProductTemplateController extends CController
         foreach ($gp_list as $key => $val) {
             $pprice = $pprice + ($val['num']-0)*($fMap[$val['id']]-0);
         }
-        echo json_encode($pprice);
+        echo json_encode($pprice);exit;
     }
 
     public function actionFlashtpprice(){
@@ -250,6 +250,19 @@ class ProductTemplateController extends CController
             $val['unitprice'] = $price;
             $val->save();
         }
-        echo json_encode(['flag'=>'T']);
+        echo json_encode(['flag'=>'T']);exit;
+    }
+
+
+    public function actionChecksub(){
+        $product_id = Yii::$app->request->post('product_id');
+        $p_arr = ProductTemplate::find()->andWhere(['product_id'=>$product_id,'is_del'=>0])->asArray()->all();
+        $flag = 1;
+        $msg = '';
+        if(!empty($p_arr)&&count($p_arr)>0){
+            $flag = 0;
+            $msg = "模板已经存在，一个成品有且只能有一个模板。";
+        }
+        echo json_encode(['flag'=>$flag,'msg'=>$msg]);exit;
     }
 }

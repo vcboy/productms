@@ -127,7 +127,7 @@ if(!empty($model->productclass_id)){
                     ftype_txt = ftype_txt + ft_txt + ",";    
                 }else{
                     flag=0;
-                    err_msg = err_msg + "食品类型没有选择。";
+                    err_msg = err_msg + "食品类型没有选择。\n";
                 }
             });
 
@@ -137,7 +137,7 @@ if(!empty($model->productclass_id)){
                     food_txt = food_txt + ft_txt + ",";    
                 }else{
                     flag=0;
-                    err_msg = err_msg + "食品名称没有选择。";
+                    err_msg = err_msg + "食品名称没有选择。\n";
                 }
             });
 
@@ -147,21 +147,50 @@ if(!empty($model->productclass_id)){
                     fnum_txt = fnum_txt + ft_txt + ",";    
                 }else{
                     flag=0;
-                    err_msg = err_msg + "食品配额数量没有填写或填写有误。";
+                    err_msg = err_msg + "食品配额数量没有填写或填写有误。\n";
                 }
             });
         }else{
-            err_msg = err_msg + "请添加成品所需要的食材配比。";
+            flag=0;
+            err_msg = err_msg + "请添加成品所需要的食材配比。\n";
         }
-        if(flag==0){
-            swal(err_msg);
-        }else{
-            $('#ftype_txt').val(ftype_txt.substring(0,ftype_txt.length-1));
-            $('#food_txt').val(food_txt.substring(0,food_txt.length-1));
-            $('#fnum_txt').val(fnum_txt.substring(0,fnum_txt.length-1));
-            swal("保存成功", "成品模板保存成功","success");
-            $('form').submit();
+
+        var productclass_id = $('#productclass_id').val();
+        var product_id = $('#product_id').val();
+        var unit = $('#unit').val();
+
+        if(productclass_id == ""){
+            flag=0;
+            err_msg = err_msg + "请选择成品类型。\n";
         }
+
+        if(unit == ""){
+            flag=0;
+            err_msg = err_msg + "请选择成品单位。\n";
+        }
+
+        if(product_id == ""){
+            flag=0;
+            err_msg = err_msg + "请选择需要配比的成品。\n";
+        }
+
+        var Content = {'product_id': product_id};
+
+        var url = "<?=Url::to(['checksub'])?>";
+        $.post(url,Content,function(rsp){
+            var obj = JSON.parse(rsp);
+            if(flag>0){flag = obj.flag;}
+            err_msg = err_msg + obj.msg + "\n";
+            if(flag==0){
+                swal(err_msg);
+            }else{
+                $('#ftype_txt').val(ftype_txt.substring(0,ftype_txt.length-1));
+                $('#food_txt').val(food_txt.substring(0,food_txt.length-1));
+                $('#fnum_txt').val(fnum_txt.substring(0,fnum_txt.length-1));
+                swal("保存成功", "成品模板保存成功","success");
+                $('form').submit();
+            }
+        });
     }
 
     function _getUnitprice(){
@@ -185,7 +214,7 @@ if(!empty($model->productclass_id)){
                 if(rsp){
                     $("#producttemplate-unitprice").val(rsp);
                 }
-            })
+            });
         }
     }
 </script>

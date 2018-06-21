@@ -80,7 +80,7 @@ class ProductController extends CController
     {
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->andWhere(['send_status'=>0,'is_del'=>0]);
+        $dataProvider->query->andWhere(['is_del'=>0]);
         $dataProvider->query->orderBy('book_date desc');
         return $this->render('createlist', [
             'searchModel' => $searchModel,
@@ -166,7 +166,7 @@ class ProductController extends CController
                 }    
             }
 
-            $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['book_count']."</td><td>".$pte['book_count']."</td></tr>";
+            $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['book_count']."</td><td>".(empty($pte['send_count'])?"-":$pte['send_count'])."</td><td>".(empty($pte['depot_count'])?"-":$pte['depot_count'])."</td></tr>";
             $pte_arr_txt .= $pte_info;
             $pte_info_txt_arr[] = $pte['product_id']."_".$pte['book_count'];
         }
@@ -222,6 +222,7 @@ class ProductController extends CController
             $model->book_date = date('Y-m-d',time());
             return $this->render('create', [
                 'model' => $model,
+                'pte_arr_txt' => '',
             ]);
         }
     }
@@ -253,6 +254,7 @@ class ProductController extends CController
                 $pMap[$val['id']] = $val;
             }
             $priceMap = ArrayHelper::map(ProductTemplate::find()->andWhere(['product_id'=>$product_txt_arr])->all(),'product_id','unitprice');
+            $send_status = $model->send_status;
             foreach ($product_txt_arr as $key => $val) {
                 $pinfo = $pMap[$val];
                 $book_count = $pnum_txt_arr[$key];
@@ -265,6 +267,9 @@ class ProductController extends CController
                 $pe['unit'] = $pinfo->unitName;
                 $pe['price'] = $price*($book_count-0);
                 $pe['book_count'] = $book_count;
+                if($send_status==1){
+                    $pe['send_count'] = $book_count;
+                }
                 $pe->save();
             }
             return $this->redirect(['createlist']);
@@ -311,6 +316,63 @@ class ProductController extends CController
             $model->book_date = date('Y-m-d',$model->book_date);
             $model->arrive_date = date('Y-m-d',$model->arrive_date);
             return $this->render('update', [
+                'model' => $model,
+                'pte_arr_txt' => $pte_arr_txt,
+            ]);
+        }
+    }
+
+
+    /**
+     * Updates an existing Product model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionCopy($id)
+    {
+        $model = $this->findModel($id);
+        $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
+        $pte_arr_txt = "";
+        $now = time()-10;
+        $productclasslist = Refcode::getRefcodeBytype('productclass');
+
+        $productArr = [];
+        $productObj = Refcode::find()->where(['is_del'=>0,'type'=>'product'])->all();
+        foreach ($productObj as $key => $value) {
+            $unitName = $value->unitName;
+            $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+            $info['id'] = $value->id;
+            $info['nm'] = $nm;
+            $productArr[$value->pid][] = $info;
+        }
+        foreach ($pte_arr as $key => $pte) {
+            $temp = $now - $key;
+            $productclasslist_txt = "";
+            $productlist_txt = "";
+
+            foreach ($productclasslist as $fkey => $fval) {
+                $flag = "";
+                if($fkey==$pte['productclass_id']){
+                    $flag = " selected ";
+                }
+                $productclasslist_txt .= "<option value='".$fkey."' ".$flag.">".$fval."</option>";
+            }
+            if(!empty($productArr[$pte['productclass_id']])){
+                foreach ($productArr[$pte['productclass_id']] as $fkey => $fval) {
+                    $flag = "";
+                    if($fval['id']==$pte['product_id']){
+                        $flag = " selected ";
+                    }
+                    $productlist_txt .= "<option value='".$fval['id']."' ".$flag.">".$fval['nm']."</option>";
+                }    
+            }
+
+            $pte_info = "<tr id='tr_".$temp."'><td><select class='ftype form-control' onchange='_changePtype(this,".$temp.")'><option value=''>--请选择--</option>".$productclasslist_txt."</select></td><td><select class='form-control fid product_".$temp."' onchange='_getUnitprice()'><option value=''>--请选择--</option>".$productlist_txt."</select></td><td><input onchange='_getUnitprice()' class='form-control num num_".$temp."' value='".$pte['book_count']."'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\"".$temp."\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
+            $pte_arr_txt .= $pte_info;
+            $model->book_date = date('Y-m-d',$model->book_date);
+            $model->arrive_date = date('Y-m-d',$model->arrive_date);
+            return $this->render('create', [
                 'model' => $model,
                 'pte_arr_txt' => $pte_arr_txt,
             ]);
@@ -549,7 +611,7 @@ class ProductController extends CController
                 $val['price'] = $total_pay;
                 $val['unitprice'] = round($total_pay/$pnum,2);
             }
-            return $this->redirect(['sendlist']);
+            return $this->redirect(['inspectorlist']);
         } else {
             $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
             $pte_arr_txt = "";
@@ -855,7 +917,5 @@ class ProductController extends CController
             'dataProvider' => $dataProvider,
         ]);
     }
-
-    
 
 }

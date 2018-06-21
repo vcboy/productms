@@ -51,7 +51,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <div class="form-group">
     <?=  Html::Button('验货入库', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
-    <?=  Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary'])?>
+    <?=  Html::a('返回',Url::toRoute("inspectorlist"),['class'=>'btn btn-primary'])?>
     </div>
 
     <?php ActiveForm::end(); ?>

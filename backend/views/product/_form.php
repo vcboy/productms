@@ -44,7 +44,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <div class="form-group">
     <?=  Html::Button($model->isNewRecord ? '保存' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
-    <?=  Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary'])?>
+    <?=  Html::a('返回',Url::toRoute("createlist"),['class'=>'btn btn-primary'])?>
     </div>
 
     <?php ActiveForm::end(); ?>

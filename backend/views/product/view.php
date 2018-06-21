@@ -50,7 +50,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
             <tr><th colspan="4">
                 <?=  Html::a('查看库存配比','javascript:;',['class'=>'btn btn-sm btn-danger','onclick'=>'_checkstore()'])?>
             </th></tr>
-            <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th>发货数量</th></tr>
+            <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th>发货数量</th><th>验货数量</th></tr>
             <?=$pte_arr_txt?>
         </table>
 
@@ -62,3 +62,25 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     </div>
 </div>
+
+<script type="text/javascript">
+    function _checkstore(){
+        var gp_arr = $('#gp_arr').val();
+        if(gp_arr!=""){
+            var Content = {'gp_arr': gp_arr};
+            var url = "<?=Url::to(['getstoreinfo'])?>";
+            $.post(url,Content,function(rsp){
+                swal({ 
+                  title: "当前订单配额与库存量对比",
+                  text: rsp, 
+                  html: true 
+                });
+            })
+        }else{
+            swal({ 
+              title: "没有完整添加相关成品及数量",
+              text: '没有成品或者成品数量未填写'
+            });
+        }
+    }
+</script>
