@@ -33,7 +33,6 @@ if(!empty($model->productclass_id)){
 
     <?= $form->field($model, 'unit')->dropDownList(array(''=>'--请选择--')+$productunitlist,['id'=>'unit']) ?>
 
-    <? //$form->field($model, 'is_del')->textInput() ?>
     <input type="hidden" name="ftype_txt" id="ftype_txt">
     <input type="hidden" name="food_txt" id="food_txt">
     <input type="hidden" name="fnum_txt" id="fnum_txt">

@@ -40,30 +40,12 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'param_id',
                 'value'     => function($model) use($refcode){
-                    //return $refcode[$model->param_id];
                     if(array_key_exists($model->param_id, $refcode))
                         return $refcode[$model->param_id];
                     else
                         return '';
                 },
             ],
-            //'food_id',
-            //'param_id',
-            //'book_count',
-            /*[
-                'attribute' => 'pur_date',
-                'value'     => function($model) {return date("Y-m-d",$model->pur_date);},
-            ],*/
-            // 'price',
-            // 'unit',
-            // 'brand',
-            // 'supplier',
-            //'pur_user',
-            //'pur_date:date',
-            // 'depot_user',
-            //'depot_count',
-            // 'depot_date',
-            //'totalsycount:text:剩余库存',
             [
                 'attribute' => 'totalsycount',
                 'header' => '剩余库存',
@@ -79,9 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $model->totalsycount;
                 },
             ],
-            //'statustext:html',
-            // 'comment:ntext',
-            // 'is_del',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',

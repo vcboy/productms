@@ -18,15 +18,12 @@ use yii\helpers\Url;
             'action' => ['index'],
             'method' => 'get',
             'fieldConfig' => [
-                //'template' => "<div class=\"col-lg-3\">{label}{input}</div>",
-                //'template' => "<span class='col-sm-3'><span class='col-sm-3'>{label}</span><span>{input}</span></span>",
                 'template' => "<div class='form-group' style='float: left;width:200px;'>{label} {input}</div>",
                 'labelOptions' => ['style' => 'width:60px;'],
             ],
         ]);
         ?>
             <?= $form->field($model, 'name')->input('text',['class'=>'input-small']) ?>
-            <?//= $form->field($model, 'role_name')->dropDownList(RoleForm::getRoleList(),['style'=>'width:100px;']) ?>
 
             <table style="width: 100%;">
                 <tr><td>
@@ -34,7 +31,6 @@ use yii\helpers\Url;
                         <?= Html::submitButton("查询", ["class" =>"btn btn-primary btn-sm"])?>
                         <?= Html::a("重置", ['index'], ["class" =>"btn btn-primary btn-sm"])?>
                         <?php
-                        //判断权限需要用到的参数
                         $auth = Yii::$app->authManager;
                         $userid = Yii::$app->user->identity->id;
                         if($auth->checkAccess($userid,'admin_create')) {

@@ -34,7 +34,6 @@ if(!empty($model->productclass_id)){
 
     <?= $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type']) ?>
 
-    <?//= $form->field($model, 'status')->textInput() ?>
     <?= $form->field($model, 'create_user')->textInput(['value'=>$model->create_user?$model->create_user:Yii::$app->user->identity->name]) ?>
 
     <?= $form->field($model, 'create_dt')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->create_dt]) ?>

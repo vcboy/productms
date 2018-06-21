@@ -29,11 +29,9 @@ $domenu = [
             $options = [
                 'title' => Yii::t('yii', 'Delete'),
                 'aria-label' => Yii::t('yii', 'Delete'),
-                //'data-confirm' => Yii::t('yii', '你确定要删除吗?'),
                 'data-method' => 'post',
                 'data-pjax' => '0',
             ];
-            //$url = Url::to(['delete','id'=>$model->id]);
             return Html::a('<button class="btn btn-xs btn-danger"><i class="icon-trash bigger-120"></i></button>', '#', ['onclick'=>'javascript:sweetConfirmChange(\'你确定要删除吗?\',\''.$url.'\')']);
         },
     ],
@@ -55,14 +53,11 @@ $columns[] = $domenu;
 ?>
 <div class="refcode-index">
 
-    <h1><?//= Html::encode($this->title) ?></h1>
-    <?php  //echo $this->render('_search', ['model' => $searchModel]); ?>
     <?= Html::a('添加', ['create','type_code'=>$type_code], ['class' => 'btn btn-sm btn-success']) ?>
     <p></p>
     <?= JobGridView::widget([
         'dataProvider' => $dataProvider,
         'summary'       => '',
-        //'filterModel' => $searchModel,
         'columns' => $columns,
     ]); ?>
 </div>

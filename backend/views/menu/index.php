@@ -66,18 +66,11 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                     },
                     'delete' => function ($url, $model, $key) {
-                        $options = [
-                            //'title' => Yii::t('yii', 'Delete'),
-                            //'aria-label' => Yii::t('yii', 'Delete'),
-                            //'data-confirm' => Yii::t('yii', '你确定要删除吗?'),
-                            //'data-method' => 'post',
-                            //'data-pjax' => '0',
-                        ];
+                        $options = [];
                         //判断权限需要用到的参数
                         $auth = Yii::$app->authManager;
                         $userid = Yii::$app->user->identity->id;
                         if($auth->checkAccess($userid,'menu_delete')) {
-                            //return Html::a('<button class="btn btn-xs btn-danger"><i class="icon-trash bigger-120"></i></button>', $url, $options);
                             $url = Url::to(['menu/dodelete','id'=>$model['id']]);
                             return Html::a('<lable class="btn btn-xs btn-danger"><i class="icon-trash bigger-120"></i></lable>', '#', ['onclick'=>'javascript:sweetConfirmChange(\'你确定要删除吗?\',\''.$url.'\')']);
                         }

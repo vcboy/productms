@@ -61,20 +61,6 @@ if(!isset($this -> context -> subject)){
     <!-- page specific plugin scripts -->
 
 
-    <!--<script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery-ui-1.10.3.custom.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.ui.touch-punch.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.slimscroll.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.easy-pie-chart.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.sparkline.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/chosen.jquery.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/fuelux/fuelux.spinner.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.knob.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.autosize.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.inputlimiter.1.3.1.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.maskedinput.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/bootstrap-tag.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.PrintArea.js"></script>
-    -->
 
     <!-- ace scripts -->
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/ace-elements.min.js"></script>
@@ -89,10 +75,6 @@ if(!isset($this -> context -> subject)){
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/bootstrap-colorpicker.min.js"></script>
     
 
-    <!--上传图片插件
-    <script type="text/javascript" src="<?=Yii::$app -> request -> baseUrl;?>/uploadify/swfobject.js"></script>
-	<script type="text/javascript" src="<?=Yii::$app -> request -> baseUrl;?>/uploadify/jquery.uploadify.v2.1.4.min.js"></script>
-	<link href="<?=Yii::$app -> request -> baseUrl;?>/uploadify/uploadify.css" rel="stylesheet" type="text/css" />-->
 
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/jquery-ui-1.10.3.custom.min.css" />
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/resource/css/chosen.css" />
@@ -124,9 +106,6 @@ if(!isset($this -> context -> subject)){
     <!--Jquery cookie 插件 Start-->
     <script src="<?=Yii::$app -> request -> baseUrl;?>/resource/js/jquery.cookie.js"></script>
     <!--Jquery cookie 插件 End-->
-    <!--Jquery 复制代码到剪贴板
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/js/jquery.zclip.min.js"></script>
-    <script src="<?=Yii::$app -> request -> baseUrl;?>/js/ZeroClipboard.js"></script>-->
 
     <!-- 框架自定义css-->
     <link rel="stylesheet" href="<?=Yii::$app -> request -> baseUrl;?>/css/default.css" />
@@ -142,7 +121,6 @@ if (isset($this->blocks['head'])) {
             if(timer == null){
                timer = 2000;
             }
-            //swal({   title: alertMsg,   timer,   showConfirmButton: false });
         }
         //新弹出框，有确定按钮
         function sweetalertButton(alertMsg){
@@ -161,8 +139,6 @@ if (isset($this->blocks['head'])) {
                 },
                 function(){
                     if(url.length) {
-                        //window.open(url,'_self');
-                        //alert(url);
                         window.location.href = url;
                     }
                 });
@@ -204,78 +180,7 @@ if (isset($this->blocks['head'])) {
 								<a href="<?=Url::to(['default/index'])?>">首页</a>
 							</li>
                             <?php
-                            //START-得到左侧菜单
-                            //$menu = new Menu();
-                            /****判断登录用户拥有的菜单 START******************************************************************************/
-                            /*$auth = Yii::$app->authManager;
-                            $userid = Yii::$app->user->identity->id;
-                            $leftMenu = $menu ->getUserLeftMenu($userid);*/
-                            /****判断登录用户拥有的菜单 END******************************************************************************/
-                            //END-得到左侧菜单
-                            /****菜单定位 Start ******************************************************************/
-                            /*$controller     = Yii::$app->controller->id;            //得到当前控制器名称
-                            $action         = Yii::$app->controller->action->id;    //得到当前action名称
-                            $current_url    = $controller.'/'.$action;
-                            $queryString    = Yii::$app->request->queryString;*/
-        
-                            /*$current_url    = $controller.'/'.$action;
-                            if($queryString)
-                                $current_url .= '?'.$queryString;*/
-                            //定位数组
-                            /*$current_key = array(
-                                'k1' => '',
-                                'k2' => '',
-                                'k3' => '',
-                            );
-                            $top_menu_name = '';
-                            //print_r($leftMenu);
-                            foreach($leftMenu as $k => $v){
-                                if(!empty($v['sons'])){
-                                    foreach($v['sons'] as $k1 => $v1){
-                                        if($current_url == $v1['url']){
-                                            $current_key['k1']  = $k;
-                                            $current_key['k2']  = $k1;
-                                        }
-                                        if(!empty($v1['sons'])){
-                                            foreach($v1['sons'] as $k2 => $v2){
-                                                if($current_url == $v2['url']){
-                                                    $current_key['k1']  = $k;
-                                                    $current_key['k2']  = $k1;
-                                                    $current_key['k3']  = $k2;
-                                                }
-                                            }
-                                        }
-                                    }
-                                }
-                            }
-                            //print_r($current_key);
-                            $session = Yii::$app->session;
-                            //print_r($session['current_key']);
-                            if(empty($current_key['k1']) && empty($current_key['k2']) && empty($current_key['k3'])){
-                                if($session['current_key']){
-                                    $current_key = $session['current_key'];
-                                }
-                            }else{
-                                $session['current_key']  = $current_key;
-                            }
-                            if(empty($current_key)){
-                                $current_key = array(
-                                    'k1' => '',
-                                    'k2' => '',
-                                    'k3' => '',
-                                );
-                            }
-                            if($current_key['k1']){
-                                if(array_key_exists($current_key['k1'],$leftMenu)){
-                                    $top_menu_name = $leftMenu[$current_key['k1']]['name'];
-                                }
-                            }
-                            if(!$this -> context -> is_welcome) {
-                                if ($top_menu_name) {
-                                    echo '<li class="active">' . $top_menu_name . '</li> ';
-                                }
-                            }*/
-                            //echo $this -> context -> childSubject.'a';
+                            
                             if($this -> context -> childSubject){
                                 if ($this->context->subject) {
                                     echo '<li class="active">' . $this->context->childSubject . '</li>';
@@ -285,30 +190,8 @@ if (isset($this->blocks['head'])) {
                                     echo '<li class="active">' . $this->context->subject . '</li>';
                                 }
                             }
-                            //print_r($current_url);
-                            //echo '<br />';
-                            //print_r($current_key);
-                            //echo '<br />';
-                            //echo $top_menu_name;
-                            //print_r($leftMenu);
-                            /****菜单定位 End ******************************************************************/
+                            
                             ?>
-                            <?php
-                            //if($this -> context -> childSubject && 0){
-                            ?>
-                            <!--
-							<li>
-                                <a href="javascript:;"><?=$this -> context -> subject;?></a>
-                            </li>
-                            <li class="active">
-                               <?php //echo $this -> context -> childSubject;?>
-                            </li>
-                            <?php //}else{ ?>
-                                <li class="active">
-                                    <?php //echo $this -> context -> subject;?>
-                                </li>
-                                -->
-                            <?php //}?>
 						</ul><!-- .breadcrumb -->
 
 						<div class="nav-search" id="nav-search">
@@ -316,14 +199,7 @@ if (isset($this->blocks['head'])) {
 							<i class="icon-arrow-left"></i>
 							返回
 						</a>
-							<!--
-							<form class="form-search">
-								<span class="input-icon">
-									<input type="text" placeholder="Search ..." class="nav-search-input" id="nav-search-input" autocomplete="off" />
-									<i class="icon-search nav-search-icon"></i>
-								</span>
-							</form>
-							-->
+							
 						</div><!-- #nav-search -->
 					</div>
 				<div class="page-content">
@@ -337,29 +213,7 @@ if (isset($this->blocks['head'])) {
     <!-- inline scripts related to this page -->
     <script type="text/javascript">
         jQuery(function($) {
-            /*
-        $('.easy-pie-chart.percentage').each(function(){
-            var $box = $(this).closest('.infobox');
-            var barColor = $(this).data('color') || (!$box.hasClass('infobox-dark') ? $box.css('color') : 'rgba(255,255,255,0.95)');
-            var trackColor = barColor == 'rgba(255,255,255,0.95)' ? 'rgba(255,255,255,0.25)' : '#E2E2E2';
-            var size = parseInt($(this).data('size')) || 50;
-            $(this).easyPieChart({
-                barColor: barColor,
-                trackColor: trackColor,
-                scaleColor: false,
-                lineCap: 'butt',
-                lineWidth: parseInt(size/10),
-                animate: /msie\s*(8|7|6)/.test(navigator.userAgent.toLowerCase()) ? false : 1000,
-                size: size
-            });
-        })
-
-        $('.sparkline').each(function(){
-            var $box = $(this).closest('.infobox');
-            var barColor = !$box.hasClass('infobox-dark') ? $box.css('color') : '#FFF';
-            $(this).sparkline('html', {tagValuesAttribute:'data-values', type: 'bar', barColor: barColor , chartRangeMin:$(this).data('min') || 0} );
-        });
-    */
+           
         var placeholder = $('#piechart-placeholder').css({'width':'90%' , 'min-height':'150px'});
         var data = [
             { label: "social networks",  data: 38.7, color: "#68BC31"},
@@ -368,38 +222,7 @@ if (isset($this->blocks['head'])) {
             { label: "direct traffic",  data: 18.6, color: "#DA5430"},
             { label: "other",  data: 10, color: "#FEE074"}
         ]
-        /*
-        function drawPieChart(placeholder, data, position) {
-            $.plot(placeholder, data, {
-                series: {
-                    pie: {
-                        show: true,
-                        tilt:0.8,
-                        highlight: {
-                            opacity: 0.25
-                        },
-                        stroke: {
-                            color: '#fff',
-                            width: 2
-                        },
-                        startAngle: 2
-                    }
-                },
-                legend: {
-                    show: true,
-                    position: position || "ne",
-                    labelBoxBorderColor: null,
-                    margin:[-30,15]
-                }
-                ,
-                grid: {
-                    hoverable: true,
-                    clickable: true
-                }
-            })
-        }
-        drawPieChart(placeholder, data);
-*/
+       
         var $tooltip = $("<div class='tooltip top in'><div class='tooltip-inner'></div></div>").hide().appendTo('body');
         var previousPoint = null;
         placeholder.on('plothover', function (event, pos, item) {
@@ -434,35 +257,7 @@ if (isset($this->blocks['head'])) {
 
 
         var sales_charts = $('#sales-charts').css({'width':'100%' , 'height':'220px'});
-      /*  $.plot("#sales-charts", [
-            { label: "Domains", data: d1 },
-            { label: "Hosting", data: d2 },
-            { label: "Services", data: d3 }
-        ], {
-            hoverable: true,
-            shadowSize: 0,
-            series: {
-                lines: { show: true },
-                points: { show: true }
-            },
-            xaxis: {
-                tickLength: 0
-            },
-            yaxis: {
-                ticks: 10,
-                min: -2,
-                max: 2,
-                tickDecimals: 3
-            },
-            grid: {
-                backgroundColor: { colors: [ "#fff", "#fff" ] },
-                borderWidth: 1,
-                borderColor:'#555'
-            }
-        });*/
-
-
-        //$('#recent-box [data-rel="tooltip"]').tooltip({placement: tooltip_placement});
+      
         function tooltip_placement(context, source) {
             var $source = $(source);
             var $parent = $source.closest('.tab-content')
@@ -476,14 +271,7 @@ if (isset($this->blocks['head'])) {
             return 'left';
         }
 
-        /*
-        $('.dialogs,.comments').slimScroll({
-            height: '300px'
-        });
-        */
-
-        //Android's default browser somehow is confused when tapping on label which will lead to dragging the task
-        //so disable dragging when clicking on label
+        
         var agent = navigator.userAgent.toLowerCase();
         if("ontouchstart" in document && /applewebkit/.test(agent) && /android/.test(agent))
             $('#tasks').on('touchstart', function(e){
@@ -492,25 +280,7 @@ if (isset($this->blocks['head'])) {
                 var label = li.find('label.inline').get(0);
                 if(label == e.target || $.contains(label, e.target)) e.stopImmediatePropagation() ;
             });
-        /*
-        $('#tasks').sortable({
-                opacity:0.8,
-                revert:true,
-                forceHelperSize:true,
-                placeholder: 'draggable-placeholder',
-                forcePlaceholderSize:true,
-                tolerance:'pointer',
-                stop: function( event, ui ) {//just for Chrome!!!! so that dropdowns on items don't appear below other items after being moved
-                    $(ui.item).css('z-index', 'auto');
-                }
-            }
-        );
-        $('#tasks').disableSelection();
-        $('#tasks input:checkbox').removeAttr('checked').on('click', function(){
-            if(this.checked) $(this).closest('li').addClass('selected');
-            else $(this).closest('li').removeClass('selected');
-        });
-        */
+        
         $('.date-picker').datepicker({autoclose:true}).next().on(ace.click_event, function(){
             $(this).prev().focus();
         });

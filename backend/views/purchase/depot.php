@@ -40,34 +40,21 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'attribute' => 'param_id',
                 'value'     => function($model) use($refcode){
-                    //return $refcode[$model->param_id];
                     if(array_key_exists($model->param_id, $refcode))
                         return $refcode[$model->param_id];
                     else
                         return '';
                 },
             ],
-            //'food_id',
-            //'param_id',
             'book_count',
             [
                 'attribute' => 'pur_date',
                 'value'     => function($model) {return date("Y-m-d",$model->pur_date);},
             ],
-            // 'price',
-            // 'unit',
-            // 'brand',
-            // 'supplier',
             'pur_user',
-            //'pur_date:date',
-            // 'depot_user',
             'depot_count',
-            // 'depot_date',
             'sycount',
             'statustext:html',
-            // 'comment:ntext',
-            // 'is_del',
-
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
@@ -99,13 +86,10 @@ $this->params['breadcrumbs'][] = $this->title;
                         $options = [
                             'title' => '删除',
                             'aria-label' => Yii::t('yii', 'Delete'),
-                            //'data-confirm' => Yii::t('yii', '确认删除？'),
                             'data-pjax' => '0',
 							'class' => 'btn btn-xs btn-danger',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
                         ];
-                        //$auth = Yii::$app->authManager;
-                        //$userid = Yii::$app->user->identity->id;
                         if(Admin::checkAccess('purchase_del')) {
                             return Html::button('<i class="icon-trash bigger-120"></i>', $options);
                         }

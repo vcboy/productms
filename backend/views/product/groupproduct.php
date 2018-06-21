@@ -65,7 +65,6 @@ $this->params['breadcrumbs'][] = '发货完成基准价';
                         $options = [
                             'title' => '查看',
                             'aria-label' => Yii::t('yii', 'view'),
-                            //'data-confirm' => Yii::t('yii', '确认删除？'),
                             'data-pjax' => '0',
                             'class' => 'btn btn-xs btn-warning',
                         ];

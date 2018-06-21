@@ -78,7 +78,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         $options = [
                             'title' => '查看',
                             'aria-label' => Yii::t('yii', 'view'),
-                            //'data-confirm' => Yii::t('yii', '确认删除？'),
                             'data-pjax' => '0',
                             'class' => 'btn btn-xs btn-warning',
                         ];

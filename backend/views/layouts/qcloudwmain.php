@@ -67,7 +67,6 @@
        ws.onerror = function() {
           console.log("出现错误");
        };
-//       console.log('con test');
     }
 
     // 连接建立时发送登录信息
@@ -86,10 +85,8 @@
     // 服务端发来消息时
     function onmessage(e)
     {
-//        console.log('123');
         console.log(e.data);
         var data = eval("("+e.data+")");
-//        console.log(data['type']);
         switch(data['type']){
             // 服务端ping客户端
             case 'ping':
@@ -97,10 +94,7 @@
                 break;
             // 登录 更新用户列表
             case 'login':
-                //{"type":"login","client_id":xxx,"client_name":"xxx","client_list":"[...]","time":"xxx"}
                 say(data['client_id'], data['client_name'],  data['client_name']+' 加入了聊天室'/*, data['time']*/);
-                console.log('test');
-//                console.log(data['client_list']);
                 if(data['client_list'])
                 {
                     client_list = data['client_list'];
@@ -111,61 +105,36 @@
                 }
                 // flush_client_list();
                 var obj = Object.keys(client_list);
-                console.log(obj.length);
                 //每次有人登陆时会统计人数
                 get_person_count(obj.length)
-                console.log(data['client_name']+"登录成功");
                 break;
             // 发言
             case 'say':
-                //{"type":"say","from_client_id":xxx,"to_client_id":"all/client_id","content":"xxx","time":"xxx"}
                 say(data['from_client_id'], data['from_client_name'], data['content']/*, data['time']*/);
                 break;
 
             // 用户退出 更新用户列表
             case 'logout':
-                //{"type":"logout","client_id":xxx,"time":"xxx"}
                 say(data['from_client_id'], data['from_client_name'], data['from_client_name']+' 退出了'/*, data['time']*/);
                 delete client_list[data['from_client_id']];
-                // flush_client_list();
                 var arr = Object.keys(client_list);
-                console.log(arr.length);
                 //每次有人登陆时会统计人数
                 get_person_count(arr.length)
         }
 
                 setTimeout(function () {
-                    console.log('3334');
                     $('#dialog').scrollTop( $('#dialog')[0].scrollHeight  );
                     console.log($("#dialog>.speech_item").length);
                 }, 1);
-
-
-
     }
 
     //统计人数
     function get_person_count(count_num) {
         var person_count = count_num;
-//        $.ajax({
-//            type: "post",
-//            method: "post",
-//            dataType: "json",
-//            data: {"value": value},
-//            url: "<?//= Url::to(['courseware/changecheck']);?>//",
-//            success: function(data){
-//                console.log(data);
-//
-//            }
-//        });
-//        var t=  <?//= $_SESSION['roomid']['person_count']?>
-//        alert(t);
-//        alert()
     }
 
     // 输入姓名
     function show_prompt(){
-//        name = prompt('输入你的名字11：', '');
         if(!name || name=='null'){
             name = '游客' +  Math.floor(Math.random() * 100000);
         }

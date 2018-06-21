@@ -6,7 +6,6 @@ use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $model backend\models\Admin */
 
-//$this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Admins', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>

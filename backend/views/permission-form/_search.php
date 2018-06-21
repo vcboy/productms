@@ -29,7 +29,6 @@ use yii\widgets\ActiveForm;
                 <?= Html::submitButton("查询", ["class" =>"btn btn-primary btn-sm"])?>
                 <?= Html::a("重置", ['index'], ["class" =>"btn btn-primary btn-sm"])?>
                 <?php
-                    //判断权限需要用到的参数
                     $auth = Yii::$app->authManager;
                     $userid = Yii::$app->user->identity->id;
                     if($auth->checkAccess($userid,'permission_create')){

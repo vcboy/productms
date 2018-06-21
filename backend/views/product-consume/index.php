@@ -37,9 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value' => function($model){
                     return $model->consume_type == 1?'销售':'损耗';
                 }
-            ],            
-            // 'status',
-            //'create_dt:date',
+            ],
             [
                 'attribute' => 'create_dt',
                 'value'     => function($model) {return date("Y-m-d",$model->create_dt);},
@@ -74,7 +72,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         $options = [
                             'title' => '删除',
                             'aria-label' => Yii::t('yii', 'Delete'),
-                            //'data-confirm' => Yii::t('yii', '确认删除？'),
                             'data-pjax' => '0',
 							'class' => 'btn btn-xs btn-danger',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',

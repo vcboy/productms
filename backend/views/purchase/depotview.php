@@ -28,7 +28,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function($model) use($refcode){
                     $food = Refcode::getFoodbyid($model->food_id);
                     return $food;
-                    //return $refcode[$model->food_id];
                 },
             ],
             [
@@ -40,8 +39,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'book_count',
             'price',
-            //'unit',
-            //'brand',
             [
                 'attribute' => 'brand',
                 'value'     => function($model) use($refcode){
@@ -49,7 +46,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $refcode[$model->brand];
                 },
             ],
-            //'supplier',
             [
                 'attribute' => 'supplier',
                 'value'     => function($model) use($refcode){
@@ -65,7 +61,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'statustext:html',
             'depot_user',
             'depot_count',
-            //'depot_date',
             [
                 'attribute' => 'depot_date',
                 'value'     => function($model) {
@@ -75,7 +70,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'sycount',                      
             'comment:ntext',
-            //'is_del',
         ],
     ]) ?>
     <div class="form-group">

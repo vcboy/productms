@@ -29,7 +29,6 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function($model) use($refcode){
                     $food = Refcode::getFoodbyid($model->food_id);
                     return $food;
-                    //return $refcode[$model->food_id];
                 },
             ],
             [
@@ -41,8 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             'book_count',
             'price',
-            //'unit',
-            //'brand',
             [
                 'attribute' => 'brand',
                 'value'     => function($model) use($refcode){
@@ -50,7 +47,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         return $refcode[$model->brand];
                 },
             ],
-            //'supplier',
             [
                 'attribute' => 'supplier',
                 'value'     => function($model) use($refcode){
@@ -63,14 +59,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'pur_date',
                 'value'     => function($model) {return date("Y-m-d",$model->pur_date);},
             ],
-            //'depot_user',
-            //'depot_count',
-            //'depot_date',
-            //'sycount',
             'statustext:html',
-            
-            //'comment:ntext',
-            //'is_del',
         ],
     ]) ?>
 
@@ -79,19 +68,12 @@ $this->params['breadcrumbs'][] = $this->title;
         <?php $form = ActiveForm::begin(); ?>
 
         
-        <?//= $form->field($model, 'book_count')->textInput() ?>
         <?= $form->field($model, 'depot_count')->textInput() ?>
 
         <?= $form->field($model, 'depot_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>date("Y-m-d")]) ?>
 
-        <?//= $form->field($model, 'sycount')->textInput() ?>
-
-        <?//= $form->field($model, 'status')->textInput() ?>
         <?= $form->field($model, 'depot_user')->textInput(['value'=>Yii::$app->user->identity->name]) ?>
         <?= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
-
-        <?//= $form->field($model, 'is_del')->textInput() ?>
-
 
         <div class="form-group">
         <?=  Html::submitButton('采购入库', ['class' => 'btn btn-primary']) ?>

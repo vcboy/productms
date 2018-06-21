@@ -77,7 +77,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         $options = [
                             'title' => '删除',
                             'aria-label' => Yii::t('yii', 'Delete'),
-                            //'data-confirm' => Yii::t('yii', '确认删除？'),
                             'data-pjax' => '0',
                             'class' => 'btn btn-xs btn-danger',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
@@ -88,7 +87,6 @@ $this->params['breadcrumbs'][] = $this->title;
                         $options = [
                             'title' => '查看',
                             'aria-label' => Yii::t('yii', 'view'),
-                            //'data-confirm' => Yii::t('yii', '确认删除？'),
                             'data-pjax' => '0',
                             'class' => 'btn btn-xs btn-warning',
                         ];

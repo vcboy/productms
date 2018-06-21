@@ -21,7 +21,6 @@ use yii\widgets\ActiveForm;
                 if(array_key_exists($v->name,$children)){
                     $checked = true;
                 }
-                //echo $v->description.':'.Html::checkbox("rolebox[]", $checked, ['value'=>$v->name]);
                 echo '<label class="checkbox-inline">'.Html::checkbox("rolebox[]", $checked, ['value'=>$v->name]).$v->description.'</label>';
             }
             ?>
@@ -51,8 +50,6 @@ use yii\widgets\ActiveForm;
                 <td><?php echo $v['name'];?></td>
                 <td>
                    <?php
-                    //print_r($children);
-                    //print_r($v['permission']);
                     foreach($v['permission'] as $k => $v){
                         $checked = false;
                         if(array_key_exists($k,$children)){

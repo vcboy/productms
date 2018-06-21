@@ -14,7 +14,6 @@ $supplierlist = Refcode::getRefcodeBytype('supplier');
 $foodunitlist = Refcode::getRefcodeBytype('foodunit');
 $foodlist = $paramlist = [];
 if($model->foodclass_id){
-    //$foodlist = Refcode::getRefcodeBytype('food');
     $foodlist = Refcode::getFood($model->foodclass_id);
 }
 if($model->food_id){
@@ -39,7 +38,6 @@ if($model->food_id){
 
     <?= $form->field($model, 'price')->textInput() ?>
 
-    <?//= $form->field($model, 'unit')->dropDownList(array(''=>'--请选择--')+$foodunitlist) ?>
 
     <?= $form->field($model, 'brand')->dropDownList(array(''=>'--请选择--')+$brandlist) ?>
 
@@ -49,19 +47,6 @@ if($model->food_id){
 
     <?= $form->field($model, 'pur_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->pur_date]) ?>
 
-    <?//= $form->field($model, 'depot_user')->textInput() ?>
-
-    <?//= $form->field($model, 'depot_count')->textInput() ?>
-
-    <?//= $form->field($model, 'depot_date')->textInput() ?>
-
-    <?//= $form->field($model, 'sycount')->textInput() ?>
-
-    <?//= $form->field($model, 'status')->textInput() ?>
-
-    <?//= $form->field($model, 'comment')->textarea(['rows' => 6]) ?>
-
-    <?//= $form->field($model, 'is_del')->textInput() ?>
 
 
     <div class="form-group">
@@ -80,7 +65,6 @@ if($model->food_id){
             var url = "<?=Url::to(['getfood'])?>";
             $.post(url,Content,function(rsp){
                 if(rsp){
-                    //JSON.pase()
                     var obj = JSON.parse(rsp);
                     console.log(obj);
                     var optionstr = '<option value="">--请选择--</option>';
@@ -102,7 +86,6 @@ if($model->food_id){
             var url = "<?=Url::to(['getfood'])?>";
             $.post(url,Content,function(rsp){
                 if(rsp){
-                    //JSON.pase()
                     var obj = JSON.parse(rsp);
                     console.log(obj);
                     var optionstr = '<option value="">--请选择--</option>';
