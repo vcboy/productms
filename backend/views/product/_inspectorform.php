@@ -45,12 +45,12 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
         <tr><th colspan="4">
             <?=  Html::a('查看库存配比','javascript:;',['class'=>'btn btn-sm btn-danger','onclick'=>'_checkstore()'])?>
         </th></tr>
-        <tr><th>成品分类</th><th>成品名称</th><th>配货数量</th><th>发货数量</th></tr>
+        <tr><th>成品分类</th><th>成品名称</th><th>发货数量</th><th>入库数量</th></tr>
         <?=$pte_arr_txt?>
     </table>
 
     <div class="form-group">
-    <?=  Html::Button('发货', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
+    <?=  Html::Button('验货入库', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
     <?=  Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary'])?>
     </div>
 
