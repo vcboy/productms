@@ -50,7 +50,7 @@ if(!empty($model->productclass_id)){
     $(document).ready(function(){
         <?php
         if($model->count){
-            echo "$('#count').attr('readonly',true);";
+            //echo "$('#count').attr('readonly',true);";
         }
         ?>
         

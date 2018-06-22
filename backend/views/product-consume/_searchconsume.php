@@ -20,6 +20,10 @@ if(!empty($model->productclass_id)){
 
     <?php $form = ActiveForm::begin([
         'method' => 'get',
+        'fieldConfig' => [
+            'template' => "<div>{label} {input}</div>",
+            'labelOptions' => ['style' => 'width:60px;'],
+        ],
     ]); ?>
     <div class="tabfield">
 

@@ -54,7 +54,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{view} {copy} {delete}  {update}',
+                'template' => '{view} {copy} {update} {delete} ',
                 'buttons' => [                    
                     'view' => function ($url, $model, $key) {
                         $options = [

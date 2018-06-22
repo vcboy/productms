@@ -46,7 +46,7 @@ class ProductTemplate extends \yii\db\ActiveRecord
             'id' => 'ID',
             'productclass_id' => '成品类型',
             'product_id' => '成品名称',
-            'unitprice' => '单价',
+            'unitprice' => '单价(元)',
             'unit' => '单位',
             'is_del' => '是否删除',
         ];

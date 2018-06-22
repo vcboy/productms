@@ -57,7 +57,7 @@ class Purchase extends \yii\db\ActiveRecord
             [['comment'], 'string'],
             [['unit','pur_user', 'depot_user'], 'string', 'max' => 32],
             [['brand', 'supplier'], 'string', 'max' => 128],
-            [["depot_count"], "checkdepotcount"],
+            [["depot_count"], "checkdepotcount", 'on' => 'depot'],
         ];
     }
 
@@ -80,7 +80,7 @@ class Purchase extends \yii\db\ActiveRecord
             'food_id' => '食材名称',
             'param_id' => '规格参数',
             'book_count' => '采购数量',
-            'price' => '单价',
+            'price' => '单价(元)',
             'unit' => '食材单位',
             'brand' => '品牌',
             'supplier' => '供应商',

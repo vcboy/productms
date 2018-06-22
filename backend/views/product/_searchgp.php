@@ -13,13 +13,17 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['groupproduct'],
         'method' => 'get',
+        'fieldConfig' => [
+            'template' => "<div>{label} {input}</div>",
+            'labelOptions' => ['style' => 'width:60px;'],
+        ],
     ]); ?>
     <div class="tabfield">
 
     <?= $form->field($model, 'customer')->label('配送客户') ?>
     <?= $form->field($model, 'book_date')->label('配货时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
     <?= $form->field($model, 'send_date')->label('发货时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
-    <?= $form->field($model, 'arrive_date')->label('需要到达时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
+    <?= $form->field($model, 'arrive_date')->label('到达时间')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
     </div>
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>

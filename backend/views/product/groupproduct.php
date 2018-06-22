@@ -26,7 +26,7 @@ $this->params['breadcrumbs'][] = '发货完成基准价';
         'summary'=>'',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header' => '序号'],
-            'customer',
+            //'customer',
             [
                 'attribute' => 'arrive_date',
                 'value'     => function($model) {return date("Y-m-d",$model->arrive_date);},
@@ -39,7 +39,7 @@ $this->params['breadcrumbs'][] = '发货完成基准价';
                 'attribute' => 'is_customer',
                 'label' => '是否本单位',
                 'value' => function($model){
-                    return '本单位';
+                    return $model->is_customer == 1?$model->customer:'本单位';
                 }
             ],
             'booker_user',

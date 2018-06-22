@@ -13,6 +13,10 @@ use yii\widgets\ActiveForm;
     <?php $form = ActiveForm::begin([
         'action' => ['createlist'],
         'method' => 'get',
+        'fieldConfig' => [
+            'template' => "<div>{label} {input}</div>",
+            'labelOptions' => ['style' => 'width:60px;'],
+        ],
     ]); ?>
     <div class="tabfield">
 
