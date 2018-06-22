@@ -30,7 +30,15 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'yii\grid\SerialColumn','header' => '序号'],
             'productclass.nm:text:成品类型',
             'product.nm:text:成品名称',
-            'avgprice:text:销售均价',           
+            //'avgprice:text:销售均价',  
+            [
+                'attribute' => 'avgprice',
+                'label' => '销售均价',
+                'value' => function($model){
+                    $avgprice = round($model->totalprice / $model->totalcount,2);
+                    return $avgprice;
+                }
+            ],         
             'totalcount:text:销售总数',
             'totalprice:text:总销售额',
             [

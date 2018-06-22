@@ -81,7 +81,7 @@ class ProductController extends CController
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['is_del'=>0]);
-        $dataProvider->query->orderBy('book_date desc,id desc');
+        $dataProvider->query->orderBy('send_status asc,book_date desc,id desc');
         return $this->render('createlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -97,7 +97,7 @@ class ProductController extends CController
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['is_del'=>0]);
-        $dataProvider->query->orderBy('book_date desc,id desc');
+        $dataProvider->query->orderBy('send_status asc,book_date desc,id desc');
         return $this->render('sendlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -113,7 +113,7 @@ class ProductController extends CController
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['is_del'=>0,'is_customer'=>0,'send_status'=>1]);
-        $dataProvider->query->orderBy('send_date desc,id desc');
+        $dataProvider->query->orderBy('inspect_status asc,send_date desc,id desc');
         return $this->render('inspectorlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,

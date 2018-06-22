@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'is_customer',
                 'label' => '客户',
                 'value' => function($model){
-                    return $model->is_customer == 1?'非本单位':'本单位';
+                    return $model->is_customer == 1?$model->customer:'本单位';
                 }
             ],
             'booker_user',
@@ -45,13 +45,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function($model) {return date("Y-m-d",$model->book_date);},
             ],
             //'book_comment',
-            [
+            'statustext:html:是否发货',
+            /*[
                 'attribute' => 'send_status',
                 'label' => '是否发货',
                 'value' => function($model){
-                    return $model->send_status == 1?'已发货':'未发货';
+                    return $model->send_status == 1?'已发货':'<font color="red">未发货</font>';
                 }
-            ],
+            ],*/
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
                 'template' => '{view} {copy} {update} {delete} ',

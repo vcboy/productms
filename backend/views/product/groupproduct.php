@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = '发货完成基准价';
             ],
             [
                 'attribute' => 'is_customer',
-                'label' => '是否本单位',
+                'label' => '单位',
                 'value' => function($model){
                     return $model->is_customer == 1?$model->customer:'本单位';
                 }

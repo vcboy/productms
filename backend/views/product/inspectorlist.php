@@ -50,13 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function($model) {return (empty($model->inspect_date)?"-":date("Y-m-d",$model->inspect_date));},
             ],
             //'inspect_comment',
-            [
+            'instatustext:html:是否验收',
+            /*[
                 'attribute' => 'inspect_status',
                 'label' => '是否验收',
                 'value' => function($model){
                     return $model->inspect_status == 1?'已验收':'未验收';
                 }
-            ],
+            ],*/
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
                 'template' => '{inspector} {view}',

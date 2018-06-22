@@ -200,8 +200,8 @@ class ProductConsumeController extends CController
     {
         $searchModel = new ProductConsumeSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->select(['sum(count) as totalcount,sum(price) as totalprice,avg(unitprice) as avgprice,productclass_id,product_id']);
-        $dataProvider->query->andWhere(['status'=>1]);
+        $dataProvider->query->select(['sum(count) as totalcount,sum(price) as totalprice,productclass_id,product_id']);
+        $dataProvider->query->andWhere(['status'=>1,'consume_type'=>1]);
         $dataProvider->query->groupBy(['product_id']);
         $this->childSubject = '成品消耗基准价';
         return $this->render('search', [

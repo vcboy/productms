@@ -36,7 +36,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'attribute' => 'food_id',
                 'value'     => function($model) use($refcode){return $refcode[$model->food_id];},
             ],
-            [
+            /*[
                 'attribute' => 'param_id',
                 'value'     => function($model) use($refcode){
                     if(array_key_exists($model->param_id, $refcode))
@@ -44,8 +44,9 @@ $this->params['breadcrumbs'][] = $this->title;
                     else
                         return '';
                 },
-            ],
+            ],*/
             'book_count',
+            'price',
             [
                 'attribute' => 'pur_date',
                 'value'     => function($model) {return date("Y-m-d",$model->pur_date);},

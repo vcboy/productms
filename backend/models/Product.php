@@ -61,7 +61,7 @@ class Product extends \yii\db\ActiveRecord
             'booker_user' => '配货人',
             'book_date' => '配货时间',
             'book_comment' => '配货意见',
-            'arrive_date' => '需要达到时间',
+            'arrive_date' => '达到时间',
             'is_customer' => '是否本单位',
             'total_price' => '总价',
             'sender_user' => '发货人',
@@ -77,5 +77,11 @@ class Product extends \yii\db\ActiveRecord
         ];
     }
 
-   
+    public function getStatustext(){
+        return $this->send_status == 1?'<font color="green">已发货</font>':'<font color="red">未发货</font>';
+    }
+
+    public function getInstatustext(){
+        return $this->inspect_status == 1?'<font color="green">已验货</font>':'<font color="red">未验货</font>';
+    }
 }

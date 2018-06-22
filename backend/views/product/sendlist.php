@@ -50,13 +50,14 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function($model) {return (empty($model->send_date)?"-":date("Y-m-d",$model->send_date));},
             ],
             //'send_comment',
-            [
+            'statustext:html:是否发货',
+            /*[
                 'attribute' => 'send_status',
                 'label' => '是否发货',
                 'value' => function($model){
                     return $model->send_status == 1?'已发货':'未发货';
                 }
-            ],
+            ],*/
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
                 'template' => '{send} {view}',
