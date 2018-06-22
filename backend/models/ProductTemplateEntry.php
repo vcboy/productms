@@ -28,7 +28,8 @@ class ProductTemplateEntry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['foodclass_id', 'food_id', 'count'], 'integer'],
+            [['foodclass_id', 'food_id'], 'integer'],
+            [['count'], 'number'],
         ];
     }
 

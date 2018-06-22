@@ -226,8 +226,9 @@ class ProductTemplateController extends CController
         }
         $pprice = 0;
         foreach ($gp_list as $key => $val) {
-            $pprice = $pprice + ($val['num']-0)*($fMap[$val['id']]-0);
+            $pprice = $pprice + ($val['num']-0)*((empty($fMap[$val['id']])?0:$fMap[$val['id']])-0);
         }
+        $pprice = round($pprice,2);
         echo json_encode($pprice);exit;
     }
 
@@ -256,7 +257,8 @@ class ProductTemplateController extends CController
 
     public function actionChecksub(){
         $product_id = Yii::$app->request->post('product_id');
-        $p_arr = ProductTemplate::find()->andWhere(['product_id'=>$product_id,'is_del'=>0])->asArray()->all();
+        $id =  Yii::$app->request->post('id');
+        $p_arr = ProductTemplate::find()->andWhere(['product_id'=>$product_id,'is_del'=>0])->andWhere(['<>','id',$id])->asArray()->all();
         $flag = 1;
         $msg = '';
         if(!empty($p_arr)&&count($p_arr)>0){

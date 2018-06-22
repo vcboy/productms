@@ -57,7 +57,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
      */
     function _addProduct(){
         var temp = new Date().getTime();
-        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changePtype(this,"+temp+")'><option value=''>--请选择--</option><? foreach ($productclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";}?></select></td><td><select class='form-control fid product_"+temp+"' onchange='_getUnitprice()'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"' onchange='_getUnitprice()'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
+        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changePtype(this,"+temp+")'><option value=''>--请选择--</option><?php foreach ($productclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";} ?></select></td><td><select class='form-control fid product_"+temp+"' onchange='_getUnitprice()'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"' onchange='_getUnitprice()'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
         $('#product_tb').append(txt);
     }
 

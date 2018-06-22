@@ -76,7 +76,7 @@ if(!empty($model->productclass_id)){
      */
     function _addPurchase(){
         var temp = new Date().getTime();
-        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changeFtype(this,"+temp+")'><option value=''>--请选择--</option><? foreach ($foodclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";}?></select></td><td><select class='form-control fid food_"+temp+"' onchange='_getUnitprice()'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"' onchange='_getUnitprice()'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
+        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changeFtype(this,"+temp+")'><option value=''>--请选择--</option><?php foreach ($foodclasslist as $key => $val) { echo "<option value='".$key."'>".$val."</option>"; } ?></select></td><td><select class='form-control fid food_"+temp+"' onchange='_getUnitprice()'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"' onchange='_getUnitprice()'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
         $('#food_tb').append(txt);
     }
 
@@ -173,7 +173,7 @@ if(!empty($model->productclass_id)){
             err_msg = err_msg + "请选择需要配比的成品。\n";
         }
 
-        var Content = {'product_id': product_id};
+        var Content = {'product_id': product_id,'id':<?=(empty($model->id)?0:$model->id)?>};
 
         var url = "<?=Url::to(['checksub'])?>";
         $.post(url,Content,function(rsp){

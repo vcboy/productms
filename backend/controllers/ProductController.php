@@ -781,6 +781,7 @@ class ProductController extends CController
         foreach ($gp_list as $key => $val) {
             $pprice = $pprice + ($val['num']-0)*(@$pMap[$val['id']]-0);
         }
+        $pprice = round($pprice,2);
         echo json_encode($pprice);
     }
 

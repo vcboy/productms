@@ -18,7 +18,8 @@ class ProductEntrySearch extends ProductEntry
     public function rules()
     {
         return [
-            [['id', 'pid', 'productclass_id', 'product_id', 'book_count', 'send_count', 'depot_count', 'sycount', 'status'], 'integer'],
+            [['id', 'pid', 'productclass_id', 'product_id','status'], 'integer'],
+            [[ 'book_count', 'send_count', 'depot_count', 'sycount'], 'number'],
             [['unitprice', 'price'], 'number'],
             [['unit'], 'safe'],
         ];

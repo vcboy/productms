@@ -38,8 +38,8 @@ class ProductEntry extends \yii\db\ActiveRecord
     {
         return [
             [['productclass_id', 'product_id', 'unitprice', 'price'], 'required'],
-            [['productclass_id', 'product_id', 'book_count', 'send_count', 'depot_count', 'status','pid'], 'integer'],
-            [['unitprice', 'price'], 'number'],
+            [['productclass_id', 'product_id',  'status','pid'], 'integer'],
+            [['unitprice', 'price','book_count', 'send_count', 'depot_count'], 'number'],
             [['unit'], 'string', 'max' => 32],
         ];
     }
