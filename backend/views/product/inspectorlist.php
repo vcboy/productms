@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'is_customer',
-                'label' => '是否本单位',
+                'label' => '客户',
                 'value' => function($model){
                     return $model->is_customer == 1?$model->customer:'本单位';
                 }

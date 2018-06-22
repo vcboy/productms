@@ -34,9 +34,9 @@ $this->params['breadcrumbs'][] = $this->title;
             ],
             [
                 'attribute' => 'is_customer',
-                'label' => '是否本单位',
+                'label' => '客户',
                 'value' => function($model){
-                    return $model->is_customer == 1?$model->customer:'本单位';
+                    return $model->is_customer == 1?'非本单位':'本单位';
                 }
             ],
             'booker_user',

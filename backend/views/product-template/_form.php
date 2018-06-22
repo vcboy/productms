@@ -31,8 +31,7 @@ if(!empty($model->productclass_id)){
 
     <?= $form->field($model, 'unitprice')->textInput(['readonly'=>'readonly']) ?>
 
-    <?= $form->field($model, 'unit')->dropDownList(array(''=>'--请选择--')+$productunitlist,['id'=>'unit']) ?>
-
+    <input type="hidden" name="ProductTemplate[unit]" id="unit" value="<?=$model->unit?>">
     <input type="hidden" name="ftype_txt" id="ftype_txt">
     <input type="hidden" name="food_txt" id="food_txt">
     <input type="hidden" name="fnum_txt" id="fnum_txt">
@@ -68,6 +67,19 @@ if(!empty($model->productclass_id)){
                     $("#product_id").append(optionstr);
                 }
             })
+        });
+
+        $("#product_id").change(function(){
+            var product_id = $(this).val();
+            if(product_id!=""){
+                var Content = {product_id: product_id};
+                var url = "<?=Url::to(['getunit'])?>";
+                $.post(url,Content,function(rsp){
+                    if(rsp){
+                        $('#unit').val(rsp);
+                    }
+                })
+            }
         });
     });
 
