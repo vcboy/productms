@@ -41,9 +41,10 @@ if($model->food_id){
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
         <?= Html::a('重置', [$depot?'depot':'index'], ['class' => 'btn btn-sm btn-primary']) ?>       
-        <? 
-        if(empty($depot))
-            echo Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success'])
+        <?php
+        if(empty($depot)){
+            echo Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']);
+        }
         ?>
     </div>
 

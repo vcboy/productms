@@ -14,7 +14,7 @@ use backend\models\Refcode;
 <div class="refcode-form">
 
     <?php $form = ActiveForm::begin(); ?>
-    <?
+    <?php
     switch($type_code){
         case 'food':
             $downlist = Refcode::getRefcodeBytype('foodclass');
@@ -39,7 +39,7 @@ use backend\models\Refcode;
 
     <?= $form->field($model, 'nm')->textInput(['maxlength' => true]) ?>
 
-    <?
+    <?php
     if($type_code == 'food')
         echo $form->field($model, 'value')->label('预警值')->textInput(['maxlength' => true]);
     ?>

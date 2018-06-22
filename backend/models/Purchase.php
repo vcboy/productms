@@ -50,8 +50,8 @@ class Purchase extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['foodclass_id', 'food_id', 'param_id', 'book_count', 'depot_count', 'sycount', 'status', 'is_del'], 'integer'],
-            [['price'], 'number'],
+            [['foodclass_id', 'food_id', 'param_id', 'status', 'is_del'], 'integer'],
+            [['price', 'book_count', 'depot_count', 'sycount'], 'number'],
             [['foodclass_id', 'food_id','price','book_count','pur_user', 'pur_date'], 'required'],
             [['depot_user', 'depot_date', 'depot_count'], 'required', 'on' => 'depot'],
             [['comment'], 'string'],

@@ -50,11 +50,10 @@ if(!empty($model->productclass_id)){
     $(document).ready(function(){
         <?php
         if($model->count){
-        ?>
-        $("#count").attr('readonly',true);
-        <?
+            echo "$('#count').attr('readonly',true);";
         }
         ?>
+        
         $("#productclass_id").change(function(){
             var productclass_id = $(this).val();
             var Content = {productclass_id: productclass_id};

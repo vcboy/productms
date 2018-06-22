@@ -23,15 +23,14 @@ if(!empty($model->productclass_id)){
         'method' => 'get',
     ]); ?>
     <div class="tabfield">
-    <?//= $form->field($model, 'id') ?>
 
     <?= $form->field($model, 'productclass_id')->dropDownList(array(''=>'--请选择--')+$productclasslist,['id'=>'productclass_id']) ?>
 
     <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
 
-    <?
+    <?php
     if(empty($sh))
-    echo $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type']) 
+        echo $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type']);
     ?>
     <?= $form->field($model, 'create_dt_s')->label('开始日期')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?> 
     <?= $form->field($model, 'create_dt_e')->label('截止日期')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})']) ?>
@@ -41,9 +40,9 @@ if(!empty($model->productclass_id)){
     <div class="form-group">
         <?= Html::submitButton("查询", ["class" =>"btn btn-sm btn-primary"]) ?>
         <?= Html::a('重置', ['index'], ['class' => 'btn btn-sm btn-primary']) ?>
-        <?
+        <?php
         if(empty($sh))
-        echo  Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']) 
+            echo  Html::a('添加', ['create'], ['class' => 'btn btn-sm btn-success']);
         ?>
     </div>
 

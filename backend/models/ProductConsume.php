@@ -40,8 +40,8 @@ class ProductConsume extends \yii\db\ActiveRecord
     {
         return [
             [['productclass_id', 'product_id', 'unitprice', 'count', 'price', 'consume_type', 'create_dt'], 'required'],
-            [['productclass_id', 'product_id', 'count', 'consume_type', 'status'], 'integer'],
-            [['unitprice', 'price'], 'number'],
+            [['productclass_id', 'product_id', 'consume_type', 'status'], 'integer'],
+            [['unitprice', 'price', 'count'], 'number'],
             //需要做销售数量和剩余数量判断
             [["count"], "checkcount"],
         ];

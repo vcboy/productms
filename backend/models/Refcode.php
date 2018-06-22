@@ -45,7 +45,7 @@ class Refcode extends \yii\db\ActiveRecord
                 $this->addError($attribute, "该名称已经存在.");
         }else{
             $obj = self::find()->where(['type'=>$this->type,'nm'=>$this->$attribute,'is_del'=>0])->one();
-            if($obj->id != $this->id){
+            if($obj && $obj->id != $this->id){
                 $this->addError($attribute, "该名称已经存在.");
             }
             return false;

@@ -28,7 +28,8 @@ class ProductConsumeEntry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_consume_id', 'product_entry_id', 'count'], 'integer'],
+            [['product_consume_id', 'product_entry_id'], 'integer'],
+            [['count'], 'number'],
         ];
     }
 

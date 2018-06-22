@@ -3,8 +3,11 @@
 
 FTP:
 bxu2713680062.my3w.com
-bxu2713680062FTP / cc111111
+bxu2713680062 / cc111111
 
 mysql
 bdm29971423.my3w.com
 bdm29971423 / cc111111
+
+
+http://bxu2713680062.my3w.com/productms/backend/web/default/login
