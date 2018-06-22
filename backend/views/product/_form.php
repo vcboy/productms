@@ -14,7 +14,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
 <div class="product-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => ['product/create'],'method'=>'post']); ?>
 
     <?= $form->field($model, 'booker_user')->textInput(['value'=>$model->booker_user?$model->booker_user:Yii::$app->user->identity->name]) ?>
 
@@ -70,7 +70,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
     function _changePtype(obj,tempkey){
         var productclass_id = $(obj).val();
         var Content = {productclass_id: productclass_id};
-        var url = "<?=Url::to(['product/getproduct'])?>";
+        var url = "<?=Url::to(['product/getproductbyuse'])?>";
         $.post(url,Content,function(rsp){
             if(rsp){
                 var obj = JSON.parse(rsp);
@@ -212,7 +212,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
         }else{
             $('#product_txt').val(product_txt.substring(0,product_txt.length-1));
             $('#pnum_txt').val(pnum_txt.substring(0,pnum_txt.length-1));
-            swal("保存成功", "成品配货成功","success");
+            //swal("保存成功", "成品配货成功","success");
             $('form').submit();
         }
     }

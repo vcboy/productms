@@ -234,7 +234,7 @@ class ProductTemplateController extends CController
 
     public function actionFlashtpprice(){
         $pt_arr = ProductTemplate::find()->andWhere(['is_del'=>0])->all();
-        $f_arr = Purchase::find()->andWhere(['is_del'=>0])->orderBy('pur_date desc')->all();
+        $f_arr = Purchase::find()->andWhere(['is_del'=>0])->orderBy('pur_date desc,id desc')->all();
         $fMap = [];
         foreach ($f_arr as $key => $val) {
             if(empty($fMap[$val['food_id']])){
@@ -246,8 +246,9 @@ class ProductTemplateController extends CController
             $price = 0;
             foreach ($pte_arr as $k => $v) {
                 $t_price = empty($fMap[$v['food_id']])?0:$fMap[$v['food_id']];
-                $price = $price + $t_price;
+                $price = $price + $t_price*$v['count'];
             }
+            $price = round($price,2);
             $val['unitprice'] = $price;
             $val->save();
         }
@@ -266,5 +267,11 @@ class ProductTemplateController extends CController
             $msg = "模板已经存在，一个成品有且只能有一个模板。";
         }
         echo json_encode(['flag'=>$flag,'msg'=>$msg]);exit;
+    }
+
+    public function actionGetunit(){
+        $product_id = Yii::$app->request->post('product_id');
+        $productObj = Refcode::find()->where(['id'=>$product_id,'is_del'=>0])->one();
+        return $productObj->pid2;
     }
 }

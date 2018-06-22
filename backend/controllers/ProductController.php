@@ -81,7 +81,7 @@ class ProductController extends CController
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['is_del'=>0]);
-        $dataProvider->query->orderBy('book_date desc');
+        $dataProvider->query->orderBy('book_date desc,id desc');
         return $this->render('createlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -97,7 +97,7 @@ class ProductController extends CController
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['is_del'=>0]);
-        $dataProvider->query->orderBy('book_date desc');
+        $dataProvider->query->orderBy('book_date desc,id desc');
         return $this->render('sendlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -113,7 +113,7 @@ class ProductController extends CController
         $searchModel = new ProductSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->andWhere(['is_del'=>0,'is_customer'=>0,'send_status'=>1]);
-        $dataProvider->query->orderBy('send_date desc');
+        $dataProvider->query->orderBy('send_date desc,id desc');
         return $this->render('inspectorlist', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
@@ -173,6 +173,7 @@ class ProductController extends CController
         $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
         $model->book_date = date('Y-m-d',$model->book_date);
         $model->arrive_date = date('Y-m-d',$model->arrive_date);
+        $model->send_date = (!empty($model->send_date)?date('Y-m-d',$model->send_date):"");
         return $this->render('view', [
             'model' => $model,
             'pte_arr_txt' => $pte_arr_txt,
@@ -187,7 +188,6 @@ class ProductController extends CController
     public function actionCreate()
     {
         $model = new Product();
-
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->book_date = strtotime($model->book_date);
             $model->arrive_date = strtotime($model->arrive_date);
@@ -238,6 +238,7 @@ class ProductController extends CController
         $model = $this->findModel($id);
 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+
             $model->book_date = strtotime($model->book_date);
             $model->arrive_date = strtotime($model->arrive_date);
 
@@ -332,6 +333,8 @@ class ProductController extends CController
     public function actionCopy($id)
     {
         $model = $this->findModel($id);
+
+
         $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
         $pte_arr_txt = "";
         $now = time()-10;
@@ -370,13 +373,21 @@ class ProductController extends CController
 
             $pte_info = "<tr id='tr_".$temp."'><td><select class='ftype form-control' onchange='_changePtype(this,".$temp.")'><option value=''>--请选择--</option>".$productclasslist_txt."</select></td><td><select class='form-control fid product_".$temp."' onchange='_getUnitprice()'><option value=''>--请选择--</option>".$productlist_txt."</select></td><td><input onchange='_getUnitprice()' class='form-control num num_".$temp."' value='".$pte['book_count']."'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\"".$temp."\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
             $pte_arr_txt .= $pte_info;
-            $model->book_date = date('Y-m-d',$model->book_date);
-            $model->arrive_date = date('Y-m-d',$model->arrive_date);
-            return $this->render('create', [
-                'model' => $model,
-                'pte_arr_txt' => $pte_arr_txt,
-            ]);
         }
+        $model->book_date = date('Y-m-d',$model->book_date);
+        $model->arrive_date = date('Y-m-d',$model->arrive_date);
+        $model2 = new Product();
+        $model2->booker_user = $model->booker_user;
+        $model2->book_date = $model->book_date;
+        $model2->book_comment = $model->book_comment;
+        $model2->arrive_date = $model->arrive_date;
+        $model2->is_customer = $model->is_customer;
+        $model2->total_price = $model->total_price;
+        $model2->customer = $model->customer;
+        return $this->render('create', [
+            'model' => $model2,
+            'pte_arr_txt' => $pte_arr_txt,
+        ]);
     }
 
     /**
@@ -395,6 +406,7 @@ class ProductController extends CController
             $model->send_status = 1;
             $model->save();
             if($model->is_customer){//其他单位，发货需要减去库存
+                $pinfo_price = 0;
                 $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();//获取发货清单
                 $gp_list = [];
                 foreach ($pte_arr as $key => $val) {
@@ -460,11 +472,15 @@ class ProductController extends CController
                                 break;
                             }
                         }
+                        $pinfo_price = $pinfo_price + $total_pay;
                     }
                     //$val['sycount'] = $pnum;
                     $val['price'] = $total_pay;
                     $val['unitprice'] = round($total_pay/$pnum,2);
                 }
+                //刷新总价
+                $model->total_price = $pinfo_price;
+                $model->save();
             }else{//更新发货数量
                 $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();//获取发货清单
                 foreach ($pte_arr as $key => $val) {
@@ -569,6 +585,7 @@ class ProductController extends CController
                 $foodids[] = $key;
             }
             $fMap = ArrayHelper::map(Refcode::find()->andWhere(['id'=>$foodids])->all(),'id','nm');
+            $pinfo_price = 0;
             foreach ($gp_list as $key => $val) {//循环配货表
                 $ptid = $pMap[$val['id']];//得到食材配比明细
                 $pnum = $val['num']-0;
@@ -606,11 +623,15 @@ class ProductController extends CController
                             break;
                         }
                     }
+                    $pinfo_price = $pinfo_price + $total_pay;
                 }
                 $val['sycount'] = $pnum;
                 $val['price'] = $total_pay;
                 $val['unitprice'] = round($total_pay/$pnum,2);
             }
+            //刷新总价
+            $model->total_price = $pinfo_price;
+            $model->save();
             return $this->redirect(['inspectorlist']);
         } else {
             $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
@@ -654,6 +675,7 @@ class ProductController extends CController
             $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
             $model->book_date = date('Y-m-d',$model->book_date);
             $model->arrive_date = date('Y-m-d',$model->arrive_date);
+            $model->send_date = date('Y-m-d',$model->send_date);
             return $this->render('inspector', [
                 'model' => $model,
                 'pte_arr_txt' => $pte_arr_txt,
@@ -758,6 +780,21 @@ class ProductController extends CController
         $productclass_id = $this->request->post('productclass_id');
         $productArr = Refcode::getProduct($productclass_id);
         echo json_encode($productArr);
+    }
+
+    public function actionGetproductbyuse(){
+        $ptpid_arr = ProductTemplate::find()->andWhere(['is_del'=>0])->all();
+        $ptpids = ArrayHelper::getColumn($ptpid_arr,'product_id');
+        $productclass_id = $this->request->post('productclass_id');
+        $productArr = Refcode::getProduct($productclass_id);
+        $r_arr = array();
+        foreach ($ptpids as $key => $val) {
+            if(!empty($productArr[$val])){
+                $info = $productArr[$val];
+                $r_arr[$val] = $info;
+            }
+        }
+        echo json_encode($r_arr);
     }
 
     /**
