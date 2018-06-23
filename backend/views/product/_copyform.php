@@ -14,7 +14,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
 <div class="product-form">
 
-    <?php $form = ActiveForm::begin(); ?>
+    <?php $form = ActiveForm::begin(['action' => ['product/create'],'method'=>'post']); ?>
 
     <?= $form->field($model, 'booker_user')->textInput(['readonly'=>'readonly','value'=>$model->booker_user?$model->booker_user:Yii::$app->user->identity->name]) ?>
 
@@ -56,34 +56,8 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
      */
     function _addProduct(){
         var temp = new Date().getTime();
-        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changePtype(this,"+temp+")'><option value=''>--请选择--</option><?php foreach ($productclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";} ?></select></td><td><select class='form-control fid product_"+temp+"' onchange='_checkdouble(this)'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"' onchange='_getUnitprice()'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
+        var txt = "<tr id='tr_"+temp+"'><td><select class='ftype form-control' onchange='_changePtype(this,"+temp+")'><option value=''>--请选择--</option><?php foreach ($productclasslist as $key => $val) {echo "<option value='".$key."'>".$val."</option>";} ?></select></td><td><select class='form-control fid product_"+temp+"' onchange='_getUnitprice()'><option value=''>--请选择--</option></select></td><td><input class='form-control num num_"+temp+"' onchange='_getUnitprice()'></td><td><button type='button' class='btn btn-xs btn-danger' title='删除' aria-label='删除' data-pjax='0' onclick='_deltr(\""+temp+"\")'><i class='icon-trash bigger-120'></i></button></td></tr>";
         $('#product_tb').append(txt);
-    }
-
-    /**
-     * [_checkdouble 检测是否有重复的成品被添加]
-     * @return {[type]} [description]
-     */
-    function _checkdouble(obj){
-        var m = new Map();
-        var flag = 1;
-        $('.fid').each(function(){
-            var pinfo = $(this).val();
-            if(!m.has(pinfo)){
-                m.set(pinfo,1);
-            }else{
-                flag = 0;
-            }
-        });
-        if(!flag){
-            $(obj).val('');
-            swal({ 
-              title: "无法选择该成品",
-              text: '该成品已在该配货列表中存在，不可再次选择'
-            });
-        }
-        _getUnitprice();
-        
     }
 
     /**

@@ -30,7 +30,7 @@ $this->params['breadcrumbs'][] = $this->title;
             //'customer',
             [
                 'attribute' => 'arrive_date',
-                'value'     => function($model) {return date("Y-m-d",$model->arrive_date);},
+                'value'     => function($model) {return date("Y-m-d H:i",$model->arrive_date);},
             ],
             [
                 'attribute' => 'is_customer',

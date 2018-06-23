@@ -42,9 +42,6 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
     <?= $form->field($model, 'send_comment')->textInput(['readonly'=>'readonly']) ?>
 
     <table class="table table-striped table-bordered" id="product_tb">
-        <tr><th colspan="4">
-            <?=  Html::a('查看库存配比','javascript:;',['class'=>'btn btn-sm btn-danger','onclick'=>'_checkstore()'])?>
-        </th></tr>
         <tr><th>成品分类</th><th>成品名称</th><th>发货数量</th><th>入库数量</th></tr>
         <?=$pte_arr_txt?>
     </table>
@@ -123,6 +120,14 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
     }
 
     function _checkSub(){
+        var msg = "";
+        $('.icount').each(function(){
+            var num = $(this).attr('inputnum')-0;
+            var rnum = $(this).val()-0;
+            if(num!=rnum){
+                msg = "所有成品入库数量必须与发货数量一致。";
+            }
+        })；
         var gp_arr = $('#gp_arr').val();
         var Content = {'gp_arr': gp_arr};
         var url = "<?=Url::to(['hasenough'])?>";
@@ -130,12 +135,21 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
             if(rsp!=1){
                 swal({ 
                   title: "库存数量不足,无法完成验货。",
-                  text: rsp, 
+                  text: rsp+msg, 
                   html: true 
                 });
             }else{
-                swal("验货成功", "成品验货成功","success");
-                $('form').submit();
+                if(msg==""){
+                    swal("验货成功", "成品验货成功","success");
+                    $('form').submit();    
+                }else{
+                    swal({ 
+                      title: "入库数量不一致,无法完成验货。",
+                      text: msg, 
+                      html: true 
+                    });
+                }
+                
             }
         });
     }

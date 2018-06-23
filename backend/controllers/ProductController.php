@@ -172,7 +172,7 @@ class ProductController extends CController
         }
         $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
         $model->book_date = date('Y-m-d',$model->book_date);
-        $model->arrive_date = date('Y-m-d',$model->arrive_date);
+        $model->arrive_date = date('Y-m-d H:i',$model->arrive_date);
         $model->send_date = (!empty($model->send_date)?date('Y-m-d',$model->send_date):"");
         return $this->render('view', [
             'model' => $model,
@@ -315,7 +315,7 @@ class ProductController extends CController
                 $pte_arr_txt .= $pte_info;
             }
             $model->book_date = date('Y-m-d',$model->book_date);
-            $model->arrive_date = date('Y-m-d',$model->arrive_date);
+            $model->arrive_date = date('Y-m-d H:i',$model->arrive_date);
             return $this->render('update', [
                 'model' => $model,
                 'pte_arr_txt' => $pte_arr_txt,
@@ -375,7 +375,7 @@ class ProductController extends CController
             $pte_arr_txt .= $pte_info;
         }
         $model->book_date = date('Y-m-d',$model->book_date);
-        $model->arrive_date = date('Y-m-d',$model->arrive_date);
+        $model->arrive_date = date('Y-m-d H:i',$model->arrive_date);
         $model2 = new Product();
         $model2->booker_user = $model->booker_user;
         $model2->book_date = $model->book_date;
@@ -384,7 +384,7 @@ class ProductController extends CController
         $model2->is_customer = $model->is_customer;
         $model2->total_price = $model->total_price;
         $model2->customer = $model->customer;
-        return $this->render('create', [
+        return $this->render('copy', [
             'model' => $model2,
             'pte_arr_txt' => $pte_arr_txt,
         ]);
@@ -539,7 +539,7 @@ class ProductController extends CController
             }
             $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
             $model->book_date = date('Y-m-d',$model->book_date);
-            $model->arrive_date = date('Y-m-d',$model->arrive_date);
+            $model->arrive_date = date('Y-m-d H:i',$model->arrive_date);
             return $this->render('send', [
                 'model' => $model,
                 'pte_arr_txt' => $pte_arr_txt,
@@ -685,13 +685,13 @@ class ProductController extends CController
                     }    
                 }
 
-                $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['book_count']."</td><td>".$pte['book_count']."</td></tr>";
+                $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['book_count']."</td><td><input class='icount form-control' inputnum='".$pte['book_count']."'></td></tr>";
                 $pte_arr_txt .= $pte_info;
                 $pte_info_txt_arr[] = $pte['product_id']."_".$pte['book_count'];
             }
             $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
             $model->book_date = date('Y-m-d',$model->book_date);
-            $model->arrive_date = date('Y-m-d',$model->arrive_date);
+            $model->arrive_date = date('Y-m-d H:i',$model->arrive_date);
             $model->send_date = date('Y-m-d',$model->send_date);
             return $this->render('inspector', [
                 'model' => $model,
@@ -750,7 +750,7 @@ class ProductController extends CController
         }
         $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
         $model->book_date = date('Y-m-d',$model->book_date);
-        $model->arrive_date = date('Y-m-d',$model->arrive_date);
+        $model->arrive_date = date('Y-m-d H:i',$model->arrive_date);
         return $this->render('groupproductdetail', [
             'model' => $model,
             'pte_arr_txt' => $pte_arr_txt,
@@ -839,7 +839,10 @@ class ProductController extends CController
         echo json_encode($pprice);
     }
 
-
+    /**
+     * [actionGetstoreinfo description]
+     * @return [type] [description]
+     */
     public function actionGetstoreinfo(){
         $gp = Yii::$app->request->post('gp_arr');
         $gp_arr = explode('|',$gp);
@@ -890,7 +893,12 @@ class ProductController extends CController
             $fneed = $val;
             $fhas = empty($sMap[$key])?0:$sMap[$key];
             $fsycount = $fhas-$fneed;
-            $table_txt .= "<tr><td>".$fname."</td><td>".$fneed."</td><td>".$fhas."</td><td>".($fsycount>0?("<font color='green'>".$fsycount."</font>"):("<font color='red'>".$fsycount."【需采购】</font>"))."</td></tr>";
+            if($fsycount>0){
+                $table_txt .= "<tr><td>".$fname."</td><td>".$fneed."</td><td>".$fhas."</td><td>".($fsycount>0?("<font color='green'>".$fsycount."</font>"):("<font color='red'>".$fsycount."【需采购】</font>"))."</td></tr>";    
+            }
+        }
+        if($table_txt == '<table class="table table-striped table-bordered"><tr><th>食材名称</th><td>配比所需</td><td>当前库存</td><td>配送后剩余</td></tr>'){
+            $table_txt .= '<tr><td colspan=4 style="text-align:center"><font color="green">食材库存充足可以进行发货</td></tr>';    
         }
         $table_txt .= '</table>';
         print_r($table_txt);exit;
