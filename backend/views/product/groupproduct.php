@@ -26,11 +26,7 @@ $this->params['breadcrumbs'][] = '发货完成基准价';
         'summary'=>'',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header' => '序号'],
-            //'customer',
-            [
-                'attribute' => 'arrive_date',
-                'value'     => function($model) {return date("Y-m-d",$model->arrive_date);},
-            ],
+            
             [
                 'attribute' => 'total_price',
                 'value'     => function($model) {return (empty($model->total_price)?"-":("￥".$model->total_price.'元'));},
@@ -42,17 +38,7 @@ $this->params['breadcrumbs'][] = '发货完成基准价';
                     return $model->is_customer == 1?$model->customer:'本单位';
                 }
             ],
-            'booker_user',
-            [
-                'attribute' => 'book_date',
-                'value'     => function($model) {return date("Y-m-d",$model->book_date);},
-            ],
-            'sender_user',
-            [
-                'attribute' => 'send_date',
-                'value'     => function($model) {return (empty($model->send_date)?"-":date("Y-m-d",$model->send_date));},
-            ],
-            'inspector_user',
+            
             [
                 'attribute' => 'inspect_date',
                 'value'     => function($model) {return (empty($model->inspect_date)?"-":date("Y-m-d",$model->inspect_date));},

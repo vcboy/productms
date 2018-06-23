@@ -407,6 +407,8 @@ class ProductController extends CController
             $model->save();
             if($model->is_customer){//其他单位，发货需要减去库存
                 $pinfo_price = 0;
+                $model->inspect_date = $model->send_date;
+                $model->inspector_user = $model->sender_user;
                 $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();//获取发货清单
                 $gp_list = [];
                 foreach ($pte_arr as $key => $val) {
@@ -414,6 +416,7 @@ class ProductController extends CController
                     $val->status = 1;
                     $val->save();
                     $info = [];
+                    $info['obj'] = $val;
                     $info['id'] = $val['product_id'];
                     $info['num'] = $val['send_count'];
                     $gp_list[] = $info;
@@ -439,6 +442,7 @@ class ProductController extends CController
                     $ptid = $pMap[$val['id']];//得到食材配比明细
                     $pnum = $val['num']-0;
                     $pe_arr = $peMap[$ptid];
+                    $pe_price_total=0;
                     foreach ($pe_arr as $k => $v) {//食材模板
                         $total_pay = 0;
                         $fnum = $v['count']*$pnum;//需要出库的食物
@@ -473,10 +477,15 @@ class ProductController extends CController
                             }
                         }
                         $pinfo_price = $pinfo_price + $total_pay;
+                        $pe_price_total = $pe_price_total + $total_pay;
                     }
                     //$val['sycount'] = $pnum;
-                    $val['price'] = $total_pay;
-                    $val['unitprice'] = round($total_pay/$pnum,2);
+                    //$val['price'] = $total_pay;
+                    //$val['unitprice'] = round($total_pay/$pnum,2);
+                    $obj = $val['obj'];
+                    $obj['price'] = round($pe_price_total,2);
+                    $obj['unitprice'] = round($pe_price_total/$pnum,2);
+                    $obj->save();
                 }
                 //刷新总价
                 $model->total_price = $pinfo_price;
@@ -564,6 +573,7 @@ class ProductController extends CController
                 $val->status = 1;
                 $val->save();
                 $info = [];
+                $info['obj'] = $val;
                 $info['id'] = $val['product_id'];
                 $info['num'] = $val['send_count'];
                 $gp_list[] = $info;
@@ -590,6 +600,7 @@ class ProductController extends CController
                 $ptid = $pMap[$val['id']];//得到食材配比明细
                 $pnum = $val['num']-0;
                 $pe_arr = $peMap[$ptid];
+                $pe_price_total=0;
                 foreach ($pe_arr as $k => $v) {//食材模板
                     $total_pay = 0;
                     $fnum = $v['count']*$pnum;//需要出库的食物
@@ -624,10 +635,16 @@ class ProductController extends CController
                         }
                     }
                     $pinfo_price = $pinfo_price + $total_pay;
+                    $pe_price_total = $pe_price_total + $total_pay;
                 }
-                $val['sycount'] = $pnum;
-                $val['price'] = $total_pay;
-                $val['unitprice'] = round($total_pay/$pnum,2);
+                //$val['sycount'] = $pnum;
+                //$val['price'] = $total_pay;
+                //$val['unitprice'] = round($total_pay/$pnum,2);
+                $obj = $val['obj'];
+                $obj['sycount'] = $pnum;
+                $obj['price'] = round($pe_price_total,2);
+                $obj['unitprice'] = round($pe_price_total/$pnum,2);
+                $obj->save();
             }
             //刷新总价
             $model->total_price = $pinfo_price;

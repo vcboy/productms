@@ -20,7 +20,7 @@ class ProcutSearch extends Procut
         return [
             [['id', 'booker_id',  'book_comment','is_customer', 'sender_id',  'send_status', 'inspector_id', 'inspect_status', 'is_del'], 'integer'],
             [['total_price'], 'number'],
-            [['send_comment', 'inspect_comment', 'customer'], 'safe'],
+            [['send_comment', 'inspect_comment', 'customer','dt_s','dt_e'], 'safe'],
         ];
     }
 
@@ -56,6 +56,14 @@ class ProcutSearch extends Procut
             // uncomment the following line if you do not want to return any records when validation fails
             // $query->where('0=1');
             return $dataProvider;
+        }
+
+        if($this->dt_s){
+            $query->andFilterWhere(['>=','inspect_date' ,strtotime($this->dt_s)]);
+        }
+        
+        if($this->dt_e){
+            $query->andFilterWhere(['<','inspect_date' ,strtotime("$this->dt_e + 1 day")]);
         }
 
         // grid filtering conditions

@@ -27,6 +27,8 @@ use Yii;
  */
 class Product extends \yii\db\ActiveRecord
 {
+    public $dt_s;
+    public $dt_e;
     /**
      * @inheritdoc
      */

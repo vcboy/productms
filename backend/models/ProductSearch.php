@@ -19,7 +19,7 @@ class ProductSearch extends Product
     {
         return [
             [['id',  'book_comment','is_customer',  'send_status',  'inspect_status', 'is_del'], 'integer'],
-            [['booker_user', 'sender_user', 'send_comment', 'inspector_user', 'inspect_comment','send_date', 'inspect_date','arrive_date',  'book_date','customer'], 'safe'],
+            [['booker_user', 'sender_user', 'send_comment', 'inspector_user', 'inspect_comment','send_date', 'inspect_date','arrive_date',  'book_date','customer',  'dt_s','dt_e'], 'safe'],
             [['total_price'], 'number'],
         ];
     }
@@ -83,6 +83,14 @@ class ProductSearch extends Product
 
         if($this->inspect_date){
             $query->andFilterWhere(['inspect_date' => strtotime($this->inspect_date)]);
+        }
+
+        if($this->dt_s){
+            $query->andFilterWhere(['>=','inspect_date' ,strtotime($this->dt_s)]);
+        }
+        
+        if($this->dt_e){
+            $query->andFilterWhere(['<','inspect_date' ,strtotime("$this->dt_e + 1 day")]);
         }
 
         $query->andFilterWhere(['like', 'booker_user', $this->booker_user])
