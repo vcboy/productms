@@ -45,7 +45,7 @@ class Product extends \yii\db\ActiveRecord
         return [
             [['book_date', 'arrive_date'], 'required'],
             [['send_date', 'inspect_date'] , 'default' ],
-            [[ 'is_customer', 'send_status',  'inspect_status', 'is_del','is_consume'], 'integer'],
+            [[ 'is_customer', 'send_status',  'inspect_status', 'is_del','is_consume','consume_status'], 'integer'],
             [['total_price'], 'number'],
             [['book_comment','send_comment', 'inspect_comment'], 'string'],
             [['booker_user', 'sender_user', 'inspector_user'], 'string', 'max' => 32],

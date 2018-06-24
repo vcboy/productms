@@ -26,7 +26,13 @@ if(!empty($model->productclass_id)){
 
     <?= $form->field($model, 'product_id')->dropDownList(array(''=>'--请选择--')+$productlist,['id'=>'product_id']) ?>
 
+    <?= $form->field($model, 'unitprice')->textInput(['id'=>'unitprice']) ?>
+
     <?= $form->field($model, 'count')->textInput(['id'=>'count']) ?>
+
+    <?= $form->field($model, 'price')->textInput(['readonly'=>true,'id'=>'price']) ?>
+
+    <?//= $form->field($model, 'consume_type')->dropDownList(array(''=>'--请选择--')+['1'=>'销售','2'=>'损耗'],['id'=>'consume_type']) ?>
 
     <?= $form->field($model, 'create_user')->textInput(['value'=>$model->create_user?$model->create_user:Yii::$app->user->identity->name]) ?>
 

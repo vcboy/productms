@@ -106,6 +106,8 @@ class ProductConsumeController extends CController
     public function actionCreate()
     {
         $model = new ProductConsume();
+        $id = intval($this->request->get('id'));
+        $model->product_entry_id = $id;
         $this->childSubject = '消耗添加';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->create_dt = strtotime($model->create_dt);
@@ -114,7 +116,13 @@ class ProductConsumeController extends CController
             $model->save();
             return $this->redirect(['index']);
         } else {
+            
+            $productclass_id = intval($this->request->get('productclass_id'));
+            $product_id = intval($this->request->get('product_id'));
+            $model->productclass_id = $productclass_id;
+            $model->product_id = $product_id;
             $model->create_dt = date("Y-m-d H:i:s"); 
+            
             return $this->render('create', [
                 'model' => $model,
             ]);

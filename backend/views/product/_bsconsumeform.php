@@ -23,14 +23,12 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
 
     <table class="table table-striped table-bordered" id="product_tb">
-        <tr><th>成品分类</th><th>成品名称</th><th>入库数量</th><th>消耗数量
-            <?=  Html::Button('全部消耗', ['class' => 'btn btn-primary btn-xs','onclick'=>'_consumeall()']) ?></th></tr>
+        <tr><th>成品分类</th><th>成品名称</th><th>入库数量</th><th>消耗数量</th><th>报损</th></tr>
         <?=$pte_arr_txt?>
     </table>
 
     <div class="form-group">
-    <?=  Html::Button('添加消耗', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
-    <?=  Html::a('返回',Url::toRoute("consume"),['class'=>'btn btn-primary'])?>
+    <?=  Html::a('返回',Url::toRoute("consumelist"),['class'=>'btn btn-primary'])?>
     </div>
 
     <?php ActiveForm::end(); ?>

@@ -16,6 +16,8 @@ use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 use yii\helpers\ArrayHelper;
+use yii\helpers\Html;
+use yii\helpers\Url;
 
 
 /**
@@ -1007,30 +1009,28 @@ class ProductController extends CController
     public function actionAddconsume($id)
     {
         $model = $this->findModel($id);
+        $inspect_date = $model->inspect_date;
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
-            /*$model->book_date = strtotime($model->book_date);
-            $model->arrive_date = strtotime($model->arrive_date);
-            $model->send_date = strtotime($model->send_date);
-            $model->inspect_date = strtotime($model->inspect_date);
-            $model->inspect_status = 1;
-            $model->save();*/
             $depot_count = Yii::$app->request->post('depot_count');
             $pte_id = Yii::$app->request->post('pte_id');
+            $entry_num = count($depot_count);
+            $consume_entry = 0;
             foreach ($pte_id as $key => $id) {
                 $pte_model = ProductEntry::findOne($id);
                 $pte_model->consume_count = $depot_count[$key];
                 $pte_model->save();
-            }
+                if($pte_model->consume_count == $pte_model->depot_count)
+                    $consume_entry++;
 
-            /*$pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();//获取发货清单
-            $gp_list = [];
-            foreach ($pte_arr as $key => $val) {
-                $val->depot_count = $val->book_count;
-                //$val->sycount = $val->book_count;
-                //$val->status = 1;
-                $val->consume_count = $val->
-                $val->save();
-            }*/
+            }           
+            if($consume_entry > 0){
+                if($consume_entry == $entry_num){
+                    $model->is_consume = 1;
+                }
+                $model->inspect_date = $inspect_date;
+                $model->consume_status = 1;
+                $model->save();
+            }
                       
             return $this->redirect(['consume']);
         } else {
@@ -1068,13 +1068,119 @@ class ProductController extends CController
                     }    
                 }
 
-                $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['depot_count']."</td><td><input class='icount form-control' name='depot_count[]' inputnum='".$pte['depot_count']."'><input  type='hidden' name='pte_id[]' value='".$pte['id']."'></td></tr>";
+                $pte_info = "<tr class='pentry'><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['depot_count']."</td><td><input class='icount form-control' name='depot_count[]' inputnum='".$pte['depot_count']."' value='".$pte['consume_count']."'><input  type='hidden' name='pte_id[]' value='".$pte['id']."'></td></tr>";
                 $pte_arr_txt .= $pte_info;
                 $pte_info_txt_arr[] = $pte['product_id']."_".$pte['depot_count'];
                 $pte_id[] = $pte['id'];
             }
             $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
             return $this->render('addconsume', [
+                'model' => $model,
+                'pte_arr_txt' => $pte_arr_txt,
+            ]);
+        }
+    }
+
+    /**
+     * Lists all Product models.
+     * @return mixed
+     */
+    public function actionConsumelist()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['is_del'=>0,'is_customer'=>0,'inspect_status'=>1,'consume_status'=>1]);
+        $dataProvider->query->orderBy('inspect_date desc,id desc');
+        return $this->render('consumelist', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Send an existing Product model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionBsconsume($id)
+    {
+        $model = $this->findModel($id);
+        $inspect_date = $model->inspect_date;
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            $depot_count = Yii::$app->request->post('depot_count');
+            $pte_id = Yii::$app->request->post('pte_id');
+            $entry_num = count($depot_count);
+            $consume_entry = 0;
+            foreach ($pte_id as $key => $id) {
+                $pte_model = ProductEntry::findOne($id);
+                $pte_model->consume_count = $depot_count[$key];
+                $pte_model->save();
+                if($pte_model->consume_count == $pte_model->depot_count)
+                    $consume_entry++;
+
+            }           
+            if($consume_entry > 0){
+                if($consume_entry == $entry_num){
+                    $model->is_consume = 1;
+                }
+                $model->inspect_date = $inspect_date;
+                $model->consume_status = 1;
+                $model->save();
+            }
+                      
+            return $this->redirect(['consume']);
+        } else {
+            $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
+            $pte_arr_txt = "";
+            $pte_info_txt_arr = [];
+            $now = time()-10;
+            $productclasslist = Refcode::getRefcodeBytype('productclass');
+
+            $productArr = [];
+            $productObj = Refcode::find()->where(['is_del'=>0,'type'=>'product'])->all();
+            foreach ($productObj as $key => $value) {
+                $unitName = $value->unitName;
+                $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+                $info['id'] = $value->id;
+                $info['nm'] = $nm;
+                $productArr[$value->pid][] = $info;
+            }
+            $options = [
+                'title' => '报损',
+                'aria-label' => Yii::t('yii', 'view'),
+                'data-pjax' => '0',
+                'class' => 'btn btn-xs btn-warning',
+            ];
+            foreach ($pte_arr as $key => $pte) {
+                $temp = $now - $key;
+                $productclasslist_txt = "";
+                $productlist_txt = "";
+                foreach ($productclasslist as $fkey => $fval) {
+                    $flag = "";
+                    if($fkey==$pte['productclass_id']){
+                        $productclasslist_txt = $fval;
+                    }
+                }
+                if(!empty($productArr[$pte['productclass_id']])){
+                    foreach ($productArr[$pte['productclass_id']] as $fkey => $fval) {
+                        $flag = "";
+                        if($fval['id']==$pte['product_id']){
+                            $productlist_txt = $fval['nm'];
+                        }
+                    }    
+                }
+
+                $url = Url::to(["product-consume/create",'id'=>$pte['id'],'productclass_id'=>$pte['productclass_id'],'product_id'=>$pte['product_id']]);
+                $bs_button = Html::a('<i class="icon-edit  bigger-120"></i>', $url,$options);
+                //$bs_button = Html::a('报损',Url::toRoute("product-consume/create"),['class'=>'btn btn-primary btn-xs']);
+                $pte_info = "<tr class='pentry'><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['depot_count']."</td><td>".$pte['consume_count']."</td><td>".$bs_button."</td></tr>";
+                $pte_arr_txt .= $pte_info;
+                $pte_info_txt_arr[] = $pte['product_id']."_".$pte['depot_count'];
+                $pte_id[] = $pte['id'];
+            }
+            $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
+            return $this->render('bsconsume', [
                 'model' => $model,
                 'pte_arr_txt' => $pte_arr_txt,
             ]);
