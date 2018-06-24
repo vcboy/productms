@@ -15,3 +15,15 @@ http://bxu2713680062.my3w.com/productms/backend/web/default/login
 6.22
 1、“成品配比”，成品名称已经带有单位，是否还需要再选择单位？
 2、“成品配比”，当没有采购过改食材，但是配比里有改食材，即使价格是程序出错
+
+FTP账号: p980f852xn
+FTP地址: hkip1215.51php.com 
+FTP密码: Fq2W32ptPdZSH
+ 
+数据库地址: localhost
+数据库名称: p980f852xn_4q8k 
+数据库用户: p980f852xn_4q8k 
+数据库密码: 6sKUNF57qG
+http://hkip1215.51php.com/phpmyadmin/
+
+http://dingding.wapnb.com/

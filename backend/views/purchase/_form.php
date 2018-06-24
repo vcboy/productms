@@ -43,7 +43,7 @@ if($model->food_id){
 
     <?= $form->field($model, 'supplier')->dropDownList(array(''=>'--请选择--')+$supplierlist) ?>
 
-    <?= $form->field($model, 'pur_user')->textInput(['value'=>$model->pur_user?$model->pur_user:Yii::$app->user->identity->name]) ?>
+    <?= $form->field($model, 'pur_user')->textInput(['value'=>$model->pur_user?$model->pur_user:Yii::$app->user->identity->name,'readonly'=>true]) ?>
 
     <?= $form->field($model, 'pur_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd"})','value'=>$model->pur_date]) ?>
 

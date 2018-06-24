@@ -109,6 +109,7 @@ class ProductConsumeController extends CController
         $this->childSubject = '消耗添加';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->create_dt = strtotime($model->create_dt);
+            $model->consume_type == 2;
             $model->status = $model->consume_type == 1?1:0;
             $model->save();
             return $this->redirect(['index']);

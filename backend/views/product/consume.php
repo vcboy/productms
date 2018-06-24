@@ -2,6 +2,7 @@
 
 use yii\helpers\Html;
 use job\lib\JobGridView;
+use yii\helpers\Url;
 
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductSearch */
@@ -17,7 +18,7 @@ $this->params['breadcrumbs'][] = $this->title;
         </div>
         <div class="widget-body">
             <div class="widget-main">
-                <?php echo $this->render('_searchinspector', ['model' => $searchModel]); ?>
+                <?php echo $this->render('_searchconsume', ['model' => $searchModel]); ?>
             </div>
         </div>
     </div>
@@ -26,41 +27,14 @@ $this->params['breadcrumbs'][] = $this->title;
         'summary'=>'',
         'columns' => [
             ['class' => 'yii\grid\SerialColumn','header' => '序号'],
-            //'customer',
-            [
-                'attribute' => 'arrive_date',
-                'value'     => function($model) {return date("Y-m-d H:i",$model->arrive_date);},
-            ],
-            [
-                'attribute' => 'is_customer',
-                'label' => '客户',
-                'value' => function($model){
-                    return $model->is_customer == 1?$model->customer:'本单位';
-                }
-            ],
-            'sender_user',
-            [
-                'attribute' => 'send_date',
-                'value'     => function($model) {return (empty($model->send_date)?"-":date("Y-m-d",$model->send_date));},
-            ],
-            //'send_comment',
             'inspector_user',
             [
                 'attribute' => 'inspect_date',
                 'value'     => function($model) {return (empty($model->inspect_date)?"-":date("Y-m-d H:i",$model->inspect_date));},
             ],
-            //'inspect_comment',
-            'instatustext:html:是否验收',
-            /*[
-                'attribute' => 'inspect_status',
-                'label' => '是否验收',
-                'value' => function($model){
-                    return $model->inspect_status == 1?'已验收':'未验收';
-                }
-            ],*/
             [   'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{inspector} {view}',
+                'template' => '{inspector} {add}',
                 'buttons' => [
                     'inspector' => function ($url, $model, $key) {
                         $options = [
@@ -75,14 +49,15 @@ $this->params['breadcrumbs'][] = $this->title;
                         }
                         return $r_txt;
                     },
-                    'view' => function ($url, $model, $key) {
+                    'add' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '查看',
+                            'title' => '添加消耗',
                             'aria-label' => Yii::t('yii', 'view'),
                             'data-pjax' => '0',
                             'class' => 'btn btn-xs btn-warning',
                         ];
-                        return Html::a('<i class="icon-zoom-in  bigger-120"></i>', $url,$options);
+                        $url = Url::to(["addconsume",'id'=>$model->id]);
+                        return Html::a('<i class="icon-edit  bigger-120"></i>', $url,$options);
                     },
                 ]
             ],

@@ -981,4 +981,104 @@ class ProductController extends CController
         ]);
     }
 
+    /**
+     * Lists all Product models.
+     * @return mixed
+     */
+    public function actionConsume()
+    {
+        $searchModel = new ProductSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->andWhere(['is_del'=>0,'is_customer'=>0,'inspect_status'=>1,'is_consume'=>0]);
+        $dataProvider->query->orderBy('inspect_date desc,id desc');
+        return $this->render('consume', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+
+    /**
+     * Send an existing Product model.
+     * If update is successful, the browser will be redirected to the 'view' page.
+     * @param integer $id
+     * @return mixed
+     */
+    public function actionAddconsume($id)
+    {
+        $model = $this->findModel($id);
+        if ($model->load(Yii::$app->request->post()) && $model->validate()) {
+            /*$model->book_date = strtotime($model->book_date);
+            $model->arrive_date = strtotime($model->arrive_date);
+            $model->send_date = strtotime($model->send_date);
+            $model->inspect_date = strtotime($model->inspect_date);
+            $model->inspect_status = 1;
+            $model->save();*/
+            $depot_count = Yii::$app->request->post('depot_count');
+            $pte_id = Yii::$app->request->post('pte_id');
+            foreach ($pte_id as $key => $id) {
+                $pte_model = ProductEntry::findOne($id);
+                $pte_model->consume_count = $depot_count[$key];
+                $pte_model->save();
+            }
+
+            /*$pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();//获取发货清单
+            $gp_list = [];
+            foreach ($pte_arr as $key => $val) {
+                $val->depot_count = $val->book_count;
+                //$val->sycount = $val->book_count;
+                //$val->status = 1;
+                $val->consume_count = $val->
+                $val->save();
+            }*/
+                      
+            return $this->redirect(['consume']);
+        } else {
+            $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
+            $pte_arr_txt = "";
+            $pte_info_txt_arr = [];
+            $now = time()-10;
+            $productclasslist = Refcode::getRefcodeBytype('productclass');
+
+            $productArr = [];
+            $productObj = Refcode::find()->where(['is_del'=>0,'type'=>'product'])->all();
+            foreach ($productObj as $key => $value) {
+                $unitName = $value->unitName;
+                $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
+                $info['id'] = $value->id;
+                $info['nm'] = $nm;
+                $productArr[$value->pid][] = $info;
+            }
+            foreach ($pte_arr as $key => $pte) {
+                $temp = $now - $key;
+                $productclasslist_txt = "";
+                $productlist_txt = "";
+                foreach ($productclasslist as $fkey => $fval) {
+                    $flag = "";
+                    if($fkey==$pte['productclass_id']){
+                        $productclasslist_txt = $fval;
+                    }
+                }
+                if(!empty($productArr[$pte['productclass_id']])){
+                    foreach ($productArr[$pte['productclass_id']] as $fkey => $fval) {
+                        $flag = "";
+                        if($fval['id']==$pte['product_id']){
+                            $productlist_txt = $fval['nm'];
+                        }
+                    }    
+                }
+
+                $pte_info = "<tr><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['depot_count']."</td><td><input class='icount form-control' name='depot_count[]' inputnum='".$pte['depot_count']."'><input  type='hidden' name='pte_id[]' value='".$pte['id']."'></td></tr>";
+                $pte_arr_txt .= $pte_info;
+                $pte_info_txt_arr[] = $pte['product_id']."_".$pte['depot_count'];
+                $pte_id[] = $pte['id'];
+            }
+            $pte_arr_txt .= "<input type='hidden' id='gp_arr' value='".implode('|', $pte_info_txt_arr)."'>";
+            return $this->render('addconsume', [
+                'model' => $model,
+                'pte_arr_txt' => $pte_arr_txt,
+            ]);
+        }
+    }
+
 }

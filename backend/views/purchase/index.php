@@ -52,6 +52,10 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function($model) {return date("Y-m-d",$model->pur_date);},
             ],
             'pur_user',
+            [
+                'attribute' => 'create_date',
+                'value'     => function($model) {return date("Y-m-d H:i",$model->create_date);},
+            ],
             'statustext:html',
             [
                 'class' => 'yii\grid\ActionColumn',

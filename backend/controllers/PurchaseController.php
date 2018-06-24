@@ -139,6 +139,7 @@ class PurchaseController extends CController
         $model->pur_date = date("Y-m-d"); 
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
             $model->pur_date = strtotime($model->pur_date);
+            $model->create_date = time();
             $model->save();
             //var_dump($model->getErrors());
             return $this->redirect(['index']);

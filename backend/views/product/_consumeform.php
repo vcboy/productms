@@ -21,34 +21,15 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
     <?= $form->field($model, 'inspect_comment')->textInput() ?>
 
-    <?= $form->field($model, 'booker_user')->textInput(['readonly'=>'readonly','value'=>$model->booker_user?$model->booker_user:Yii::$app->user->identity->name]) ?>
-
-    <?= $form->field($model, 'book_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
-
-    <?= $form->field($model, 'book_comment')->textInput(['readonly'=>'readonly']) ?>
-
-    <?= $form->field($model, 'arrive_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
-
-    <?= $form->field($model, 'is_customer')->label('是否本单位')->dropDownList((empty($model->is_customer)?array(0=>'本单位'):array(1=>'其他单位')), array('readonly' => 'readonly')) ?>
-
-    <?= $form->field($model, 'total_price')->textInput(['readonly'=>'readonly']) ?>
-
-    <?= $form->field($model, 'customer')->textInput(['maxlength' => true,'readonly'=>'readonly']) ?>
-
-    <?= $form->field($model, 'sender_user')->textInput(['readonly'=>'readonly','value'=>$model->sender_user?$model->sender_user:Yii::$app->user->identity->name]) ?>
-
-    <?= $form->field($model, 'send_date')->textInput(['readonly'=>'readonly','maxlength' => true]) ?>
-
-    <?= $form->field($model, 'send_comment')->textInput(['readonly'=>'readonly']) ?>
 
     <table class="table table-striped table-bordered" id="product_tb">
-        <tr><th>成品分类</th><th>成品名称</th><th>发货数量</th><th>入库数量</th></tr>
+        <tr><th>成品分类</th><th>成品名称</th><th>入库数量</th><th>消耗数量</th></tr>
         <?=$pte_arr_txt?>
     </table>
 
     <div class="form-group">
-    <?=  Html::Button('验货入库', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
-    <?=  Html::a('返回',Url::toRoute("inspectorlist"),['class'=>'btn btn-primary'])?>
+    <?=  Html::Button('添加消耗', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary','onclick'=>'_checkSub()']) ?>
+    <?=  Html::a('返回',Url::toRoute("consume"),['class'=>'btn btn-primary'])?>
     </div>
 
     <?php ActiveForm::end(); ?>
@@ -124,32 +105,16 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
         $('.icount').each(function(){
             var num = $(this).attr('inputnum')-0;
             var rnum = $(this).val()-0;
-            if(num!=rnum){
-                msg = "所有成品入库数量必须与发货数量一致。";
-            }
-        });
-        var gp_arr = $('#gp_arr').val();
-        var Content = {'gp_arr': gp_arr};
-        var url = "<?=Url::to(['hasenough'])?>";
-        $.post(url,Content,function(rsp){
-            if(rsp!=1){
+            if(num<rnum){
+                msg = "消耗的数量不能大于入库的数量。";
                 swal({ 
-                  title: "库存数量不足,无法完成验货。",
-                  text: rsp+msg, 
+                  title: "添加错误",
+                  text: msg, 
                   html: true 
                 });
             }else{
-                if(msg==""){
-                    swal("验货成功", "成品验货成功","success");
-                    $('form').submit();    
-                }else{
-                    swal({ 
-                      title: "入库数量不一致,无法完成验货。",
-                      text: msg, 
-                      html: true 
-                    });
-                }
-                
+                swal("添加成功", "添加消耗成功","success");
+                $('form').submit();
             }
         });
     }

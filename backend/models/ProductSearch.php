@@ -82,7 +82,7 @@ class ProductSearch extends Product
         }
 
         if($this->inspect_date){
-            $query->andFilterWhere(['inspect_date' => strtotime($this->inspect_date)]);
+            $query->andFilterWhere(['and',['>=','inspect_date' , strtotime($this->inspect_date)],['<','inspect_date',strtotime($this->inspect_date+" 1 day")]]);
         }
 
         if($this->dt_s){
