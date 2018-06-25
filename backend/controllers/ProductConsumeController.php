@@ -89,7 +89,7 @@ class ProductConsumeController extends CController
      */
     public function actionView($id)
     {
-        $sh = $this->request->get('sh');
+        $sh = intval($this->request->get('sh'));
         $error = $this->request->get('error');
         return $this->render('view', [
             'model' => $this->findModel($id),

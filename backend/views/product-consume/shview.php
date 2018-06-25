@@ -37,7 +37,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     }
     if(empty($sh)){
-        echo Html::a('返回',Url::toRoute("sh"),['class'=>'btn btn-primary']);
+        echo Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary']);
     }else{
         echo Html::a('审核通过',Url::toRoute(["dosh",'sh'=>1,'id'=>$model->id]),['class'=>'btn btn-success'])."&nbsp&nbsp"; 
         echo Html::a('返回',Url::toRoute("sh"),['class'=>'btn btn-primary']);

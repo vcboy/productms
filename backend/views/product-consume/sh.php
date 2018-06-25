@@ -47,7 +47,7 @@ $this->params['breadcrumbs'][] = $this->title;
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
-                'template' => '{view} {delete}',
+                'template' => '{view} {update} {delete}',
                 'buttons' => [
                     'view' => function($url,$model){
                         $options = [
@@ -56,8 +56,20 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
                             'class' => 'btn-xs btn btn-warning',
                         ];
-                        $url = Url::to(['view','id'=>$model->id,'sh'=>1]);   
+                        $url = Url::to(['view','id'=>$model->id]);   
                         return Html::a('<i class="icon-zoom-in bigger-120"></i>', $url, $options);
+                    },
+                    'update' => function ($url, $model, $key) {
+                        $options = [
+                            'title' => '审核',
+                            'aria-label' => Yii::t('yii', 'Update'),
+                            'data-pjax' => '0',
+                            'class' => 'btn btn-xs btn-info',
+                        ];
+                        if(Admin::checkAccess('bs_sh')) {
+                            $url = Url::to(['view','id'=>$model->id,'sh'=>1]);  
+                            return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
+                        }
                     },
                     'delete' => function ($url, $model, $key) {
                         $options = [
@@ -67,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							'class' => 'btn btn-xs btn-danger',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
                         ];
-                        if(Admin::checkAccess('consume_del')) {
+                        if(Admin::checkAccess('bs_del')) {
                             return Html::button('<i class="icon-trash bigger-120"></i>', $options);
                         }
                     },
