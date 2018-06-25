@@ -66,7 +66,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
                             'class' => 'btn btn-xs btn-info',
                         ];
-                        if(Admin::checkAccess('bs_sh')) {
+                        if(Admin::checkAccess('bs_sh') && $model->status == 0) {
                             $url = Url::to(['view','id'=>$model->id,'sh'=>1]);  
                             return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
                         }

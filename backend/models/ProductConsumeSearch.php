@@ -19,7 +19,7 @@ class ProductConsumeSearch extends ProductConsume
     public function rules()
     {
         return [
-            [['id', 'productclass_id', 'product_id', 'count', 'consume_type', 'status', 'create_dt'], 'integer'],
+            [['id', 'productclass_id', 'product_id','product_consume_entry_id', 'count', 'consume_type', 'status', 'create_dt'], 'integer'],
             [['unitprice', 'price'], 'number'],
             [['create_dt_s', 'create_dt_e'], 'safe'],
         ];

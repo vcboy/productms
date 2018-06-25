@@ -110,7 +110,9 @@ class ProductConsumeController extends CController
     {
         $model = new ProductConsume();
         $id = intval($this->request->get('id'));
-        $model->product_entry_id = $id;
+        $product_entry_id = intval($this->request->get('product_entry_id'));
+        $model->product_entry_id = $product_entry_id;
+        $model->product_consume_entry_id = $id;
         $model->consume_type = 2;
         $this->childSubject = '消耗添加';
         if ($model->load(Yii::$app->request->post()) && $model->validate()) {
@@ -118,7 +120,7 @@ class ProductConsumeController extends CController
             $model->status = 0;
             $model->save();
             //var_dump($model->getErrors());
-            return $this->redirect(['product-consume/sh']);
+            return $this->redirect(['product-consume/index']);
         } else {
             
             $productclass_id = intval($this->request->get('productclass_id'));
@@ -180,16 +182,23 @@ class ProductConsumeController extends CController
         $count = $model['count'];
         $product_id = $model['product_id'];
         $product_entry_id = $model['product_entry_id'];
-        $pteObj = ProductEntry::find()->where(['id'=>$product_entry_id,'status'=>1])->one();
-        $consume_count = $pteObj->consume_count - $model->count;
-
-        if($consume_count < 0){
+        $product_consume_entry_id = $model['product_consume_entry_id'];
+        
+        $pceObj = ProductConsumeEntry::find()->where(['id'=>$product_consume_entry_id,'is_del'=>0])->one();
+        $sy_consume_count = $pceObj->count - $model->count;
+        if($sy_consume_count < 0){
             return $this->redirect(['view','sh'=>$sh,'id'=>$id,'error'=>1]);
         }else{
+            $pteObj = ProductEntry::find()->where(['id'=>$product_entry_id,'status'=>1])->one();
+            $consume_count = $pteObj->consume_count - $model->count;
             $pteObj->consume_count = $consume_count;
             $pteObj->save();
             $model['status'] = $sh;
             $model->save();
+
+            $pceObj->count = $sy_consume_count;
+            $pceObj->consume_count = $pceObj->consume_count + $model->count;
+            $pceObj->save();
             return $this->redirect(['sh']);
         }
     }

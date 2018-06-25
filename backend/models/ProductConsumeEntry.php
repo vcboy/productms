@@ -35,7 +35,7 @@ class ProductConsumeEntry extends \yii\db\ActiveRecord
     {
         return [
             [['productclass_id', 'product_id', 'product_entry_id'], 'integer'],
-            [['count','create_dt','unitprice'], 'number'],
+            [['count','create_dt','unitprice','consume_count'], 'number'],
         ];
     }
 
@@ -52,6 +52,7 @@ class ProductConsumeEntry extends \yii\db\ActiveRecord
             'product_entry_id' => '成品库存表id',
             'count' => '消耗数量',
             'unitprice' => '单价',
+            'consume_count' => '报损数量'
         ];
     }
 
@@ -65,5 +66,9 @@ class ProductConsumeEntry extends \yii\db\ActiveRecord
 
     public function getProductentry(){
         return $this->hasOne(ProductEntry::className(), ['id' => 'product_entry_id']);
+    }
+
+    public function getProductconsume(){
+        return $this->hasMany(ProductConsume::className(), ['product_consume_entry_id' => 'id']);
     }
 }

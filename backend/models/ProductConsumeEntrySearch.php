@@ -43,7 +43,7 @@ class ProductConsumeEntrySearch extends ProductConsumeEntry
     public function search($params)
     {
         $query = ProductConsumeEntry::find();
-
+        $query->orderBy('id desc');
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([

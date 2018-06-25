@@ -30,8 +30,9 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'yii\grid\SerialColumn','header' => '序号'],
             'productclass.nm:text:成品类型',
             'product.nm:text:成品名称',
-            'unitprice',           
+            //'unitprice',           
             'count',
+            'consume_count',
             //'price',
             /*[
                 'attribute' => 'consume_type',
@@ -66,7 +67,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							'class' => 'btn btn-xs btn-info',
                         ];
                         //if(Admin::checkAccess('consume_edit')) {
-                        $url = Url::to(["product-consume/create",'id'=>$model['product_entry_id'],'productclass_id'=>$model['productclass_id'],'product_id'=>$model['product_id'],'count'=>$model['count']]);
+                        $url = Url::to(["product-consume/create",'id'=>$model['id'],'product_entry_id'=>$model['product_entry_id'],'productclass_id'=>$model['productclass_id'],'product_id'=>$model['product_id'],'count'=>$model['count']]);
                             return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
                         //}
                     },

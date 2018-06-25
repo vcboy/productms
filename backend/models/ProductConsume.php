@@ -40,7 +40,7 @@ class ProductConsume extends \yii\db\ActiveRecord
     {
         return [
             [['productclass_id', 'product_id', 'count', 'consume_type', 'create_dt','create_user'], 'required'],
-            [['productclass_id', 'product_id', 'consume_type', 'status','product_entry_id'], 'integer'],
+            [['productclass_id', 'product_id', 'consume_type', 'status','product_entry_id','product_consume_entry_id'], 'integer'],
             [['unitprice', 'price', 'count'], 'number'],
             [['create_user'], 'string','max' => 64],
             //需要做销售数量和剩余数量判断
@@ -76,8 +76,8 @@ class ProductConsume extends \yii\db\ActiveRecord
     public function checkconsumecount($attribute, $params){
         if($this->isNewRecord){
             if($this->$attribute > 0){
-                $pteobj = ProductEntry::find()->where(['id'=>$this->product_entry_id,'status'=>1])->one();
-                if($this->$attribute > $pteobj['consume_count']){                   
+                $pteobj = ProductConsumeEntry::find()->where(['id'=>$this->product_consume_entry_id,'is_del'=>0])->one();
+                if($this->$attribute > $pteobj['count']){                   
                     $this->addError($attribute, "报损数量大于消耗数量，无法添加");
                 }
             }else{
@@ -162,13 +162,13 @@ class ProductConsume extends \yii\db\ActiveRecord
             //审核通过，更新库存
             if(isset($changedAttributes['status'])){
                 if($changedAttributes['status'] == 0 && $this->status == 1){
-                    $this->setConsumecount($this->count,$this->product_id,$this->id);
+                    //$this->setConsumecount($this->count,$this->product_id,$this->id);
                 } 
             }
             //更新消耗子表
             if(isset($changedAttributes['is_del'])){
                 if($changedAttributes['is_del'] == 0 && $this->is_del == 1){
-                    ProductConsumeEntry::updateAll(['is_del'=>1],['product_consume_id'=>$this->id]);
+                    //ProductConsumeEntry::updateAll(['is_del'=>1],['product_consume_id'=>$this->id]);
                 } 
              }        
         }
