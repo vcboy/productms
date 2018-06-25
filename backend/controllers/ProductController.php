@@ -895,8 +895,8 @@ class ProductController extends CController
             $fneed = $val;
             $fhas = empty($sMap[$key])?0:$sMap[$key];
             $fsycount = $fhas-$fneed;
-            if($fsycount>0){
-                $table_txt .= "<tr><td>".$fname."</td><td>".$fneed."</td><td>".$fhas."</td><td>".($fsycount>0?("<font color='green'>".$fsycount."</font>"):("<font color='red'>".$fsycount."【需采购】</font>"))."</td></tr>";    
+            if($fsycount<0){
+                $table_txt .= "<tr><td>".$fname."</td><td>".$fneed."</td><td>".$fhas."</td><td>".($fsycount>0?("<font color='green'>".$fsycount."</font>"):("<font color='red'>".$fsycount."【需采购】</font>"))."</td></tr>";
             }
         }
         if($table_txt == '<table class="table table-striped table-bordered"><tr><th>食材名称</th><td>配比所需</td><td>当前库存</td><td>配送后剩余</td></tr>'){
@@ -960,8 +960,8 @@ class ProductController extends CController
             $fsycount = $fhas-$fneed;
             if($fsycount<0){
                 $flag = 0;
+                $table_txt .= "<tr><td>".$fname."</td><td>".$fneed."</td><td>".$fhas."</td><td>".($fsycount>0?("<font color='green'>".$fsycount."</font>"):("<font color='red'>".$fsycount."【需采购】</font>"))."</td></tr>";
             }
-            $table_txt .= "<tr><td>".$fname."</td><td>".$fneed."</td><td>".$fhas."</td><td>".($fsycount>0?("<font color='green'>".$fsycount."</font>"):("<font color='red'>".$fsycount."【需采购】</font>"))."</td></tr>";
         }
         $table_txt .= '</table>';
         if(empty($flag)){
