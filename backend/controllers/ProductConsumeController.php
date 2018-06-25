@@ -189,10 +189,10 @@ class ProductConsumeController extends CController
         if($sy_consume_count < 0){
             return $this->redirect(['view','sh'=>$sh,'id'=>$id,'error'=>1]);
         }else{
-            $pteObj = ProductEntry::find()->where(['id'=>$product_entry_id,'status'=>1])->one();
+            /*$pteObj = ProductEntry::find()->where(['id'=>$product_entry_id,'status'=>1])->one();
             $consume_count = $pteObj->consume_count - $model->count;
             $pteObj->consume_count = $consume_count;
-            $pteObj->save();
+            $pteObj->save();*/
             $model['status'] = $sh;
             $model->save();
 
