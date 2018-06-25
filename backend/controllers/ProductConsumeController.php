@@ -5,7 +5,10 @@ namespace backend\controllers;
 use Yii;
 use backend\models\ProductConsume;
 use backend\models\ProductConsumeSearch;
+use backend\models\ProductEntrySearch;
 use backend\models\ProductEntry;
+use backend\models\ProductConsumeEntry;
+use backend\models\ProductConsumeEntrySearch;
 use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -33,11 +36,11 @@ class ProductConsumeController extends CController
      */
     public function actionIndex()
     {
-        $searchModel = new ProductConsumeSearch();
+        $searchModel = new ProductConsumeEntrySearch();
         $productclass_id = intval($this->request->get('productclass_id'));
         $product_id = intval($this->request->get('product_id'));
-        $status = intval($this->request->get('status'));
-        $consume_type = intval($this->request->get('consume_type'));
+        //$status = intval($this->request->get('status'));
+        //$consume_type = intval($this->request->get('consume_type'));
         $create_dt_s = $this->request->get('create_dt_s');
         $create_dt_e = $this->request->get('create_dt_e');
         if($productclass_id){
@@ -46,12 +49,12 @@ class ProductConsumeController extends CController
         if($product_id){
             $searchModel->product_id = $product_id;
         }
-        if($consume_type){
+        /*if($consume_type){
             $searchModel->consume_type = $consume_type;
         }
         if($status){
              $searchModel->status = $status;
-        }
+        }*/
         if($create_dt_s){
              $searchModel->create_dt_s = $create_dt_s;
         }
@@ -115,7 +118,7 @@ class ProductConsumeController extends CController
             $model->status = 0;
             $model->save();
             //var_dump($model->getErrors());
-            return $this->redirect(['product/consumelist']);
+            return $this->redirect(['product-consume/sh']);
         } else {
             
             $productclass_id = intval($this->request->get('productclass_id'));
@@ -213,10 +216,12 @@ class ProductConsumeController extends CController
      */
     public function actionSearch()
     {
-        $searchModel = new ProductConsumeSearch();
+        $searchModel = new ProductConsumeEntrySearch();
+        //$searchModel = new ProductEntrySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $dataProvider->query->select(['sum(count) as totalcount,sum(price) as totalprice,productclass_id,product_id']);
-        $dataProvider->query->andWhere(['status'=>1,'consume_type'=>1]);
+        $dataProvider->query->select(['sum(count) as totalcount,sum(unitprice * count) as totalprice,productclass_id,product_id']);
+        $dataProvider->query->andWhere(['is_del'=>0]);
+        $dataProvider->query->andWhere(['>','count',0]);
         $dataProvider->query->groupBy(['product_id']);
         $this->childSubject = '成品消耗基准价';
         return $this->render('search', [

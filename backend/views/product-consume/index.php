@@ -3,6 +3,7 @@
 use yii\helpers\Html;
 use job\lib\JobGridView;
 use backend\models\Admin;
+use yii\helpers\Url;
 /* @var $this yii\web\View */
 /* @var $searchModel backend\models\ProductConsumeSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
@@ -31,22 +32,22 @@ $this->params['breadcrumbs'][] = $this->title;
             'product.nm:text:成品名称',
             'unitprice',           
             'count',
-            'price',
-            [
+            //'price',
+            /*[
                 'attribute' => 'consume_type',
                 'value' => function($model){
                     return $model->consume_type == 1?'销售':'损耗';
                 }
-            ],
+            ],*/
             [
                 'attribute' => 'create_dt',
-                'value'     => function($model) {return date("Y-m-d",$model->create_dt);},
+                'value'     => function($model) {return date("Y-m-d H:i",$model->create_dt);},
             ],
-            'statustext:html',
+            //'statustext:html',
             [
                 'class' => 'yii\grid\ActionColumn',
-                'header' => '操作',
-                'template' => '{view} {update} {delete}',
+                'header' => '报损',
+                'template' => ' {update}',
                 'buttons' => [
                     'view' => function($url,$model){
                         $options = [
@@ -59,14 +60,15 @@ $this->params['breadcrumbs'][] = $this->title;
                     },
                     'update' => function ($url, $model, $key) {
                         $options = [
-                            'title' => '修改',
+                            'title' => '报损',
                             'aria-label' => Yii::t('yii', 'Update'),
                             'data-pjax' => '0',
 							'class' => 'btn btn-xs btn-info',
                         ];
-                        if(Admin::checkAccess('consume_edit')) {
+                        //if(Admin::checkAccess('consume_edit')) {
+                        $url = Url::to(["product-consume/create",'id'=>$model['product_entry_id'],'productclass_id'=>$model['productclass_id'],'product_id'=>$model['product_id'],'count'=>$model['count']]);
                             return Html::a('<i class="icon-edit bigger-120"></i>', $url, $options);
-                        }
+                        //}
                     },
                     'delete' => function ($url, $model, $key) {
                         $options = [

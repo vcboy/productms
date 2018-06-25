@@ -114,6 +114,10 @@ class ProductConsume extends \yii\db\ActiveRecord
         return $this->hasOne(Refcode::className(), ['id' => 'product_id']);
     }
 
+    public function getProductentry(){
+        return $this->hasOne(ProductEntry::className(), ['id' => 'product_entry_id']);
+    }
+
     public function getStatustext(){
         return $this->status == 1?'<font color="green">已审核</font>':'<font color="red">未审核</font>';
     }

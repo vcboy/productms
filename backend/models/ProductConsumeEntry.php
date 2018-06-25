@@ -17,6 +17,12 @@ class ProductConsumeEntry extends \yii\db\ActiveRecord
     /**
      * @inheritdoc
      */
+    public $totalcount;
+    public $totalprice;
+    public $create_dt_s;
+    public $create_dt_e;
+
+
     public static function tableName()
     {
         return '{{%product_consume_entry}}';
@@ -28,8 +34,8 @@ class ProductConsumeEntry extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['product_consume_id', 'product_entry_id'], 'integer'],
-            [['count'], 'number'],
+            [['productclass_id', 'product_id', 'product_entry_id'], 'integer'],
+            [['count','create_dt','unitprice'], 'number'],
         ];
     }
 
@@ -40,9 +46,24 @@ class ProductConsumeEntry extends \yii\db\ActiveRecord
     {
         return [
             'id' => 'ID',
-            'product_consume_id' => '成品消耗表id',
+            'productclass_id' => '成品分类',
+            'product_id' => '成品名称',
+            'create_dt' => '消耗时间',
             'product_entry_id' => '成品库存表id',
             'count' => '消耗数量',
+            'unitprice' => '单价',
         ];
+    }
+
+    public function getProductclass(){
+        return $this->hasOne(Refcode::className(), ['id' => 'productclass_id']);
+    }
+
+    public function getProduct(){
+        return $this->hasOne(Refcode::className(), ['id' => 'product_id']);
+    }
+
+    public function getProductentry(){
+        return $this->hasOne(ProductEntry::className(), ['id' => 'product_entry_id']);
     }
 }

@@ -23,6 +23,8 @@ class ProductEntry extends \yii\db\ActiveRecord
     public $totalcount;
     public $totalprice;
     public $avgprice;
+    public $create_dt_s;
+    public $create_dt_e;
     /**
      * @inheritdoc
      */

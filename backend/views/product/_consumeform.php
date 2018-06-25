@@ -17,9 +17,8 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
     <?php $form = ActiveForm::begin(); ?>
     <?= $form->field($model, 'inspector_user')->textInput(['readonly'=>'readonly','value'=>$model->inspector_user?$model->inspector_user:Yii::$app->user->identity->name]) ?>
 
-    <?= $form->field($model, 'inspect_date')->textInput(['maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm"})','value'=>date('Y-m-d H:i',time())]) ?>
+    <?= $form->field($model, 'inspect_date')->textInput(['readonly'=>'readonly','maxlength' => true,'onfocus' => 'WdatePicker({dateFmt:"yyyy-MM-dd HH:mm"})','value'=>date('Y-m-d H:i',time())]) ?>
 
-    <?= $form->field($model, 'inspect_comment')->textInput() ?>
 
 
     <table class="table table-striped table-bordered" id="product_tb">

@@ -9,12 +9,12 @@ return [
             'username' => 'root',
             'password' => 'Wechatbaoming1013',*/
             //'dsn' => 'mysql:host=localhost;dbname=site_center',
-            /*'dsn' => 'mysql:host=localhost;dbname=productms',
+            'dsn' => 'mysql:host=localhost;dbname=productms',
             'username' => 'root',
-            'password' => 'root',*/
-            'dsn' => 'mysql:host=bdm29971423.my3w.com;dbname=bdm29971423_db',
+            'password' => 'root',
+            /*'dsn' => 'mysql:host=bdm29971423.my3w.com;dbname=bdm29971423_db',
             'username' => 'bdm29971423',
-            'password' => 'cc111111',
+            'password' => 'cc111111',*/
             'charset' => 'utf8',
             'tablePrefix' => 'wx_',
         ],

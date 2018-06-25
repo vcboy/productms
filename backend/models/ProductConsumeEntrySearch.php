@@ -5,12 +5,12 @@ namespace backend\models;
 use Yii;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use backend\models\ProductEntry;
+use backend\models\ProductConsumeEntry;
 
 /**
- * ProductEntrySearch represents the model behind the search form about `backend\models\ProductEntry`.
+ * ProcutSearch represents the model behind the search form about `backend\models\ProductConsumeEntry`.
  */
-class ProductEntrySearch extends ProductEntry
+class ProductConsumeEntrySearch extends ProductConsumeEntry
 {
     /**
      * @inheritdoc
@@ -18,10 +18,9 @@ class ProductEntrySearch extends ProductEntry
     public function rules()
     {
         return [
-            [['id', 'pid', 'productclass_id', 'product_id','status'], 'integer'],
-            [[ 'book_count', 'send_count', 'depot_count', 'sycount'], 'number'],
-            [['unitprice', 'price'], 'number'],
-            [['unit','create_dt_s', 'create_dt_e'], 'safe'],
+            [['id','productclass_id', 'product_id', 'product_entry_id', 'create_dt', 'is_del'], 'integer'],
+            [['count','unitprice'], 'number'],
+            [['create_dt_s', 'create_dt_e'], 'safe'],
         ];
     }
 
@@ -43,7 +42,7 @@ class ProductEntrySearch extends ProductEntry
      */
     public function search($params)
     {
-        $query = ProductEntry::find();
+        $query = ProductConsumeEntry::find();
 
         // add conditions that should always apply here
 
@@ -59,24 +58,21 @@ class ProductEntrySearch extends ProductEntry
             return $dataProvider;
         }
 
-        
+        if($this->create_dt_s){
+            $query->andFilterWhere(['>=','create_dt' ,strtotime($this->create_dt_s)]);
+        }
+        if($this->create_dt_e){
+            //echo $this->create_dt_e+1;
+            $query->andFilterWhere(['<','create_dt' ,strtotime("$this->create_dt_e + 1 day")]);
+        }
 
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'pid' => $this->pid,
+            'is_del' => $this->is_del,
             'productclass_id' => $this->productclass_id,
             'product_id' => $this->product_id,
-            'unitprice' => $this->unitprice,
-            'price' => $this->price,
-            'book_count' => $this->book_count,
-            'send_count' => $this->send_count,
-            'depot_count' => $this->depot_count,
-            'sycount' => $this->sycount,
-            'status' => $this->status,
         ]);
-
-        $query->andFilterWhere(['like', 'unit', $this->unit]);
 
         return $dataProvider;
     }

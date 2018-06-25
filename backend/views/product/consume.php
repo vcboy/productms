@@ -33,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
                 'value'     => function($model) {return (empty($model->inspect_date)?"-":date("Y-m-d H:i",$model->inspect_date));},
             ],
             [   'class' => 'yii\grid\ActionColumn',
-                'header' => '操作',
+                'header' => '添加消耗',
                 'template' => '{inspector} {add}',
                 'buttons' => [
                     'inspector' => function ($url, $model, $key) {

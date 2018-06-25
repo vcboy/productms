@@ -12,6 +12,7 @@ use backend\models\ProductEntry;
 use backend\models\Purchase;
 use backend\models\Pfmap;
 use backend\models\ProductEntrySearch;
+use backend\models\ProductConsumeEntry;
 use backend\components\CController;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -1022,6 +1023,17 @@ class ProductController extends CController
                 $sycount = $pte_model->sycount - $depot_count[$key];
                 $pte_model->sycount = $sycount;
                 $pte_model->save();
+                //保存到消耗记录表
+                if($depot_count[$key] - 0 > 0){
+                    $pce = new ProductConsumeEntry();
+                    $pce->productclass_id = $pte_model->productclass_id;
+                    $pce->product_id = $pte_model->product_id;
+                    $pce->product_entry_id = $id;
+                    $pce->count = $depot_count[$key];
+                    $pce->unitprice = $pte_model->unitprice;
+                    $pce->create_dt = time();
+                    $pce->save();
+                }
                 if($pte_model->consume_count == $pte_model->depot_count)
                     $consume_entry++;
 

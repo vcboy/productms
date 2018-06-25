@@ -33,14 +33,22 @@ $this->params['breadcrumbs'][] = $this->title;
             //'avgprice:text:销售均价',  
             [
                 'attribute' => 'avgprice',
-                'label' => '销售均价',
+                'label' => '消耗均价',
                 'value' => function($model){
                     $avgprice = round($model->totalprice / $model->totalcount,2);
                     return $avgprice;
                 }
-            ],         
-            'totalcount:text:销售总数',
-            'totalprice:text:总销售额',
+            ],
+            'totalcount:text:消耗总数',
+            [
+                'attribute' => 'totalprice',
+                'label' => '总消耗额',
+                'value' => function($model){
+                    $totalprice = round($model->totalprice,2);
+                    return $totalprice;
+                }
+            ],
+            //'totalprice:text:总消耗额',
             [
                 'class' => 'yii\grid\ActionColumn',
                 'header' => '操作',
@@ -53,7 +61,7 @@ $this->params['breadcrumbs'][] = $this->title;
                             'data-pjax' => '0',
                             'class' => 'btn-xs btn btn-warning',
                         ];
-                        $url = Url::to(['index','product_id'=>$model->product_id,'productclass_id'=>$model->productclass_id,'status'=>1,'consume_type'=>$searchModel->consume_type,'create_dt_s'=>$searchModel->create_dt_s,'create_dt_e'=>$searchModel->create_dt_e]);                        
+                        $url = Url::to(['index','product_id'=>$model->product_id,'productclass_id'=>$model->productclass_id,'create_dt_s'=>$searchModel->create_dt_s,'create_dt_e'=>$searchModel->create_dt_e]);                        
                         return Html::a('<i class="icon-zoom-in bigger-120"></i>', $url, $options);
                     },
                 ]

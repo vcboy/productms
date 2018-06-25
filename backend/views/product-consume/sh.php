@@ -79,7 +79,7 @@ $this->params['breadcrumbs'][] = $this->title;
 							'class' => 'btn btn-xs btn-danger',
                             'onclick' => 'sweetConfirmChange("确定要删除么","'.$url.'")',
                         ];
-                        if(Admin::checkAccess('bs_del')) {
+                        if(Admin::checkAccess('bs_del') && $model->status == 0) {
                             return Html::button('<i class="icon-trash bigger-120"></i>', $options);
                         }
                     },
