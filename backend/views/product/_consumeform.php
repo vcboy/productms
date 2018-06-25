@@ -23,7 +23,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
 
     <table class="table table-striped table-bordered" id="product_tb">
-        <tr><th>成品分类</th><th>成品名称</th><th>入库数量</th><th>消耗数量
+        <tr><th>成品分类</th><th>成品名称</th><th>入库数量</th><th>剩余数量</th><th>消耗数量
             <?=  Html::Button('全部消耗', ['class' => 'btn btn-primary btn-xs','onclick'=>'_consumeall()']) ?></th></tr>
         <?=$pte_arr_txt?>
     </table>
@@ -108,19 +108,21 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
             var rnum = $(this).val()-0;
             console.log(rnum);
             if(rnum == 0){
-                swal("添加错误", "消耗数量必须大于0","success");
+                //msg = "消耗数量必须大于0";
             }else if(num<rnum){
-                msg = "消耗的数量不能大于入库的数量。";
-                swal({ 
-                  title: "添加错误",
-                  text: msg, 
-                  html: true 
-                });
-            }else{
-                swal("添加成功", "添加消耗成功","success");
-                $('form').submit();
+                msg = "消耗的数量不能大于剩余的数量。";
             }
         });
+        if(msg){
+            swal({ 
+                title: "添加错误",
+                text: msg, 
+                html: true 
+            });
+        }else{
+            swal("添加成功", "添加消耗成功","success");
+            $('form').submit();
+        }
     }
 
     function _consumeall(){

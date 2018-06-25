@@ -34,7 +34,7 @@ if(!empty($model->productclass_id)){
 
     <div class="form-group">
     <?=  Html::submitButton($model->isNewRecord ? '保存' : '更新', ['class' => $model->isNewRecord ? 'btn btn-success' : 'btn btn-primary']) ?>
-    <?=  Html::a('返回',Url::toRoute("index"),['class'=>'btn btn-primary'])?>
+    <?=  Html::Button('返回', ['class' => 'btn btn-primary','onclick'=>'history.back();']) ?>
     </div>
     
     <?php ActiveForm::end(); ?>

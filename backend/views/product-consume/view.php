@@ -18,8 +18,6 @@ $this->params['breadcrumbs'][] = $this->title;
         'attributes' => [
             'productclass.nm:text:成品类型',
             'product.nm:text:成品名称',
-            'unitprice',
-            'price',
             'count',
             [
                 'attribute' => 'consume_type',
@@ -35,7 +33,7 @@ $this->params['breadcrumbs'][] = $this->title;
     <?php
     if($error == 1){
     ?>
-    <div style="color:red;padding-bottom:10px ">库存数据不够，无法通过审核</div>
+    <div style="color:red;padding-bottom:10px ">报损数据超过消耗数量，无法通过审核</div>
     <?php
     }
     if(empty($sh)){

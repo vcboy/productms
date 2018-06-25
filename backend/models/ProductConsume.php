@@ -39,11 +39,14 @@ class ProductConsume extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['productclass_id', 'product_id', 'count', 'consume_type', 'create_dt'], 'required'],
+            [['productclass_id', 'product_id', 'count', 'consume_type', 'create_dt','create_user'], 'required'],
             [['productclass_id', 'product_id', 'consume_type', 'status','product_entry_id'], 'integer'],
             [['unitprice', 'price', 'count'], 'number'],
+            [['create_user'], 'string','max' => 64],
             //需要做销售数量和剩余数量判断
             //[["count"], "checkcount"],
+            //需要做销售数量和报损数量判断
+            [["count"], "checkconsumecount"],
         ];
     }
 
@@ -65,6 +68,25 @@ class ProductConsume extends \yii\db\ActiveRecord
     }
 
     /**
+     * 判断消耗数量和报损数量
+     * @param  [type] $attribute [description]
+     * @param  [type] $params    [description]
+     * @return [type]            [description]
+     */
+    public function checkconsumecount($attribute, $params){
+        if($this->isNewRecord){
+            if($this->$attribute > 0){
+                $pteobj = ProductEntry::find()->where(['id'=>$this->product_entry_id,'status'=>1])->one();
+                if($this->$attribute > $pteobj['consume_count']){                   
+                    $this->addError($attribute, "报损数量大于消耗数量，无法添加");
+                }
+            }else{
+                 $this->addError($attribute, "请输入正确的报损数量");
+            }
+        }
+    }
+
+    /**
      * @inheritdoc
      */
     public function attributeLabels()
@@ -75,7 +97,7 @@ class ProductConsume extends \yii\db\ActiveRecord
             'product_id' => '成品名称',
             'unitprice' => '销售单价',
             'price' => '成品销售总价',
-            'count' => '消耗数量',
+            'count' => '报损数量',
             'consume_type' => '消耗方式',
             'status' => '审核状态 1：销售默认审核通过 0：报损需要指定人员审核',
             'create_dt' => '添加时间',

@@ -23,7 +23,7 @@ $productclasslist = Refcode::getRefcodeBytype('productclass');
 
 
     <table class="table table-striped table-bordered" id="product_tb">
-        <tr><th>成品分类</th><th>成品名称</th><th>入库数量</th><th>消耗数量</th><th>报损</th></tr>
+        <tr><th>成品分类</th><th>成品名称</th><th>入库数量</th><th>剩余数量</th><th>消耗数量</th><th>报损</th></tr>
         <?=$pte_arr_txt?>
     </table>
 

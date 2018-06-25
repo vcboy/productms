@@ -30,18 +30,18 @@ $this->params['breadcrumbs'][] = $this->title;
         ['class' => 'yii\grid\SerialColumn','header' => '序号'],
             'productclass.nm:text:成品类型',
             'product.nm:text:成品名称',
-            'unitprice',           
+            //'unitprice',           
             'count',
-            'price',
-            [
+            //'price',
+            /*[
                 'attribute' => 'consume_type',
                 'value' => function($model){
                     return $model->consume_type == 1?'销售':'损耗';
                 }
-            ],            
+            ], */           
             [
                 'attribute' => 'create_dt',
-                'value'     => function($model) {return date("Y-m-d",$model->create_dt);},
+                'value'     => function($model) {return date("Y-m-d H:i",$model->create_dt);},
             ],
             'statustext:html',
             [

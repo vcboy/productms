@@ -1014,24 +1014,27 @@ class ProductController extends CController
             $depot_count = Yii::$app->request->post('depot_count');
             $pte_id = Yii::$app->request->post('pte_id');
             $entry_num = count($depot_count);
+            $con_count = array_sum($depot_count);
             $consume_entry = 0;
             foreach ($pte_id as $key => $id) {
                 $pte_model = ProductEntry::findOne($id);
-                $pte_model->consume_count = $depot_count[$key];
+                $pte_model->consume_count = $depot_count[$key]+$pte_model->consume_count;
+                $sycount = $pte_model->sycount - $depot_count[$key];
+                $pte_model->sycount = $sycount;
                 $pte_model->save();
                 if($pte_model->consume_count == $pte_model->depot_count)
                     $consume_entry++;
 
             }           
-            if($consume_entry > 0){
+            if($con_count > 0){
                 if($consume_entry == $entry_num){
                     $model->is_consume = 1;
-                }
+                }                
                 $model->inspect_date = $inspect_date;
                 $model->consume_status = 1;
-                $model->save();
+                $model->save();  
             }
-                      
+
             return $this->redirect(['consume']);
         } else {
             $pte_arr = ProductEntry::find()->andWhere(['pid'=>$model->id])->all();
@@ -1068,7 +1071,7 @@ class ProductController extends CController
                     }    
                 }
 
-                $pte_info = "<tr class='pentry'><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['depot_count']."</td><td><input class='icount form-control' name='depot_count[]' inputnum='".$pte['depot_count']."' value='".$pte['consume_count']."'><input  type='hidden' name='pte_id[]' value='".$pte['id']."'></td></tr>";
+                $pte_info = "<tr class='pentry'><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['depot_count']."</td><td>".$pte['sycount']."</td><td><input class='icount form-control' name='depot_count[]' inputnum='".$pte['sycount']."' value='".$pte['consume_count']."'><input  type='hidden' name='pte_id[]' value='".$pte['id']."'></td></tr>";
                 $pte_arr_txt .= $pte_info;
                 $pte_info_txt_arr[] = $pte['product_id']."_".$pte['depot_count'];
                 $pte_id[] = $pte['id'];
@@ -1171,10 +1174,10 @@ class ProductController extends CController
                     }    
                 }
 
-                $url = Url::to(["product-consume/create",'id'=>$pte['id'],'productclass_id'=>$pte['productclass_id'],'product_id'=>$pte['product_id']]);
+                $url = Url::to(["product-consume/create",'id'=>$pte['id'],'productclass_id'=>$pte['productclass_id'],'product_id'=>$pte['product_id'],'count'=>$pte['consume_count']]);
                 $bs_button = Html::a('<i class="icon-edit  bigger-120"></i>', $url,$options);
                 //$bs_button = Html::a('报损',Url::toRoute("product-consume/create"),['class'=>'btn btn-primary btn-xs']);
-                $pte_info = "<tr class='pentry'><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['depot_count']."</td><td>".$pte['consume_count']."</td><td>".$bs_button."</td></tr>";
+                $pte_info = "<tr class='pentry'><td>".$productclasslist_txt."</td><td>".$productlist_txt."</td><td>".$pte['depot_count']."</td><td>".$pte['sycount']."</td><td>".$pte['consume_count']."</td><td>".$bs_button."</td></tr>";
                 $pte_arr_txt .= $pte_info;
                 $pte_info_txt_arr[] = $pte['product_id']."_".$pte['depot_count'];
                 $pte_id[] = $pte['id'];
