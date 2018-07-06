@@ -243,7 +243,9 @@ class PurchaseController extends CController
         $searchModel = new PurchaseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $dataProvider->query->select(['sum(sycount) as totalsycount,foodclass_id,food_id,param_id']);
+        $dataProvider->query->joinwith(['food']);
         $dataProvider->query->andWhere(['status'=>1]);
+        $dataProvider->query->andWhere(['{{%refcode}}.is_del'=>0]);
         $dataProvider->query->groupBy(['food_id']);
         $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
         $foodvalue =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0,'type'=>'food'])->all(),'id','value');

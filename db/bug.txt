@@ -17,7 +17,9 @@ http://bxu2713680062.my3w.com/productms/backend/web/default/login
 2、“成品配比”，当没有采购过改食材，但是配比里有改食材，即使价格是程序出错
 
 FTP账号: p980f852xn
+
 FTP地址: hkip1215.51php.com 
+
 FTP密码: Fq2W32ptPdZSH
  
 数据库地址: localhost

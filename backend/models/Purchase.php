@@ -97,6 +97,10 @@ class Purchase extends \yii\db\ActiveRecord
         ];
     }
 
+    public function getFood(){
+        return $this->hasOne(Refcode::className(), ['id' => 'food_id']);
+    }
+
     public function getStatustext(){
         return $this->status == 1?'<font color="green">已入库</font>':'<font color="red">未入库</font>';
     }
