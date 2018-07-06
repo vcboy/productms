@@ -48,7 +48,8 @@ class PurchaseController extends CController
         $this->childSubject = '采购管理';
         $searchModel = new PurchaseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
+        $dataProvider->query->joinwith(['food']);
+        $dataProvider->query->andWhere(['{{%refcode}}.is_del'=>0]);
         //$dataProvider->query->where(['is_del'=>0]);
         $dataProvider->query->orderBy('id desc');
         $refcode =  ArrayHelper::map(Refcode::find()->where(['is_del'=>0])->all(),'id','nm');
@@ -69,6 +70,8 @@ class PurchaseController extends CController
         $this->childSubject = '验货入库';
         $searchModel = new PurchaseSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $dataProvider->query->joinwith(['food']);
+        $dataProvider->query->andWhere(['{{%refcode}}.is_del'=>0]);
         $foodclass_id = intval($this->request->get('foodclass_id'));
         $food_id = intval($this->request->get('food_id'));
         $status = intval($this->request->get('status'));
