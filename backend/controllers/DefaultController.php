@@ -75,6 +75,9 @@ class DefaultController extends Controller
             return $this->goHome();
         }
 
+        $state = getRandStr(16);
+        Yii::$app->session->set('state', $state);
+
         $model = new LoginForm();
         if ($model->load(Yii::$app->request->post()) && $model->login()) {
             $role_name = Yii::$app->user->identity->role_name;
@@ -88,6 +91,9 @@ class DefaultController extends Controller
             ]);
         }
     }
+
+
+   
 
     public function actionLogout()
     {
