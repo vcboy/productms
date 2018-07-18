@@ -12,12 +12,14 @@ $foodclasslist = Refcode::getRefcodeBytype('foodclass');
 $brandlist = Refcode::getRefcodeBytype('brand');
 $supplierlist = Refcode::getRefcodeBytype('supplier');
 $foodunitlist = Refcode::getRefcodeBytype('foodunit');
-$foodlist = $paramlist = [];
+$foodlist = $paramlist = $brandlist = $supplierlist = [];
 if($model->foodclass_id){
-    $foodlist = Refcode::getFood($model->foodclass_id);
+    $foodlist = Refcode::getFood($model->foodclass_id,'food');
+    $brandlist = Refcode::getFood($model->foodclass_id,'brand');
+    $supplierlist = Refcode::getFood($model->foodclass_id,'supplier');
 }
 if($model->food_id){
-    $paramlist = Refcode::getFood($model->food_id);
+    $paramlist = Refcode::getFood($model->food_id,'param');
 }
 
 ?>
@@ -39,9 +41,9 @@ if($model->food_id){
     <?= $form->field($model, 'price')->textInput() ?>
 
 
-    <?= $form->field($model, 'brand')->dropDownList(array(''=>'--请选择--')+$brandlist) ?>
+    <?= $form->field($model, 'brand')->dropDownList(array(''=>'--请选择--')+$brandlist,['id'=>'brand_id']) ?>
 
-    <?= $form->field($model, 'supplier')->dropDownList(array(''=>'--请选择--')+$supplierlist) ?>
+    <?= $form->field($model, 'supplier')->dropDownList(array(''=>'--请选择--')+$supplierlist,['id'=>'supplier_id']) ?>
 
     <?= $form->field($model, 'pur_user')->textInput(['value'=>$model->pur_user?$model->pur_user:Yii::$app->user->identity->name,'readonly'=>true]) ?>
 
@@ -61,7 +63,7 @@ if($model->food_id){
     $(document).ready(function(){
         $("#foodclass_id").change(function(){
             var foodclass_id = $(this).val();
-            var Content = {foodclass_id: foodclass_id};
+            var Content = {foodclass_id: foodclass_id , type: 'food'};
             var url = "<?=Url::to(['getfood'])?>";
             $.post(url,Content,function(rsp){
                 if(rsp){
@@ -78,11 +80,41 @@ if($model->food_id){
                     $("#param_id").append('<option value="">--请选择--</option>');
                 }
             })
+
+            var Content = {foodclass_id: foodclass_id , type: 'brand'};
+            var url = "<?=Url::to(['getfood'])?>";
+            $.post(url,Content,function(rsp){
+                if(rsp){
+                    var obj = JSON.parse(rsp);
+                    console.log(obj);
+                    var optionstr = '<option value="">--请选择--</option>';
+                    for(var i in obj){
+                        optionstr+="<option value="+i+">"+obj[i]+"</option>";
+                    }
+                    $("#brand_id option").remove();
+                    $("#brand_id").append(optionstr);
+                }
+            })
+
+            var Content = {foodclass_id: foodclass_id , type: 'supplier'};
+            var url = "<?=Url::to(['getfood'])?>";
+            $.post(url,Content,function(rsp){
+                if(rsp){
+                    var obj = JSON.parse(rsp);
+                    console.log(obj);
+                    var optionstr = '<option value="">--请选择--</option>';
+                    for(var i in obj){
+                        optionstr+="<option value="+i+">"+obj[i]+"</option>";
+                    }
+                    $("#supplier_id option").remove();
+                    $("#supplier_id").append(optionstr);
+                }
+            })
         });
 
         $("#food_id").change(function(){
             var foodclass_id = $(this).val();
-            var Content = {foodclass_id: foodclass_id};
+            var Content = {foodclass_id: foodclass_id, type: 'param'};
             var url = "<?=Url::to(['getfood'])?>";
             $.post(url,Content,function(rsp){
                 if(rsp){

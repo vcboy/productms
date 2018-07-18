@@ -224,6 +224,7 @@ class PurchaseController extends CController
 
     public function actionGetfood(){
         $foodclass_id = $this->request->post('foodclass_id');
+        $type = $this->request->post('type');
         //$foodArr = ArrayHelper::map(Refcode::find()->where(['pid'=>$foodclass_id,'is_del'=>0])->all(),'id','nm');
         /*$foodObj = Refcode::find()->where(['pid'=>$foodclass_id,'is_del'=>0])->all();
         foreach ($foodObj as $key => $value) {
@@ -231,7 +232,7 @@ class PurchaseController extends CController
             $nm = $unitName?$value->nm.' ('.$unitName.')':$value->nm;
             $foodArr[$value->id] = $nm;
         }*/
-        $foodArr = Refcode::getFood($foodclass_id);
+        $foodArr = Refcode::getFood($foodclass_id,$type);
         echo json_encode($foodArr);
     }
 

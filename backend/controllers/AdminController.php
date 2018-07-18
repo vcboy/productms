@@ -112,18 +112,25 @@ class AdminController extends CController
      */
     public function actionUpdate($id)
     {
-        $model = $this->findModel($id);
-        if ($model->load(Yii::$app->request->post()) ) {
-            if($model->save()){
-                return $this->redirect(['index']);
+        $model = new Admin();
+        $oldmodel = $this->findModel($id);
+        $old_padd = $oldmodel->password;
+        if ($model->load(Yii::$app->request->post())&&$oldmodel->load(Yii::$app->request->post()) ) {
+            //print_r(md5($model->password)."=".$old_padd);exit;
+            if($model->password && md5($model->password) !== $old_padd){
+                $oldmodel->delete();
+                if($model->save()){
+                    return $this->redirect(['index']);
+                }
             }else{
-                return $this->render('update', [
-                    'model' => $model,
-                ]);
+                if($oldmodel->save()){
+                    return $this->redirect(['index']);
+                }
             }
         } else {
+            
             return $this->render('update', [
-                'model' => $model,
+                'model' => $oldmodel,
             ]);
         }
     }

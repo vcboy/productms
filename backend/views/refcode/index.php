@@ -42,7 +42,7 @@ if($type_code == 'food'){
     array_push($columns,'unitName');
 }
 
-if($type_code == 'food' || $type_code == 'param' || $type_code == 'product')
+if($type_code == 'food' || $type_code == 'param' || $type_code == 'product' || $type_code == 'brand' || $type_code == 'supplier')
     array_push($columns,'parentName');
 
 if($type_code == 'product'){
