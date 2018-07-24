@@ -109,7 +109,7 @@ if(!empty($model->productclass_id)){
 
     function _changeFtype(obj,tempkey){
         var foodclass_id = $(obj).val();
-        var Content = {foodclass_id: foodclass_id};
+        var Content = {foodclass_id: foodclass_id, type: 'food'};
         var url = "<?=Url::to(['purchase/getfood'])?>";
         $.post(url,Content,function(rsp){
             if(rsp){

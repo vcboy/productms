@@ -201,7 +201,7 @@ class ProductTemplateController extends CController
     public function actionGetproduct(){
         $productclass_id = $this->request->post('productclass_id');
         //$productArr = ArrayHelper::map(Refcode::find()->where(['pid'=>$productclass_id,'is_del'=>0])->all(),'id','nm');
-        $productArr = Refcode::getFood($productclass_id);
+        $productArr = Refcode::getFood($productclass_id,'product');
         echo json_encode($productArr);
     }
 

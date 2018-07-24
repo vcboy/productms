@@ -11,10 +11,10 @@ use backend\models\Refcode;
 $foodclasslist = Refcode::getRefcodeBytype('foodclass');
 $foodlist = $paramlist = [];
 if($model->foodclass_id){
-    $foodlist = Refcode::getFood($model->foodclass_id);
+    $foodlist = Refcode::getFood($model->foodclass_id,'food');
 }
 if($model->food_id){
-    $paramlist = Refcode::getFood($model->food_id);
+    $paramlist = Refcode::getFood($model->food_id,'param');
 }
 ?>
 
@@ -48,7 +48,7 @@ if($model->food_id){
     $(document).ready(function(){
         $("#foodclass_id").change(function(){
             var foodclass_id = $(this).val();
-            var Content = {foodclass_id: foodclass_id};
+            var Content = {foodclass_id: foodclass_id, type: 'food'};
             var url = "<?=Url::to(['getfood'])?>";
             $.post(url,Content,function(rsp){
                 if(rsp){
@@ -69,7 +69,7 @@ if($model->food_id){
 
         $("#food_id").change(function(){
             var foodclass_id = $(this).val();
-            var Content = {foodclass_id: foodclass_id};
+            var Content = {foodclass_id: foodclass_id, type: 'param'};
             var url = "<?=Url::to(['getfood'])?>";
             $.post(url,Content,function(rsp){
                 if(rsp){
